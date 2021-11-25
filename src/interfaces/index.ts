@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
-import { Consulta, Clinica, Cliente, Horario, User } from "./models";
+import { Consulta, Clinica, Cliente, Horario, Funcionario } from "./models";
 
-export * from "./models"
+export * from "./models";
 
 export interface APIResponseSuccess {
   consulta: Consulta;
@@ -11,9 +11,8 @@ export interface APIResponseSuccess {
   consultas: [Consulta];
   clientes: [Cliente];
   horarios: [Horario];
-  funcionario: User;
-  funcionarios: [User];
-
+  funcionario: Funcionario;
+  funcionarios: [Funcionario];
 }
 
 export interface APIResponseFail {
@@ -24,6 +23,6 @@ export interface APIResponseFail {
 export type APIResponse = AxiosResponse<{
   status: "success" | "fail" | "error";
   message?: string;
-  data: APIResponseSuccess | APIResponseFail | null;
+  data: APIResponseSuccess & APIResponseFail;
   path?: string;
-}>
+}>;

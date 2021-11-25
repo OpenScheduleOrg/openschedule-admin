@@ -1,5 +1,5 @@
 export interface Consulta {
-  id: number;
+  id?: number;
   clinica_id: number;
   cliente_id: number;
   marcada: string | Date;
@@ -11,14 +11,14 @@ export interface Consulta {
 }
 
 export interface Clinica {
-  id: number;
+  id?: number;
   nome: string;
   telefone: string;
   endereco: string;
 }
 
 export interface Cliente {
-  id: number;
+  id?: number;
   nome: string;
   sobrenome: string;
   cpf: string;
@@ -28,7 +28,7 @@ export interface Cliente {
 }
 
 export interface Horario {
-  id: number;
+  id?: number;
   am_inicio: string;
   am_fim?: string;
   almoco: boolean;
@@ -37,7 +37,7 @@ export interface Horario {
   dia_semana: number;
 }
 
-export interface User {
+export interface Funcionario{
   id?: number;
   nome: string;
   sobrenome: string;
