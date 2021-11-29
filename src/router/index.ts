@@ -12,15 +12,27 @@ import store from "@/store";
  */
 const children: RouteRecordRaw[] = [
   {
-    path: "/",
-    alias: "/agenda",
+    path: "/agenda",
     name: "agenda",
     component: () => import("@/components/Agenda.vue"),
+    redirect: "/agenda/" + store.state.calendar.period,
+    children: [
+      {
+        path: "/agenda/week/:day?/:month?/:year?",
+        name: "week",
+        component: () => import("@/components/periodo/Week.vue"),
+      },
+      {
+        path: "/agenda/day/:day?/:month?/:year?",
+        name: "day",
+        component: () => import("@/components/periodo/Week.vue"),
+      },
+    ],
   },
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
-    component: import("@/components/NotFound.vue"),
+    component: () => import("@/components/NotFound.vue"),
   },
 ];
 
@@ -54,6 +66,7 @@ const routes: RouteRecordRaw[] = [
         });
     },
     children,
+    redirect: "/agenda/" + store.state.calendar.period,
   },
 ];
 

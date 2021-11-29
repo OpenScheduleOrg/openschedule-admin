@@ -6,6 +6,8 @@ import FontAwesomeIcon from "@/plugins/font-awesome";
 
 import "./assets/css/style.css";
 
+import "./prototype"
+
 createApp(App)
   .use(store, key)
   .use(router)

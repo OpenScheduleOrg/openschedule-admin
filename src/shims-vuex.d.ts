@@ -1,6 +1,6 @@
 // vuex.d.t
 import { Store } from "vuex";
-import { State } from "@/store/modules";
+import { State } from "@/store";
 
 declare module "@vue/runtime-core" {
   // provide typings for `this.$store`

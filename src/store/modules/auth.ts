@@ -1,15 +1,15 @@
 import { Module, Commit } from "vuex";
 import { State as stateRoot } from "..";
-import { Funcionario, Funcionario as User } from "@/interfaces";
-import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from "../mutation-types";
+import { Funcionario } from "@/interfaces";
+import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from "./mutation-types";
 import { login, getLoged, logout } from "@/services/auth";
 
-export interface State {
+export interface StateAuth {
   status: boolean;
-  user: User | null;
+  user: Funcionario | null;
 }
 
-const auth: Module<State, stateRoot> = {
+const auth: Module<StateAuth, stateRoot> = {
   namespaced: true,
   state: {
     status: false,

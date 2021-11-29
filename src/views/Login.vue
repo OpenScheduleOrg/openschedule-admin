@@ -11,6 +11,7 @@
           type="text"
           @keyup.enter="submit"
           v-model="form.username"
+          autofocus
           placeholder="username"
           name="username"
           id="username"
@@ -38,7 +39,12 @@
         id="rememberMe"
       /><label for="rememberMe">Lembrar-me</label>
       <div class="form-group">
-        <button @click="submit()" :disabled="!form.password || !form.username">
+        <button
+          id="btnSubmit"
+          ref="btnSubmit"
+          @click="submit()"
+          :disabled="!form.password || !form.username"
+        >
           Entrar
         </button>
       </div>
@@ -47,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { ButtonHTMLAttributes, defineComponent } from "vue";
 
 export default defineComponent({
   name: "Login",
@@ -62,6 +68,16 @@ export default defineComponent({
         },
       },
     };
+  },
+  mounted() {
+    const input = this.$refs.username as HTMLInputElement;
+    const btnSubmit = this.$refs.btnSubmit as HTMLButtonElement;
+
+    setTimeout(() => {
+      if (input.matches(":-webkit-autofill")) {
+        btnSubmit.removeAttribute("disabled");
+      }
+    }, 500);
   },
   methods: {
     checkForm(usern = true, passw = true) {
@@ -100,15 +116,11 @@ export default defineComponent({
       this.checkForm(false);
     },
   },
-  mounted() {
-    const input = this.$refs.username as HTMLInputElement;
-    input.focus();
-  },
 });
 </script>
 
 <style scoped>
-.containe{
+.containe {
   width: 100%;
   height: 100vh;
   background-color: var(--bg-dark);

@@ -1,0 +1,12 @@
+//MODULE CALENDAR 
+export const SET_PERIOD = "SET_PERIOD";
+export const SET_CURRENT_DATE = "SET_CURRENT";
+
+//MODULE CLINICA
+export const SET_CLINICA = "SET_CLINICA"
+export const SET_HORARIOS = "SET_HORARIO"
+
+//MODULE AUTH
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_FAILURE = "LOGIN_FAILURE";
+export const LOGOUT = "LOGOUT";
