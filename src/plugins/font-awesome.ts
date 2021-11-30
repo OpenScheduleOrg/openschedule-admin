@@ -6,6 +6,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faUserSecret, faChevronLeft, faChevronRight);
+library.add(
+  faUserSecret,
+  faChevronLeft,
+  faChevronRight,
+);
 
 export default FontAwesomeIcon;

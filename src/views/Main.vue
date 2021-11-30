@@ -3,9 +3,9 @@
     <header class="grid-item">
       <NavTop />
     </header>
-    <nav class="grid-item">
+    <aside class="grid-item">
       <NavSide />
-    </nav>
+    </aside>
     <main class="grid-item">
       <router-view />
     </main>

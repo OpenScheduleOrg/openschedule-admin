@@ -1,13 +1,13 @@
 <template>
-    <h1>
-        Dia
-    </h1>
+  <h1>
+    DIA: {{ $route.params }}
+  </h1>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "Day",
-    })
+  name: "Day",
+});
 </script>

@@ -1,14 +1,20 @@
-import { Module } from "vuex";
+import { Commit, Module } from "vuex";
 import { State as stateRoot } from "..";
-import { SET_PERIOD, SET_CURRENT_DATE } from "./mutation-types";
+import {
+  SET_PERIOD,
+  SET_CURRENT_DATE,
+  SET_OFFSET_MONTH,
+} from "./mutation-types";
 import { Month, Period } from "@/constants";
 import { monthBetween, setPeriod, getPeriod } from "@/utils";
 
+import { SixWeeksDay } from "@/interfaces/store";
 const today = new Date();
 
 export interface StateCalendar {
   period: Period;
   current_date: Date;
+  offset_month: number;
 }
 
 const initialPeriod = getPeriod();
@@ -18,15 +24,7 @@ const calendar: Module<StateCalendar, stateRoot> = {
   state: {
     period: initialPeriod,
     current_date: today,
-  },
-  mutations: {
-    [SET_PERIOD](state, period: Period) {
-      setPeriod(period);
-      state.period = period;
-    },
-    [SET_CURRENT_DATE](state, date: Date) {
-      state.current_date = date;
-    },
+    offset_month: 0,
   },
   getters: {
     getDateString(state) {
@@ -39,7 +37,6 @@ const calendar: Module<StateCalendar, stateRoot> = {
       }
 
       const other_month = monthBetween(state.current_date);
-      console.log(other_month);
 
       if (other_month !== null) {
         if (other_month === 0)
@@ -71,12 +68,14 @@ const calendar: Module<StateCalendar, stateRoot> = {
       return Month[month][0] + " de " + year;
     },
     getDatePrev(state) {
-      const date = state.current_date.addDays(-1);
+      const offset = state.period == Period.Week ? -7 : -1;
+      const date = state.current_date.addDays(offset);
 
       return date;
     },
     getDateNext(state) {
-      const date = state.current_date.addDays(1);
+      const offset = state.period == Period.Week ? 7 : 1;
+      const date = state.current_date.addDays(offset);
       return date;
     },
     isActivedPeriod: (state) => (p: Period) => {
@@ -90,6 +89,94 @@ const calendar: Module<StateCalendar, stateRoot> = {
         state.current_date.getMonth() === today.getMonth() &&
         state.current_date.getFullYear() === today.getFullYear()
       );
+    },
+    getSixWeeks(state) {
+      let i = 0;
+      const days: SixWeeksDay[] = [];
+
+      const start_month = new Date(
+        state.current_date.getFullYear(),
+        state.current_date.getMonth() + state.offset_month,
+        1
+      );
+      const before_month = start_month.addDays(-1);
+
+      for (let j = start_month.getDay() - 1; j >= 0; j--)
+        days[i++] = {
+          day: before_month.getDate() - j,
+          month: before_month.getMonth() + 1,
+          year: before_month.getFullYear(),
+          outMonth: true,
+          isToday:
+            today.getDate() == before_month.getDate() - j &&
+            today.getMonth() == before_month.getMonth() &&
+            today.getFullYear() == before_month.getFullYear(),
+          isSelected: false,
+        };
+
+      console.log(start_month);
+      for (let j = 0; j < start_month.monthSize(); j++)
+        days[i++] = {
+          day: start_month.getDate() + j,
+          month: start_month.getMonth() + 1,
+          year: start_month.getFullYear(),
+          outMonth: false,
+          isToday:
+            today.getDate() == start_month.getDate() + j &&
+            today.getMonth() == start_month.getMonth() &&
+            today.getFullYear() == start_month.getFullYear(),
+          isSelected:
+            state.current_date.getDate() == start_month.getDate() + j &&
+            state.current_date.getMonth() == start_month.getMonth() &&
+            state.current_date.getFullYear() == start_month.getFullYear(),
+        };
+
+      const end_month = new Date(
+        start_month.getFullYear(),
+        start_month.getMonth() + 1,
+        1
+      );
+      for (let j = 0; i < 7 * 6; j++)
+        days[i++] = {
+          day: end_month.getDate() + j,
+          month: end_month.getMonth() + 1,
+          year: end_month.getFullYear(),
+          outMonth: true,
+          isToday:
+            today.getDate() == end_month.getDate() + j &&
+            today.getMonth() == end_month.getMonth() &&
+            today.getFullYear() == end_month.getFullYear(),
+          isSelected: false,
+        };
+
+      return days;
+    },
+    getMonthOffset(state) {
+      const offset_date = new Date(state.current_date.valueOf());
+
+      offset_date.setMonth(offset_date.getMonth() + state.offset_month);
+
+      return (
+        Month[offset_date.getMonth()][0] + " de " + offset_date.getFullYear()
+      );
+    },
+  },
+  mutations: {
+    [SET_PERIOD](state, period: Period) {
+      setPeriod(period);
+      state.period = period;
+    },
+    [SET_CURRENT_DATE](state, date: Date) {
+      state.offset_month = 0;
+      state.current_date = date;
+    },
+    [SET_OFFSET_MONTH](state, offset) {
+      state.offset_month = state.offset_month + offset;
+    },
+  },
+  actions: {
+    setOffsetMonth({ commit }: { commit: Commit }, offset: -1 | 1) {
+      commit(SET_OFFSET_MONTH, offset);
     },
   },
 };

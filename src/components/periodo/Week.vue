@@ -1,13 +1,11 @@
 <template>
-    <h1>
-        Week
-    </h1>
+  <h1>SEMANA: {{ $route.params }}</h1>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "Week",
-    })
+  name: "Week",
+});
 </script>

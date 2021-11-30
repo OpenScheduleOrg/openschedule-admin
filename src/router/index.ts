@@ -15,7 +15,6 @@ const children: RouteRecordRaw[] = [
     path: "/agenda",
     name: "agenda",
     component: () => import("@/components/Agenda.vue"),
-    redirect: "/agenda/" + store.state.calendar.period,
     children: [
       {
         path: "/agenda/week/:day?/:month?/:year?",
@@ -25,7 +24,7 @@ const children: RouteRecordRaw[] = [
       {
         path: "/agenda/day/:day?/:month?/:year?",
         name: "day",
-        component: () => import("@/components/periodo/Week.vue"),
+        component: () => import("@/components/periodo/Day.vue"),
       },
     ],
   },
@@ -66,7 +65,7 @@ const routes: RouteRecordRaw[] = [
         });
     },
     children,
-    redirect: "/agenda/" + store.state.calendar.period,
+    redirect: "/agenda"
   },
 ];
 
