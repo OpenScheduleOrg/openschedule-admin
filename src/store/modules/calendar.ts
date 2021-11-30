@@ -28,6 +28,7 @@ const calendar: Module<StateCalendar, stateRoot> = {
   },
   getters: {
     getDateString(state) {
+      let other_date: Date;
       const month = state.current_date.getMonth();
       const day = state.current_date.getDate();
       const year = state.current_date.getFullYear();
@@ -36,33 +37,48 @@ const calendar: Module<StateCalendar, stateRoot> = {
         return day + " de " + Month[month][0] + " de " + year;
       }
 
-      const other_month = monthBetween(state.current_date);
+      if (state.period == Period.Agenda) {
+        other_date = new Date(year, month + 6, day);
+      } else {
+        other_date = monthBetween(state.current_date);
+      }
 
-      if (other_month !== null) {
-        if (other_month === 0)
+      if (
+        other_date.getMonth() !== month ||
+        other_date.getFullYear() !== year
+      ) {
+        if (other_date.getFullYear() !== year)
           return (
             Month[month][1] +
             " " +
             year +
             " - " +
-            Month[other_month][1] +
+            Month[other_date.getMonth()][1] +
             " " +
-            (year + 1)
+            other_date.getFullYear()
           );
-        else if (month == 0)
+        else if (year > other_date.getFullYear())
           return (
-            Month[other_month][1] +
+            Month[other_date.getMonth()][1] +
             " " +
-            (year - 1) +
+            other_date.getFullYear() +
             " - " +
             Month[month][1] +
             " " +
             year
           );
-        else if (month > other_month) {
-          return Month[other_month][1] + " - " + Month[month][1] + " " + year;
+        else if (month > other_date.getMonth()) {
+          return (
+            Month[other_date.getMonth()][1] +
+            " - " +
+            Month[month][1] +
+            " " +
+            year
+          );
         }
-        return Month[month][1] + " - " + Month[other_month][1] + " " + year;
+        return (
+          Month[month][1] + " - " + Month[other_date.getMonth()][1] + " " + year
+        );
       }
 
       return Month[month][0] + " de " + year;
@@ -111,10 +127,12 @@ const calendar: Module<StateCalendar, stateRoot> = {
             today.getDate() == before_month.getDate() - j &&
             today.getMonth() == before_month.getMonth() &&
             today.getFullYear() == before_month.getFullYear(),
-          isSelected: false,
+          isSelected:
+            state.current_date.getDate() == before_month.getDate() + j &&
+            state.current_date.getMonth() == before_month.getMonth() &&
+            state.current_date.getFullYear() == before_month.getFullYear(),
         };
 
-      console.log(start_month);
       for (let j = 0; j < start_month.monthSize(); j++)
         days[i++] = {
           day: start_month.getDate() + j,
@@ -131,23 +149,28 @@ const calendar: Module<StateCalendar, stateRoot> = {
             state.current_date.getFullYear() == start_month.getFullYear(),
         };
 
-      const end_month = new Date(
+      const after_month = new Date(
         start_month.getFullYear(),
         start_month.getMonth() + 1,
         1
       );
       for (let j = 0; i < 7 * 6; j++)
         days[i++] = {
-          day: end_month.getDate() + j,
-          month: end_month.getMonth() + 1,
-          year: end_month.getFullYear(),
+          day: after_month.getDate() + j,
+          month: after_month.getMonth() + 1,
+          year: after_month.getFullYear(),
           outMonth: true,
           isToday:
-            today.getDate() == end_month.getDate() + j &&
-            today.getMonth() == end_month.getMonth() &&
-            today.getFullYear() == end_month.getFullYear(),
-          isSelected: false,
+            today.getDate() == after_month.getDate() + j &&
+            today.getMonth() == after_month.getMonth() &&
+            today.getFullYear() == after_month.getFullYear(),
+          isSelected:
+            state.current_date.getDate() == after_month.getDate() + j &&
+            state.current_date.getMonth() == after_month.getMonth() &&
+            state.current_date.getFullYear() == after_month.getFullYear(),
         };
+
+      console.log();
 
       return days;
     },

@@ -67,10 +67,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#calendar {
-  flex: 4;
-  height: 40%;
-  background-color: rgb(209, 252, 252);
+#nav-calendar {
+  background-color: #00000007;
+  padding: 4px;
+  border-radius: 5px;
 }
 
 #month-year-nav {
@@ -149,19 +149,24 @@ export default defineComponent({
   background-color: rgba(0, 0, 0, 0.055);
 }
 
-.is-selected {
+a.is-selected {
   transition: background-color 0.4s, color 0.43s !important;
-  background-color: #2230d947 !important;
+  background-color: #2231d956 !important;
   color: var(--font-secundary) !important;
 }
 
-.out-month {
+a.out-month {
   color: rgba(0, 0, 0, 0.596) !important;
 }
 
-.is-today {
+a.is-today {
   background-color: var(--bg-blue) !important;
   color: rgb(255, 255, 255) !important;
+}
+
+a.is-selected.out-month {
+  background-color: #2231d923 !important;
+  color: var(--font-secundary) !important;
 }
 
 nav {

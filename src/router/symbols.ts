@@ -1,0 +1,1 @@
+export const rootAgenda = Symbol("Root agenda");

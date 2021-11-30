@@ -1,30 +1,27 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
 import store from "@/store";
+import { rootAgenda } from "./symbols";
 
-/*
-    FORMATO ROUTE
-    {
-        path: '/',
-        name: '',
-        component: () => import('@components/'),
-    }, 
-
- */
 const children: RouteRecordRaw[] = [
   {
     path: "/agenda",
-    name: "agenda",
+    name: rootAgenda,
     component: () => import("@/components/Agenda.vue"),
     children: [
       {
+        path: "/agenda/:day?/:month?/:year?",
+        name: "agenda",
+        component: () => import("@/components/period/Consultas.vue"),
+      },
+      {
         path: "/agenda/week/:day?/:month?/:year?",
         name: "week",
-        component: () => import("@/components/periodo/Week.vue"),
+        component: () => import("@/components/period/Week.vue"),
       },
       {
         path: "/agenda/day/:day?/:month?/:year?",
         name: "day",
-        component: () => import("@/components/periodo/Day.vue"),
+        component: () => import("@/components/period/Day.vue"),
       },
     ],
   },
@@ -65,7 +62,7 @@ const routes: RouteRecordRaw[] = [
         });
     },
     children,
-    redirect: "/agenda"
+    redirect: { name: rootAgenda },
   },
 ];
 

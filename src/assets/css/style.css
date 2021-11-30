@@ -72,7 +72,7 @@ body {
 }
 aside {
   flex-direction: column;
-  padding: 1rem;
+  padding: 0.7rem;
   justify-content: space-between;
 }
 header.grid-item {

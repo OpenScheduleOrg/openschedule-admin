@@ -1,14 +1,14 @@
-const year = new Date().getFullYear();
-
 export enum Period {
+  Agenda = "agenda",
   Day = "day",
   Week = "week",
 }
 
-export const Periods: {[lang: string]: {[p in Period]: string}} = {
+export const Periods: { [lang: string]: { [p in Period]: string } } = {
   "pt-BR": {
     [Period.Day]: "Dia",
     [Period.Week]: "Semana",
+    [Period.Agenda]: "Consultas",
   },
 };
 
@@ -26,5 +26,3 @@ export const Month = [
   ["Novembro", "Nov."],
   ["Dezembro", "Dez."],
 ];
-
-

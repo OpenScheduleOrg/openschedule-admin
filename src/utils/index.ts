@@ -1,17 +1,17 @@
 import { Period } from "@/constants";
 
-export function monthBetween(date: Date): null | number {
+export function monthBetween(date: Date): Date {
   const month = date.getMonth();
 
   const week_start = date.addDays(-date.getDay());
   const week_end = date.addDays(7 - date.getDay());
   if (week_start.getMonth() !== week_end.getMonth()) {
-    if (week_start.getMonth() == date.getMonth())
-      return month == 11 ? 0 : month + 1;
-    return month == 0 ? 11 : month - 1;
+    if (week_start.getMonth() !== month) {
+      return week_start;
+    }
+    return week_end;
   }
-
-  return null;
+  return date;
 }
 
 export function setPeriod(p: Period): void {
