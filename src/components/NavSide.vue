@@ -41,7 +41,36 @@
     </div>
   </div>
 
-  <nav></nav>
+  <nav id="nav-main">
+    <ul>
+      <li>
+        <router-link class="nav-link" to="/clinica">Clínica </router-link>
+      </li>
+    </ul>
+
+    <ul>
+      <li>
+        <router-link class="nav-link" to="/cliente/new"
+          >Novo cliente</router-link
+        >
+      </li>
+      <li>
+        <router-link class="nav-link" to="/clientes">Clientes</router-link>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <router-link class="nav-link" to="/funcionario/new"
+          >Novo funcionário</router-link
+        >
+      </li>
+      <li>
+        <router-link class="nav-link" to="/funcionarios"
+          >Funcionários</router-link
+        >
+      </li>
+    </ul>
+  </nav>
 </template>
 
 <script lang="ts">
@@ -67,7 +96,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#nav-calendar {
+ul {
+  list-style-type: none;
+}
+
+#nav-calendar,
+nav {
   background-color: #00000007;
   padding: 4px;
   border-radius: 5px;
@@ -112,7 +146,7 @@ export default defineComponent({
 
 #six-weeks {
   margin-top: 5px;
-  padding: 0 10px;
+  padding: 0 0.6rem;
 }
 #week-calendar {
   display: flex;
@@ -172,6 +206,38 @@ a.is-selected.out-month {
 nav {
   flex: 7;
   margin-top: 8px;
-  background-color: rgb(209, 252, 252);
+  background-color: #00000030;
+  font-size: 1.05rem;
+  padding: 1.5rem 2.3rem 1rem 1.2rem;
+}
+
+nav > ul:not(:first-child) {
+  margin-top: 0.7em;
+}
+
+a.nav-link {
+  display: inline-block;
+  font-size: 0.9em;
+  width: 100%;
+  padding: 6px 10px;
+  margin: 4px auto;
+  font-weight: 700;
+  color: var(--font-main);
+  border-radius: 4px;
+  background-color: white;
+}
+a.nav-link:hover {
+  transition: all 200ms;
+  background-color: rgb(237, 237, 237);
+}
+
+a.nav-link.router-link-active {
+  background-color: var(--bg-blue);
+  color: white;
+}
+
+a.nav-link.router-link-exact-active {
+  background-color: rgb(19, 63, 114);
+  color: white;
 }
 </style>

@@ -26,6 +26,63 @@ const children: RouteRecordRaw[] = [
     ],
   },
   {
+    path: "/clinica",
+    name: "clinica",
+    component: () => import("@/components/Clinica.vue"),
+    children: [
+      {
+        path: "/clinica/update",
+        name: "updateClinica",
+        component: () => import("@/components/clinica/ClinicaForm.vue"),
+      },
+    ],
+  },
+  {
+    path: "/clientes",
+    name: "clientes",
+    component: () => import("@/components/Cliente.vue"),
+    children: [
+      {
+        path: "/clientes/:id",
+        name: "detailCliente",
+        component: () => import("@/components/cliente/ClienteDetail.vue"),
+      },
+      {
+        path: "/clientes/:id/update",
+        name: "updateCliente",
+        component: () => import("@/components/cliente/ClienteForm.vue"),
+      },
+      {
+        path: "/cliente/new",
+        name: "newCliente",
+        component: () => import("@/components/cliente/ClienteForm.vue"),
+      },
+    ],
+  },
+  {
+    path: "/funcionarios",
+    name: "funcinarios",
+    component: () => import("@/components/Funcionario.vue"),
+    children: [
+      {
+        path: "/funcionario/new",
+        name: "newFuncionario",
+        component: () => import("@/components/funcionario/FuncionarioForm.vue"),
+      },
+      {
+        path: "/funcionario/:id/update",
+        name: "updateFuncionario",
+        component: () => import("@/components/funcionario/FuncionarioForm.vue"),
+      },
+      {
+        path: "/funcionario/:id",
+        name: "detailFuncionario",
+        component: () =>
+          import("@/components/funcionario/FuncionarioDetail.vue"),
+      },
+    ],
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("@/components/NotFound.vue"),

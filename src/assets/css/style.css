@@ -16,7 +16,8 @@
   --font-secundary: #41445e;
 
   /* btn */
-  --btn-default: #0759a5;
+  --btn-default: #3e9bf1;
+  --btn-default-hover: #2a77c0;
   --btn-disabled: rgb(228, 227, 227);
   --btn-create: blue;
   --btn-update: blue;
@@ -70,10 +71,14 @@ body {
   display: flex;
   background-color: var(--bg-light);
 }
-aside {
+
+aside.grid-item {
   flex-direction: column;
   padding: 0.7rem;
   justify-content: space-between;
+}
+main.grid-item {
+  flex-direction: column;
 }
 header.grid-item {
   background-color: var(--bg-header);
