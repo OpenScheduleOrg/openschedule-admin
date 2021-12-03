@@ -23,3 +23,9 @@ export function getPeriod(): Period {
     (localStorage.getItem("period") as Period | null) || Period.Week;
   return period;
 }
+
+export function timeStringToS(time_str: string): number {
+  const [hh, mm, ss] = time_str.split(":");
+
+  return Number(hh) * 3600 + Number(mm) * 60 + Number(ss) ;
+}

@@ -170,7 +170,6 @@ const calendar: Module<StateCalendar, stateRoot> = {
             state.current_date.getFullYear() == after_month.getFullYear(),
         };
 
-      console.log();
 
       return days;
     },

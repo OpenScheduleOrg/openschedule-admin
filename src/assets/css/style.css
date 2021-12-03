@@ -16,7 +16,7 @@
   --font-secundary: #41445e;
 
   /* btn */
-  --btn-default: #3e9bf1;
+  --btn-default: #176dbd;
   --btn-default-hover: #2a77c0;
   --btn-disabled: rgb(228, 227, 227);
   --btn-create: blue;
@@ -47,6 +47,29 @@ body {
   min-height: 100vh;
   background-color: var(--bg-light);
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 4px;
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
@@ -61,10 +84,10 @@ body {
   grid-template:
     [header-left] "hd hd" 11vh [header-right]
     [main-left] "nav  main" 1fr / 22vw 1fr [main-right];
+  grid-template-rows: 11vh minmax(0, 1fr);
   grid-gap: 0.15rem;
   height: 100vh;
   width: 100vw;
-  background-color: rgb(245, 241, 241);
 }
 
 .grid-item {
@@ -72,14 +95,6 @@ body {
   background-color: var(--bg-light);
 }
 
-aside.grid-item {
-  flex-direction: column;
-  padding: 0.7rem;
-  justify-content: space-between;
-}
-main.grid-item {
-  flex-direction: column;
-}
 header.grid-item {
   background-color: var(--bg-header);
   grid-area: hd;
@@ -87,22 +102,47 @@ header.grid-item {
   padding: 3px 0.5rem;
   color: var(--font-light);
 }
-
-nav.grid-item {
+aside.grid-item {
   grid-area: nav;
+  flex-direction: column;
+  padding: 0.7rem;
+  justify-content: space-between;
 }
-
 main.grid-item {
   grid-area: main;
+  position: relative;
+  padding: 0.3rem;
 }
+
+.scrolled {
+  overflow-y: scroll;
+  padding-right: 4px;
+}
+.isScrolled::before {
+  content: "";
+  width: 88%;
+  position: absolute;
+  z-index: 999;
+  height: 2px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 9px;
+  top: -1px;
+}
+
+.isScrolled::before {
+  box-shadow: 0 6px 5px -3px rgba(0, 0, 0, 0.35);
+}
+
 button {
   cursor: pointer;
   padding: 0.7em 1.2em;
   background-color: var(--btn-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
-  font-size: 0.9rem;
   font-weight: 600;
-  margin: 3px;
   border: var(--btn-default);
   border-radius: 1.5px;
 }

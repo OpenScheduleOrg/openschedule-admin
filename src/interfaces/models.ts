@@ -12,9 +12,9 @@ export interface Consulta {
 
 export interface Clinica {
   id?: number;
-  nome: string;
-  telefone: string;
-  endereco: string;
+  nome?: string;
+  telefone?: string;
+  endereco?: string;
 }
 
 export interface Cliente {
@@ -29,11 +29,13 @@ export interface Cliente {
 
 export interface Horario {
   id?: number;
-  am_inicio: string;
-  am_fim?: string;
+  clinica_id:number;
+  am_inicio: string | number;
+  am_fim?: string | number;
   almoco: boolean;
-  pm_incio?: string;
-  pm_fim: string;
+  pm_inicio?: string | number;
+  pm_fim: string | number;
+  intervalo: string | number;
   dia_semana: number;
 }
 

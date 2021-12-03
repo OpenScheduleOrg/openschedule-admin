@@ -1,3 +1,5 @@
+export const DEFAULT_TITLE = "ConsuChat"
+
 export enum Period {
   Agenda = "agenda",
   Day = "day",

@@ -1,4 +1,4 @@
-import { Module, Commit } from "vuex";
+import { Module, Commit, Dispatch } from "vuex";
 import { State as stateRoot } from "..";
 import { Funcionario } from "@/interfaces";
 import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from "./mutation-types";
@@ -30,29 +30,46 @@ const auth: Module<StateAuth, stateRoot> = {
     },
   },
   actions: {
-    login({ commit }: { commit: Commit }, payload) {
+    loginFailure({ commit }: { commit: Commit }, error) {
+      commit(LOGIN_FAILURE);
+      return Promise.reject(error);
+    },
+    login(
+      { commit, dispatch }: { commit: Commit; dispatch: Dispatch },
+      payload
+    ) {
       return login(payload.username, payload.password, payload.rememberMe)
         .then((res) => {
           commit(LOGIN_SUCCESS, res.data.data.funcionario);
-          return res;
+          return dispatch("clinica/getClinica", null, {
+            root: true,
+          });
         })
-        .catch((error) => {
-          commit(LOGIN_FAILURE);
-          return Promise.reject(error);
-        });
+        .catch((error) => dispatch("loginFailure", error));
     },
-    getLoged({ commit }: { commit: Commit }) {
+    getLoged({
+      commit,
+      dispatch,
+      state,
+    }: {
+      commit: Commit;
+      dispatch: Dispatch;
+      state: StateAuth;
+    }) {
+      if (state.status) {
+        return Promise.resolve();
+      }
       return getLoged()
         .then((res) => {
           commit(LOGIN_SUCCESS, res.data.data.funcionario);
-          return res;
+          return dispatch("clinica/getClinica", null, {
+            root: true,
+          });
         })
-        .catch((error) => {
-          commit(LOGIN_FAILURE);
-          return Promise.reject(error);
-        });
+        .catch((error) => dispatch("loginFailure", error));
     },
-    logout({ commit }: { commit: Commit }) {
+    logout({ commit, dispatch }: { commit: Commit; dispatch: Dispatch }) {
+      dispatch("clinica/resetState", null, { root: true });
       logout();
       commit(LOGOUT);
     },

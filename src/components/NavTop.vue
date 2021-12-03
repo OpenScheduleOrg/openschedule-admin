@@ -6,8 +6,8 @@
     <div class="nav-calendar">
       <router-link
         class="hd_button"
-        :class="{ 'is-today': isToday }"
-        :to="{ name: period, params: { day: '', month: '', year: '' } }"
+        :class="{ 'is-today': isToday && isAgendaRoute}"
+        :to="{ name: period }"
       >
         hoje
       </router-link>
@@ -43,7 +43,7 @@
       <router-link
         class="hd_button"
         v-for="(text, p) in periods"
-        :class="{ 'selected-period': isActivedPeriod(p) }"
+        :class="{ 'selected-period': isActivedPeriod(p) && isAgendaRoute }"
         :key="p"
         :to="{
           name: p,
@@ -120,6 +120,9 @@ export default defineComponent({
       isToday: "calendar/isToday",
     }),
     ...mapState("calendar", ["period", "current_date"]),
+    isAgendaRoute() {
+      return this.$route.path.startsWith("/agenda");
+    },
   },
 });
 </script>
@@ -184,7 +187,6 @@ a.hd_button:hover,
   background-color: rgba(241, 241, 241, 0.432);
 }
 
-
 .today-date {
   font-size: 1.5rem;
   margin: 0 0.2rem;
@@ -194,9 +196,9 @@ a.hd_button:hover,
 }
 
 a.selected-period,
-a.is-today {
+a.is-today{
   pointer-events: none;
-  cursor: default;
+  cursor: initial;
   background-color: rgba(0, 0, 0, 0.219);
   border-color: rgba(0, 0, 0, 0);
   transition: all 0.4s;

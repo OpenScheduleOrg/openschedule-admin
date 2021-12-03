@@ -5,7 +5,7 @@
       <hr />
       <span class="error">{{ messages.error.both }}</span>
       <div class="form-group">
-        <label for="username">Username</label>
+        <label for="username">Usuário</label>
         <input
           ref="username"
           type="text"
@@ -19,7 +19,7 @@
         <span class="error">{{ messages.error.username }}</span>
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">Senha</label>
         <input
           ref="password"
           type="password"
@@ -44,8 +44,12 @@
           ref="btnSubmit"
           @click="submit()"
           :disabled="!form.password || !form.username"
+          :class="{ isSubmited: loading }"
         >
-          Entrar
+          <transition name="fade" mode="out-in">
+            <div v-if="loading" class="loader"></div>
+            <span v-else>Entrar</span>
+          </transition>
         </button>
       </div>
     </div>
@@ -67,6 +71,7 @@ export default defineComponent({
           password: "",
         },
       },
+      loading: false,
     };
   },
   mounted() {
@@ -93,19 +98,21 @@ export default defineComponent({
     },
     submit() {
       if (!this.checkForm()) return;
+
+      this.loading = true;
       this.$store
         .dispatch("auth/login", this.form)
         .then(() => this.$router.push("/"))
-        .catch(
-          (error) =>
-            (this.messages.error.both =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString() ||
-              "Inespected error.")
-        );
+        .catch((error) => {
+          this.loading = false;
+          return (this.messages.error.both =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString() ||
+            "Inespected error.");
+        });
     },
   },
   watch: {
@@ -129,23 +136,24 @@ export default defineComponent({
 .login-form {
   position: absolute;
   background-color: white;
-  width: 25vw;
+  width: 23vw;
   top: 50%;
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   border: solid rgb(43, 116, 226) 1.2px;
   border-radius: 5px;
-  padding: 3em 1.25em;
+  padding: 1.75em 1.25em;
 }
 
 .error {
   color: var(--font-danger);
+  margin-bottom: 4px;
 }
 span {
   display: inline-block;
   width: 100%;
-  font-size: 0.9em;
+  height: 1.1em;
 }
 
 .login-form > span {
@@ -154,7 +162,7 @@ span {
 
 h1 {
   text-align: center;
-  margin-bottom: 0.6em;
+  margin-bottom: 0.9em;
   font-family: "Roboto";
   font-weight: 800;
   color: #0d45c3;
@@ -162,7 +170,7 @@ h1 {
 
 hr {
   border: solid 1px rgb(218, 218, 218);
-  margin: 1em -1.25rem;
+  margin: 0.7em -1.25rem;
 }
 
 label[for="rememberMe"] {
@@ -174,5 +182,55 @@ input[type="checkbox"] {
 
 button {
   width: 100%;
+  height: 2.4rem;
+  margin: 4px 0;
+}
+button > span {
+  display: inline;
+  font-size: 0.95rem;
+}
+
+.isSubmited {
+  pointer-events: none;
+  cursor: initial;
+  background-color: #075197;
+}
+
+.loader {
+  border: 0.15em solid #ffffff;
+  border-radius: 50%;
+  border-top: 0.15rem solid #0392f1;
+  width: 1.5rem;
+  height: 1.5rem;
+  -webkit-animation: spin 800ms linear infinite; /* Safari */
+  animation: spin 800ms linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

@@ -1,25 +1,31 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
 import store from "@/store";
-import { rootAgenda } from "./symbols";
+import SyName from "./symbols";
+import { agendaGuard } from "./guards";
+import SyNames from "./symbols";
+
+const agendaParams = "/:day(\\d*)?/:month(\\d*)?/:year(\\d*)?";
 
 const children: RouteRecordRaw[] = [
   {
     path: "/agenda",
-    name: rootAgenda,
+    name: SyName.rootAgenda,
     component: () => import("@/components/Agenda.vue"),
     children: [
       {
-        path: "/agenda/:day?/:month?/:year?",
+        path: "/agenda" + agendaParams,
         name: "agenda",
         component: () => import("@/components/period/Consultas.vue"),
+        meta: { title: "Agenda - CONSULTAS" },
       },
       {
-        path: "/agenda/week/:day?/:month?/:year?",
+        path: "/agenda/week" + agendaParams,
         name: "week",
         component: () => import("@/components/period/Week.vue"),
+        meta: {title: "Agenda - SEMANA"}
       },
       {
-        path: "/agenda/day/:day?/:month?/:year?",
+        path: "/agenda/day" + agendaParams,
         name: "day",
         component: () => import("@/components/period/Day.vue"),
       },
@@ -92,12 +98,13 @@ const children: RouteRecordRaw[] = [
 const routes: RouteRecordRaw[] = [
   {
     path: "/login",
-    name: "login",
+    name: SyName.login,
     component: () => import("@/views/Login.vue"),
+    meta: { title: "ConsuChat - LOGIN" },
   },
   {
     path: "/logout",
-    name: "logout",
+    name: SyName.logout,
     component: {
       beforeRouteEnter(to, from, next) {
         store.dispatch("auth/logout");
@@ -107,19 +114,23 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/",
-    name: "home",
+    name: SyName.home,
     component: () => import("@/views/Main.vue"),
     beforeEnter(to, from, next) {
-      store
-        .dispatch("auth/getLoged")
-        .then(() => next())
-        .catch((error) => {
-          console.error(error);
-          next("/login");
-        });
+      if (!store.state.auth.status)
+        store
+          .dispatch("auth/getLoged")
+          .then(() => {
+            agendaGuard(to, from, next);
+          })
+          .catch(() => {
+            next({name: SyNames.login});
+          });
+      else if (to.name === SyName.home)
+        next({ name: store.state.calendar.period });
+      else agendaGuard(to, from, next);
     },
     children,
-    redirect: { name: rootAgenda },
   },
 ];
 

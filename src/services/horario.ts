@@ -1,3 +1,7 @@
 import axios from ".";
 
-import { } from "@/interfaces/services";
+import { GetHorarios } from "@/interfaces/services";
+
+
+export const getHorarios: GetHorarios = async (clinica_id) =>
+  axios.get("/horarios", { params: { clinica_id } });
