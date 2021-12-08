@@ -8,11 +8,11 @@ export interface APIResponseSuccess {
   clinica: Clinica;
   cliente: Cliente;
   horario: Horario;
-  consultas: [Consulta];
-  clientes: [Cliente];
-  horarios: [Horario];
+  consultas: Consulta[];
+  clientes: Cliente[];
+  horarios: Horario[];
   funcionario: Funcionario;
-  funcionarios: [Funcionario];
+  funcionarios: Funcionario[];
 }
 
 export interface APIResponseFail {

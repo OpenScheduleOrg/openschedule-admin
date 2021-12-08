@@ -5,6 +5,7 @@ export interface SixWeeksDay {
   isToday?: boolean;
   isSelected?: boolean;
   outMonth?: boolean;
+  isValidDay?: boolean;
 }
 
 export interface AgendaParams {

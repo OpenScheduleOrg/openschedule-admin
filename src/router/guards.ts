@@ -23,7 +23,10 @@ export const agendaGuard: NavigationGuard = function (to, from, next) {
 
       store.commit("calendar/" + SET_CURRENT_DATE, new Date(year, month, day));
     } else {
-      store.commit("calendar/" + SET_CURRENT_DATE, today);
+      store.commit(
+        "calendar/" + SET_CURRENT_DATE,
+        new Date(today.getFullYear(), today.getMonth(), today.getDate())
+      );
       // eslint-disable-next-line
       for (var _ in to.params) {
         next({ name: to.name });

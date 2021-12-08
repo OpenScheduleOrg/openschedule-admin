@@ -5,10 +5,11 @@ import {
   SET_CURRENT_DATE,
   SET_OFFSET_MONTH,
 } from "./mutation-types";
-import { Month, Period } from "@/constants";
+import { Month, Period, Week } from "@/constants";
 import { monthBetween, setPeriod, getPeriod } from "@/utils";
 
 import { SixWeeksDay } from "@/interfaces/store";
+import { Horario } from "@/interfaces";
 const today = new Date();
 
 export interface StateCalendar {
@@ -106,13 +107,17 @@ const calendar: Module<StateCalendar, stateRoot> = {
         state.current_date.getFullYear() === today.getFullYear()
       );
     },
-    getSixWeeks(state) {
+    getSixWeeks(state, getteres, rootState) {
       let i = 0;
+      const current_date = state.current_date;
       const days: SixWeeksDay[] = [];
+      const valid_week_days: number[] = rootState.clinica.horarios.map(
+        (h) => h.dia_semana
+      );
 
       const start_month = new Date(
-        state.current_date.getFullYear(),
-        state.current_date.getMonth() + state.offset_month,
+        current_date.getFullYear(),
+        current_date.getMonth() + state.offset_month,
         1
       );
       const before_month = start_month.addDays(-1);
@@ -131,6 +136,7 @@ const calendar: Module<StateCalendar, stateRoot> = {
             state.current_date.getDate() == before_month.getDate() + j &&
             state.current_date.getMonth() == before_month.getMonth() &&
             state.current_date.getFullYear() == before_month.getFullYear(),
+          isValidDay: valid_week_days.includes((i - 1) % 7),
         };
 
       for (let j = 0; j < start_month.monthSize(); j++)
@@ -147,6 +153,7 @@ const calendar: Module<StateCalendar, stateRoot> = {
             state.current_date.getDate() == start_month.getDate() + j &&
             state.current_date.getMonth() == start_month.getMonth() &&
             state.current_date.getFullYear() == start_month.getFullYear(),
+          isValidDay: valid_week_days.includes((i - 1) % 7),
         };
 
       const after_month = new Date(
@@ -168,8 +175,8 @@ const calendar: Module<StateCalendar, stateRoot> = {
             state.current_date.getDate() == after_month.getDate() + j &&
             state.current_date.getMonth() == after_month.getMonth() &&
             state.current_date.getFullYear() == after_month.getFullYear(),
+          isValidDay: valid_week_days.includes((i - 1) % 7),
         };
-
 
       return days;
     },
@@ -181,6 +188,40 @@ const calendar: Module<StateCalendar, stateRoot> = {
       return (
         Month[offset_date.getMonth()][0] + " de " + offset_date.getFullYear()
       );
+    },
+    getWeekDays(state, getters, rootState) {
+      const week: Array<{
+        day: number;
+        month: number;
+        year: number;
+        isToday: boolean;
+        weekDay: string;
+      }> = [];
+      const today = new Date();
+      const horarios: (Horario | { dia_semana: number })[] =
+        (rootState.clinica.horarios.length && rootState.clinica.horarios) || [];
+
+      const current_date = state.current_date;
+      const weekDay = current_date.getDay();
+      let week_date;
+      if (horarios.length == 0)
+        for (let i = 0; i < 7; i++) horarios.push({ dia_semana: i });
+
+      for (const h of horarios) {
+        week_date = current_date.addDays(h.dia_semana - weekDay);
+        week.push({
+          day: week_date.getDate(),
+          month: week_date.getMonth(),
+          year: week_date.getFullYear(),
+          isToday:
+            week_date.getDate() == today.getDate() &&
+            week_date.getMonth() == today.getMonth() &&
+            week_date.getFullYear() == today.getFullYear(),
+          weekDay: Week[week_date.getDay()][1],
+        });
+      }
+
+      return week;
     },
   },
   mutations: {

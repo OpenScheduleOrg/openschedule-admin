@@ -68,8 +68,7 @@ const auth: Module<StateAuth, stateRoot> = {
         })
         .catch((error) => dispatch("loginFailure", error));
     },
-    logout({ commit, dispatch }: { commit: Commit; dispatch: Dispatch }) {
-      dispatch("clinica/resetState", null, { root: true });
+    logout({ commit }: { commit: Commit }) {
       logout();
       commit(LOGOUT);
     },

@@ -35,11 +35,13 @@ export type UpdateConsulta = (
 ) => Promise<APIResponse>;
 
 export type GetConsulta = (
-  id?: number | "",
-  clinicia_id?: number | null,
-  cliente_id?: number | null,
-  data_start?: Date | null,
-  data_end?: Date | null
+  params: {
+    clinica_id?: number;
+    cliente_id?: number;
+    date_start?: Date | String;
+    date_end?: Date | String;
+  },
+  id?: number
 ) => Promise<APIResponse>;
 
 export type DeleteConsulta = (id: number) => Promise<APIResponse>;
@@ -55,12 +57,7 @@ export type UpdateCliente = (
   cliente: Cliente
 ) => Promise<APIResponse>;
 
-export type GetClientes = (
-  id?: number | "",
-  cliente?: Cliente,
-  page?: number,
-  perPage?: number
-) => Promise<APIResponse>;
+export type GetClientes = (params: {}, id?: number) => Promise<APIResponse>;
 
 /* 
 

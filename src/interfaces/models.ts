@@ -3,6 +3,8 @@ export interface Consulta {
   clinica_id: number;
   cliente_id: number;
   marcada: string | Date;
+  duracao: number;
+  hora_in_seconds: number;
   descricao: string;
   realizada: boolean;
   clinica_nome?: string;
@@ -29,7 +31,7 @@ export interface Cliente {
 
 export interface Horario {
   id?: number;
-  clinica_id:number;
+  clinica_id: number;
   am_inicio: string | number;
   am_fim?: string | number;
   almoco: boolean;
@@ -39,7 +41,7 @@ export interface Horario {
   dia_semana: number;
 }
 
-export interface Funcionario{
+export interface Funcionario {
   id?: number;
   nome: string;
   sobrenome: string;

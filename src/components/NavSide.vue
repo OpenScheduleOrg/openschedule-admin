@@ -23,12 +23,14 @@
       </div>
       <div id="four-two">
         <router-link
+          class="date-link"
           v-for="d in dates"
           :key="d.day + '/' + d.month + '/' + d.year"
           :class="{
             'is-selected': d.isSelected,
             'out-month': d.outMonth,
             'is-today': d.isToday,
+            'is-invalid-day': !d.isValidDay,
           }"
           :to="{
             name: period,
@@ -166,7 +168,8 @@ nav {
   grid-template-rows: repeat(6, 1fr);
   margin-top: 2px;
 }
-#four-two > a {
+
+.date-link {
   display: inline-block;
   text-align: center;
   cursor: pointer;
@@ -179,28 +182,28 @@ nav {
   font-weight: 700;
 }
 
-#four-two > a:hover {
+.date-link:hover {
   background-color: rgba(0, 0, 0, 0.055);
 }
 
-a.is-selected {
-  transition: background-color 0.4s, color 0.43s !important;
-  background-color: #2231d956 !important;
-  color: var(--font-secundary) !important;
-}
-
 a.out-month {
-  color: rgba(0, 0, 0, 0.596) !important;
+  color: rgba(0, 0, 0, 0.596);
 }
 
-a.is-today {
-  background-color: var(--bg-blue) !important;
-  color: rgb(255, 255, 255) !important;
+.date-link.is-invalid-day {
+  pointer-events: none;
+  cursor: initial;
+  color: rgba(0, 0, 0, 0.3);
 }
 
 a.is-selected.out-month {
   background-color: #2231d923 !important;
   color: var(--font-secundary) !important;
+}
+a.is-today.out-month {
+  transition: background-color 0.3s;
+  background-color: #006fd6d3 !important;
+  color: rgb(241, 240, 240) !important;
 }
 
 nav {

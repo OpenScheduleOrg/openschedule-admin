@@ -6,7 +6,7 @@
     <div class="nav-calendar">
       <router-link
         class="hd_button"
-        :class="{ 'is-today': isToday && isAgendaRoute}"
+        :class="{ 'is-today': isToday && isAgendaRoute }"
         :to="{ name: period }"
       >
         hoje
@@ -74,8 +74,8 @@
             alt="w3schools"
           />
           <div>
-            <span>{{ user.nome }} {{ user.sobrenome }}</span>
-            <span>{{ user.email }}</span>
+            <span :title="user.nome + ' ' + user.sobrenome">{{ user.nome }} {{ user.sobrenome }}</span>
+            <span class="text-continous" :title="user.email">{{ user.email }}</span>
           </div>
         </li>
         <hr />
@@ -196,12 +196,12 @@ a.hd_button:hover,
 }
 
 a.selected-period,
-a.is-today{
+a.is-today {
   pointer-events: none;
   cursor: initial;
-  background-color: rgba(0, 0, 0, 0.219);
-  border-color: rgba(0, 0, 0, 0);
-  transition: all 0.4s;
+  background-color: rgba(0, 0, 0, 0.219) !important;
+  border-color: rgba(0, 0, 0, 0) !important;
+  transition: all 0.4s !important;
 }
 
 .dropdown {
@@ -269,18 +269,22 @@ img {
 }
 .drop-content .user-detail div {
   padding: 3px;
+  max-width: 70%;
 }
 .drop-content hr {
   border: solid 1px rgb(194, 194, 194);
   margin-top: 4px;
 }
+
+.drop-content .user-detail img {
+  height: 45px;
+}
+
 .drop-content .user-detail span {
   display: block;
   margin: 3px;
 }
-.user-detail img {
-  height: 45px;
-}
+
 .dropdown-link {
   display: block;
   text-align: center;

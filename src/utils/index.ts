@@ -1,4 +1,5 @@
 import { Period } from "@/constants";
+import { Consulta, Horario } from "@/interfaces";
 
 export function monthBetween(date: Date): Date {
   const month = date.getMonth();
@@ -27,5 +28,47 @@ export function getPeriod(): Period {
 export function timeStringToS(time_str: string): number {
   const [hh, mm, ss] = time_str.split(":");
 
-  return Number(hh) * 3600 + Number(mm) * 60 + Number(ss) ;
+  return Number(hh) * 3600 + Number(mm) * 60 + Number(ss);
+}
+
+export function sortHorarios(a: Horario, b: Horario): number {
+  if (a.dia_semana < b.dia_semana) return -1;
+  if (a.dia_semana > b.dia_semana) return 1;
+  return 0;
+}
+
+export function sortConsultas(a: Consulta, b: Consulta): number {
+  if (a.hora_in_seconds < b.hora_in_seconds) return -1;
+  if (a.hora_in_seconds > b.hora_in_seconds) return 1;
+  return 0;
+}
+
+export function getUTCOffset(): string {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() / 60;
+
+  return (
+    "GMT" +
+    (offset < 0 ? "+" : "-") +
+    (Math.abs(offset) > 9 ? Math.abs(offset) : "0" + Math.abs(offset))
+  );
+}
+
+export function secondsToHorario(s: number): {
+  hours: number;
+  minutes: number;
+  hhmm: string;
+} {
+  const s_to_minutes = s / 60;
+  const minutes = s_to_minutes % 60;
+  const hours = (s_to_minutes - minutes) / 60;
+
+  const hhmm =
+    (hours < 10 ? "0" : "") +
+    String(hours) +
+    ":" +
+    (minutes < 10 ? "0" : "") +
+    String(minutes);
+
+  return { hours, minutes, hhmm };
 }

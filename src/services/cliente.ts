@@ -1,3 +1,6 @@
 import axios from ".";
 
-import { } from "@/interfaces/services";
+import { CreateCliente} from "@/interfaces/services";
+
+export const createCliente: CreateCliente = async (cliente) => axios.post("/cliente", cliente)
+

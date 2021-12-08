@@ -233,4 +233,36 @@ button > span {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-group {
+  width: 100%;
+  font-size: 0.8rem;
+  margin-bottom: 1em;
+}
+
+.form-group > label {
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.form-group > input {
+  width: 100%;
+  background-color: var(--input-default);
+  font-size: 1.05em;
+  padding: 0.77em 0.77em;
+  border: solid 1px var(--input-default);
+  border-radius: 2px;
+}
+.form-group > input:focus,
+.form-group > input:hover {
+  background-color: var(--input-focused);
+  border-color: var(--input-focused);
+}
 </style>
