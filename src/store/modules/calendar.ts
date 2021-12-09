@@ -1,4 +1,4 @@
-import { Commit, Module } from "vuex";
+import { Commit, Dispatch, Module } from "vuex";
 import { State as stateRoot } from "..";
 import {
   SET_PERIOD,
@@ -107,76 +107,42 @@ const calendar: Module<StateCalendar, stateRoot> = {
         state.current_date.getFullYear() === today.getFullYear()
       );
     },
-    getSixWeeks(state, getteres, rootState) {
-      let i = 0;
+    getSixWeeks(state, getters, rootState, rootGetters) {
       const current_date = state.current_date;
       const days: SixWeeksDay[] = [];
-      const valid_week_days: number[] = rootState.clinica.horarios.map(
-        (h) => h.dia_semana
-      );
 
       const start_month = new Date(
         current_date.getFullYear(),
         current_date.getMonth() + state.offset_month,
         1
       );
-      const before_month = start_month.addDays(-1);
+      let day_details: { ocuppied: number; free: number };
 
-      for (let j = start_month.getDay() - 1; j >= 0; j--)
-        days[i++] = {
-          day: before_month.getDate() - j,
-          month: before_month.getMonth() + 1,
-          year: before_month.getFullYear(),
-          outMonth: true,
+      let d: Date = start_month.addDays(-start_month.getDay() - 1);
+      for (let i = 0; i < 42; i++) {
+        d = d.addDays(1);
+        day_details = rootGetters["clinica/getDayDetails"](
+          d.toISODate,
+          d.getDay()
+        );
+        days[i] = {
+          day: d.getDate(),
+          month: d.getMonth(),
+          year: d.getFullYear(),
+          outMonth: d.getMonth() != start_month.getMonth(),
           isToday:
-            today.getDate() == before_month.getDate() - j &&
-            today.getMonth() == before_month.getMonth() &&
-            today.getFullYear() == before_month.getFullYear(),
+            today.getDate() == d.getDate() &&
+            today.getMonth() == d.getMonth() &&
+            today.getFullYear() == d.getFullYear(),
           isSelected:
-            state.current_date.getDate() == before_month.getDate() + j &&
-            state.current_date.getMonth() == before_month.getMonth() &&
-            state.current_date.getFullYear() == before_month.getFullYear(),
-          isValidDay: valid_week_days.includes((i - 1) % 7),
+            state.current_date.getDate() == d.getDate() &&
+            state.current_date.getMonth() == d.getMonth() &&
+            state.current_date.getFullYear() == d.getFullYear(),
+          isValidDay: day_details.ocuppied > 0 || day_details.free > 0,
+          hs_occup: day_details.ocuppied,
+          hs_free: day_details.free,
         };
-
-      for (let j = 0; j < start_month.monthSize(); j++)
-        days[i++] = {
-          day: start_month.getDate() + j,
-          month: start_month.getMonth() + 1,
-          year: start_month.getFullYear(),
-          outMonth: false,
-          isToday:
-            today.getDate() == start_month.getDate() + j &&
-            today.getMonth() == start_month.getMonth() &&
-            today.getFullYear() == start_month.getFullYear(),
-          isSelected:
-            state.current_date.getDate() == start_month.getDate() + j &&
-            state.current_date.getMonth() == start_month.getMonth() &&
-            state.current_date.getFullYear() == start_month.getFullYear(),
-          isValidDay: valid_week_days.includes((i - 1) % 7),
-        };
-
-      const after_month = new Date(
-        start_month.getFullYear(),
-        start_month.getMonth() + 1,
-        1
-      );
-      for (let j = 0; i < 7 * 6; j++)
-        days[i++] = {
-          day: after_month.getDate() + j,
-          month: after_month.getMonth() + 1,
-          year: after_month.getFullYear(),
-          outMonth: true,
-          isToday:
-            today.getDate() == after_month.getDate() + j &&
-            today.getMonth() == after_month.getMonth() &&
-            today.getFullYear() == after_month.getFullYear(),
-          isSelected:
-            state.current_date.getDate() == after_month.getDate() + j &&
-            state.current_date.getMonth() == after_month.getMonth() &&
-            state.current_date.getFullYear() == after_month.getFullYear(),
-          isValidDay: valid_week_days.includes((i - 1) % 7),
-        };
+      }
 
       return days;
     },
@@ -229,17 +195,56 @@ const calendar: Module<StateCalendar, stateRoot> = {
       setPeriod(period);
       state.period = period;
     },
-    [SET_CURRENT_DATE](state, date: Date) {
+    [SET_CURRENT_DATE](state, new_current_date: Date) {
       state.offset_month = 0;
-      state.current_date = date;
+      state.current_date = new_current_date;
     },
     [SET_OFFSET_MONTH](state, offset) {
       state.offset_month = state.offset_month + offset;
     },
   },
   actions: {
-    setOffsetMonth({ commit }: { commit: Commit }, offset: -1 | 1) {
+    setCurrentDate(
+      {
+        commit,
+        dispatch,
+      }: {
+        commit: Commit;
+        dispatch: Dispatch;
+      },
+      new_current_date: Date
+    ) {
+      commit(SET_CURRENT_DATE, new_current_date);
+      dispatch("updateConsultas");
+    },
+    setPeriod({ commit }: { commit: Commit }, period) {
+      commit(SET_PERIOD, period);
+    },
+    setOffsetMonth(
+      { commit, dispatch }: { commit: Commit; dispatch: Dispatch },
+      offset: -1 | 1
+    ) {
       commit(SET_OFFSET_MONTH, offset);
+      dispatch("updateConsultas");
+    },
+    updateConsultas({
+      dispatch,
+      state,
+    }: {
+      dispatch: Dispatch;
+      state: StateCalendar;
+    }) {
+      const current_date = state.current_date.addDays(0);
+      const offset_month = state.offset_month;
+
+      current_date.setMonth(current_date.getMonth() + offset_month);
+      const date_start = current_date.addDays(-60);
+      const date_end = current_date.addDays(60);
+      dispatch(
+        "clinica/setConsultas",
+        { date_start, date_end },
+        { root: true }
+      );
     },
   },
 };

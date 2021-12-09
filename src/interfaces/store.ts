@@ -6,6 +6,8 @@ export interface SixWeeksDay {
   isSelected?: boolean;
   outMonth?: boolean;
   isValidDay?: boolean;
+  hs_occup: number;
+  hs_free: number;
 }
 
 export interface AgendaParams {

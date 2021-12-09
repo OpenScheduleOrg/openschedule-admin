@@ -259,12 +259,48 @@ const clinica: Module<StateClinica, stateRoot> = {
           wd - rootState.calendar.current_date.getDay()
         );
 
-        consulta_datetime.setSeconds(
-          consulta_datetime.getSeconds() + hs
-        );
+        consulta_datetime.setSeconds(consulta_datetime.getSeconds() + hs);
 
         return consulta_datetime;
       },
+    getDayDetails: (state) => (d: string, wd: number) => {
+      const day_consultas = state.consultas[d];
+      const horario = state.horarios.find((hrr) => hrr.dia_semana == wd);
+      console.log(state.horarios);
+      const details = { occupied: 0, free: 0 };
+
+      if (!horario) return details;
+
+      const intervalo = horario.intervalo as number;
+
+      for (
+        let h = horario.am_inicio as number;
+        h < horario.pm_fim;
+        h += intervalo
+      ) {
+        if (
+          horario.am_fim &&
+          horario.pm_inicio &&
+          h >= horario.am_fim &&
+          h <= horario.pm_inicio
+        )
+          h = horario.pm_inicio as number;
+        else {
+          if (
+            day_consultas &&
+            day_consultas.some(
+              (c) =>
+                h >= c.hora_in_seconds &&
+                c.hora_in_seconds < h + intervalo &&
+                c.hora_in_seconds + c.duracao > h
+            )
+          )
+            details.occupied++;
+          else details.free++;
+        }
+      }
+      return details;
+    },
   },
   mutations: {
     [SET_CLINICA](state, clinica: Clinica) {
@@ -286,7 +322,7 @@ const clinica: Module<StateClinica, stateRoot> = {
     },
   },
   actions: {
-    getClinica({
+    setClinica({
       commit,
       rootState,
       dispatch,
@@ -298,14 +334,14 @@ const clinica: Module<StateClinica, stateRoot> = {
       return getClinicas(rootState.auth.user?.clinica_id)
         .then((res) => {
           commit(SET_CLINICA, res.data.data.clinica);
-          return dispatch("getHorarios");
+          return dispatch("setHorarios");
         })
         .catch((error) => {
           dispatch("resetState");
           return Promise.reject(error);
         });
     },
-    getHorarios({
+    setHorarios({
       commit,
       state,
       dispatch,
@@ -328,22 +364,42 @@ const clinica: Module<StateClinica, stateRoot> = {
         horarios.sort(sortHorarios);
         commit(SET_HORARIOS, horarios);
 
-        return dispatch("getConsultas");
+        return dispatch("setConsultas");
       });
     },
-    getConsultas({ state }: { state: StateClinica }) {
-      const today = new Date();
-      const date_start = new Date(
-        today.getFullYear(),
-        today.getMonth() - 3,
-        today.getDate()
-      );
-      const date_end = new Date(
-        today.getFullYear(),
-        today.getMonth() + 3,
-        today.getDate() + 1
-      );
-      return getConsultas({ clinica_id: state.id, date_start, date_end })
+    setConsultas(
+      { state, rootState }: { state: StateClinica; rootState: stateRoot },
+      params = undefined
+    ) {
+      const clinica_id = state.id;
+      const current_date = rootState.calendar.current_date;
+      let date_start, date_end, cliente_id, id;
+      if (!params) {
+        date_start = new Date(
+          current_date.getFullYear(),
+          current_date.getMonth() - 3,
+          current_date.getDate()
+        );
+        date_end = new Date(
+          current_date.getFullYear(),
+          current_date.getMonth() + 3,
+          current_date.getDate() + 1
+        );
+      } else {
+        date_start = params.date_start;
+        date_end = params.date_end;
+        cliente_id = params.cliente_id;
+        id = params.id;
+      }
+      return getConsultas(
+        {
+          clinica_id,
+          cliente_id,
+          date_start,
+          date_end,
+        },
+        id
+      )
         .then((res) => {
           console.log(res);
         })

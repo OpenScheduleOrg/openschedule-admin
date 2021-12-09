@@ -6,6 +6,7 @@ import {
   faTimes,
   faCalendarAlt,
   faPortrait,
+  faExclamationCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faWindowClose,
@@ -24,7 +25,8 @@ library.add(
   faCalendarAlt,
   faPortrait,
   faIdCard,
-  faClock
+  faClock,
+  faExclamationCircle
 );
 
 export default FontAwesomeIcon;

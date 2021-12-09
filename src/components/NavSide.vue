@@ -34,7 +34,7 @@
           }"
           :to="{
             name: period,
-            params: { day: d.day, month: d.month, year: d.year },
+            params: { day: d.day, month: d.month+1, year: d.year },
           }"
         >
           {{ d.day }}

@@ -4,27 +4,27 @@
     <div class="form-container">
       <h2>Consulta</h2>
       <Form>
-        <input-text
+        <date-picker
           v-model="consulta.marcada"
-          :field_name="'TTTT'"
-        ></input-text>
+          :field_name="'Teste'"
+          :valid="false"
+        ></date-picker>
       </Form>
     </div>
-    {{ consulta.marcada }}
   </modal>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import Modal from "../Modal.vue";
-import { Form, InputText } from "../form";
+import { Form, DatePicker } from "../util";
 
 export default defineComponent({
   name: "ConsultaForm",
   props: ["datetime"],
   data() {
     return {
-      consulta: { descricao: "", marcada: "TTTT"},
+      consulta: { descricao: "", marcada: this.datetime },
       cliente: {},
       validate: {},
     };
@@ -32,7 +32,7 @@ export default defineComponent({
   components: {
     Modal,
     Form,
-    InputText,
+    DatePicker,
   },
 });
 </script>

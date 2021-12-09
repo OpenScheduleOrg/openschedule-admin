@@ -1,6 +1,5 @@
 import { NavigationGuard, RouteRecordName } from "vue-router";
 import { Period } from "@/constants/index";
-import { SET_PERIOD, SET_CURRENT_DATE } from "@/store/modules/mutation-types";
 import store from "@/store";
 import SyNames from "./symbols";
 
@@ -21,10 +20,10 @@ export const agendaGuard: NavigationGuard = function (to, from, next) {
         return;
       }
 
-      store.commit("calendar/" + SET_CURRENT_DATE, new Date(year, month, day));
+      store.dispatch("calendar/setCurrentDate", new Date(year, month, day));
     } else {
-      store.commit(
-        "calendar/" + SET_CURRENT_DATE,
+      store.dispatch(
+        "calendar/setCurrentDate",
         new Date(today.getFullYear(), today.getMonth(), today.getDate())
       );
       // eslint-disable-next-line
@@ -35,7 +34,7 @@ export const agendaGuard: NavigationGuard = function (to, from, next) {
     }
 
     if (to.name !== store.state.calendar.period) {
-      store.commit("calendar/" + SET_PERIOD, to.name);
+      store.dispatch("calendar/setPeriod", to.name);
       const params = (from.name as string) in Period ? from.params : to.params;
       next({ name: to.name, params: params });
     } else {

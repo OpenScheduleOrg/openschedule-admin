@@ -119,7 +119,7 @@ const routes: RouteRecordRaw[] = [
     beforeEnter(to, from, next) {
       if (!store.state.auth.status)
         store
-          .dispatch("auth/getLoged")
+          .dispatch("auth/setLoged")
           .then(() => {
             agendaGuard(to, from, next);
           })
