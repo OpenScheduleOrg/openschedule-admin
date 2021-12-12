@@ -106,6 +106,7 @@ export default defineComponent({
         .catch((error) => {
           this.loading = false;
           return (this.messages.error.both =
+            error.msg ||
             (error.response &&
               error.response.data &&
               error.response.data.message) ||
@@ -151,7 +152,7 @@ export default defineComponent({
   margin-bottom: 4px;
 }
 span {
-  display: inline-block;
+  display: block;
   width: 100%;
   height: 1.1em;
 }

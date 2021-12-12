@@ -1,10 +1,13 @@
 <template>
-  <router-view @new-consulta="setDatetime" />
+  <router-view @new-consulta="setHs" v-slot="{ Component }">
+    <transition name="fade" mode="out-in">
+      <component :is="Component"> </component>
+    </transition>
+  </router-view>
   <consulta-form
     v-if="show_consulta_form"
-    @new-consulta="setDatetime"
     @close_modal="show_consulta_form = false"
-    :datetime="datetime"
+    :hs="hs"
   ></consulta-form>
 </template>
 
@@ -19,19 +22,19 @@ export default defineComponent({
     ConsultaForm,
   },
   data(): {
-    datetime: Date | undefined;
+    hs: number | undefined;
     show_consulta_form: boolean;
     show_consulta_detail: boolean;
   } {
     return {
-      datetime: undefined,
+      hs: undefined,
       show_consulta_form: false,
       show_consulta_detail: false,
     };
   },
   methods: {
-    setDatetime(datetime: Date) {
-      this.datetime = datetime;
+    setHs(hs: number) {
+      this.hs = hs;
       this.show_consulta_form = true;
     },
   },

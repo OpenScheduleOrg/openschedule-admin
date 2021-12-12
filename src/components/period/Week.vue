@@ -42,23 +42,50 @@
         v-for="ch in aw.week_cells"
         :key="ch.week_day + '/' + ch.hora_in_seconds"
       >
-        <div
-          :style="{ '--intervals': ch.intervals }"
-          :class="['day-' + ch.week_day, 'num-interval', 'has-consulta']"
-          v-if="ch.consulta"
-        >
-          consulta
-        </div>
-        <div
-          :style="{ '--intervals': ch.intervals }"
-          :class="[
-            'day-' + ch.week_day,
-            'num-interval',
-            ch.valid_horario ? 'valid-horario' : 'invalid-horario',
-          ]"
-          @click="ch.valid_horario && newConsulta(ch.hora_in_seconds, ch.week_day)"
-          v-else
-        ></div>
+        <transition name="fade" mode="out-in">
+          <div
+            :style="{ '--intervals': ch.intervals }"
+            :class="['day-' + ch.week_day, 'num-interval', 'has-consulta']"
+            v-if="ch.consulta"
+            @click="
+              showConsulta(ch.hora_in_seconds, ch.consulta.marcada.toISODate())
+            "
+          >
+            <div class="cc-consulta-intervalo">
+              <span class="cc-consulta-start">{{
+                ch.consulta.intervalo.start.hhmm
+              }}</span>
+              <span class="cc-consulta-end">{{
+                ch.consulta.intervalo.end.hhmm
+              }}</span>
+            </div>
+            <div class="cc-consulta-detail">
+              <span
+                :title="
+                  ch.consulta.cliente_nome + ch.consulta.cliente_sobrenome
+                "
+                class="text-continous cc-full-name"
+                >{{ ch.consulta.cliente_nome }}
+                {{ ch.consulta.cliente_sobrenome }}</span
+              >
+              <p class="cc-consulta-descricao">
+                {{ ch.consulta.descricao }}
+              </p>
+            </div>
+          </div>
+          <div
+            :style="{ '--intervals': ch.intervals }"
+            :class="[
+              'day-' + ch.week_day,
+              'num-interval',
+              ch.valid_horario ? 'valid-horario' : 'invalid-horario',
+            ]"
+            @click="
+              ch.valid_horario && newConsulta(ch.hora_in_seconds, ch.week_day)
+            "
+            v-else
+          ></div>
+        </transition>
       </template>
     </div>
   </div>
@@ -85,10 +112,19 @@ export default defineComponent({
   },
   methods: {
     newConsulta(hs: number, wd: number) {
-      this.$emit(
-        "new-consulta",
-        this.$store.getters["clinica/getConsultaDatetime"](hs, wd)
-      );
+      const new_current_date = this.$store.getters[
+        "clinica/getConsultaDatetime"
+      ](hs, wd);
+
+      this.$emit("new-consulta", hs);
+      this.$router.push({
+        name: this.period,
+        params: {
+          day: new_current_date.getDate(),
+          month: new_current_date.getMonth() + 1,
+          year: new_current_date.getFullYear(),
+        },
+      });
     },
   },
 });
@@ -101,7 +137,7 @@ export default defineComponent({
   --bg-valid-horario: rgb(230, 230, 230);
   --bg-valid-horario-hv: rgb(210, 210, 210);
   --bg-invalid-horario: rgb(250, 250, 250);
-  --bg-has-consulta: rgb(0, 76, 240);
+  --bg-has-consulta: var(--bg-blue);
 }
 
 #period-week.grid-container {
@@ -135,6 +171,7 @@ export default defineComponent({
   top: 0;
   height: 100%;
   width: 100%;
+  z-index: 888;
 }
 
 .timezone {
@@ -272,13 +309,75 @@ export default defineComponent({
 .week-hours-area .valid-horario {
   background-color: var(--bg-valid-horario);
   border-radius: 6px 0 6px 0;
+  transition: all 0.7s;
 }
 .week-hours-area .valid-horario:hover {
   background-color: var(--bg-valid-horario-hv);
 }
 
 .week-hours-area .has-consulta {
-  background-color: rgb(220, 220, 220);
+  position: relative;
+  display: flex;
+  transition: all 0.3s;
+  background-color: var(--bg-has-consulta);
+  color: white;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  padding: 4px;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.week-hours-area .has-consulta:hover {
+  box-shadow: 0 0 0.6em rgb(163, 163, 163);
+  background-color: rgb(9, 104, 228);
+  z-index: 1000;
+}
+
+.has-consulta .cc-consulta-intervalo {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cc-consulta-intervalo .cc-consulta-start,
+.cc-consulta-intervalo .cc-consulta-end {
+  font-size: 0.9em;
+  display: inline;
+}
+
+.cc-consulta-intervalo .cc-consulta-start {
+  font-weight: bold;
+}
+
+.cc-consulta-intervalo .cc-consulta-end {
+  color: rgba(255, 255, 255, 0.815);
+}
+
+.has-consulta .cc-consulta-detail {
+  display: flex;
+  height: 100%;
+  flex: 1;
+  margin-left: 3px;
+  padding: 2px 2px;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.cc-consulta-detail .cc-full-name {
+  display: block;
+  width: 100%;
+}
+
+.cc-consulta-detail .cc-consulta-descricao {
+  display: -webkit-box;
+  width: 100%;
+  font-size: 0.8em;
+  overflow: hidden;
+  text-align: justify;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .week-hours-area .invalid-horario {

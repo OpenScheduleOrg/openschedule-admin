@@ -1,5 +1,5 @@
 import { Period } from "@/constants";
-import { Consulta, Horario } from "@/interfaces";
+import { Consulta, DayTime, Horario } from "@/interfaces";
 
 export function monthBetween(date: Date): Date {
   const month = date.getMonth();
@@ -38,8 +38,8 @@ export function sortHorarios(a: Horario, b: Horario): number {
 }
 
 export function sortConsultas(a: Consulta, b: Consulta): number {
-  if (a.hora_in_seconds < b.hora_in_seconds) return -1;
-  if (a.hora_in_seconds > b.hora_in_seconds) return 1;
+  if (a.his < b.his) return -1;
+  if (a.his > b.his) return 1;
   return 0;
 }
 
@@ -54,11 +54,7 @@ export function getUTCOffset(): string {
   );
 }
 
-export function secondsToHorario(s: number): {
-  hours: number;
-  minutes: number;
-  hhmm: string;
-} {
+export function secondsToHorario(s: number): DayTime {
   const s_to_minutes = s / 60;
   const minutes = s_to_minutes % 60;
   const hours = (s_to_minutes - minutes) / 60;
@@ -70,5 +66,5 @@ export function secondsToHorario(s: number): {
     (minutes < 10 ? "0" : "") +
     String(minutes);
 
-  return { hours, minutes, hhmm };
+  return { his: s, hours, minutes, hhmm };
 }

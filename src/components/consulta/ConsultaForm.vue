@@ -4,13 +4,10 @@
     <div class="form-container">
       <h2>Consulta</h2>
       <Form>
-        <date-picker
-          v-model="consulta.marcada"
-          :field_name="'Teste'"
-          :valid="false"
-        ></date-picker>
+        <date-picker :field_name="'Data Marcada'"></date-picker>
       </Form>
     </div>
+    {{ date }}
   </modal>
 </template>
 
@@ -21,10 +18,16 @@ import { Form, DatePicker } from "../util";
 
 export default defineComponent({
   name: "ConsultaForm",
-  props: ["datetime"],
+  props: ["hs"],
   data() {
+    const date = new Date(this.$store.state.calendar.current_date.valueOf());
+    date.setSeconds(this.hs);
     return {
-      consulta: { descricao: "", marcada: this.datetime },
+      consulta: {
+        descricao: "",
+        hour_in_seconds: this.hs,
+      },
+      date,
       cliente: {},
       validate: {},
     };

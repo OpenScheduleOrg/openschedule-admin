@@ -3,10 +3,10 @@
     <div id="month-year-nav">
       <span> {{ calendar_month }}</span>
       <div class="nav-month">
-        <span class="prev-next">
+        <span class="noselect prev-next">
           <font-awesome-icon icon="chevron-left" @click="setMonth(-1)" />
         </span>
-        <span class="prev-next" @click="setMonth(1)">
+        <span class="noselect prev-next" @click="setMonth(1)">
           <font-awesome-icon icon="chevron-right" />
         </span>
       </div>
@@ -126,12 +126,6 @@ nav {
   color: rgba(0, 0, 0, 0.493);
   cursor: pointer;
   transition: background-color 0.2s;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently*/
 }
 .prev-next > * {
   height: 1rem;
@@ -186,7 +180,7 @@ nav {
   background-color: rgba(0, 0, 0, 0.055);
 }
 
-a.out-month {
+.date-link.out-month {
   color: rgba(0, 0, 0, 0.596);
 }
 
@@ -196,11 +190,11 @@ a.out-month {
   color: rgba(0, 0, 0, 0.3);
 }
 
-a.is-selected.out-month {
+.date-link.is-selected.out-month {
   background-color: #2231d923 !important;
   color: var(--font-secundary) !important;
 }
-a.is-today.out-month {
+.date-link.is-today.out-month {
   transition: background-color 0.3s;
   background-color: #006fd6d3 !important;
   color: rgb(241, 240, 240) !important;

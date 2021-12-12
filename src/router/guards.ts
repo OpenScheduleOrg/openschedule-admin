@@ -3,8 +3,14 @@ import { Period } from "@/constants/index";
 import store from "@/store";
 import SyNames from "./symbols";
 
+let intervalUpdateConsultas: number | undefined = undefined;
+
 export const agendaGuard: NavigationGuard = function (to, from, next) {
   if (to.name && Object.values<RouteRecordName>(Period).includes(to.name)) {
+    if (!intervalUpdateConsultas)
+      intervalUpdateConsultas = setInterval(() => {
+        store.dispatch("calendar/updateConsultas");
+      }, 500000);
     const today = new Date();
     if (to.params.day && to.params.year && to.params.month) {
       const year = Number(to.params.year);
@@ -42,5 +48,9 @@ export const agendaGuard: NavigationGuard = function (to, from, next) {
     }
   } else if (to.name === SyNames.home)
     next({ name: store.state.calendar.period });
-  else next();
+  else {
+    clearInterval(intervalUpdateConsultas);
+    intervalUpdateConsultas = undefined;
+    next();
+  }
 };

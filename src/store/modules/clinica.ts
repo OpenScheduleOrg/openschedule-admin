@@ -1,7 +1,12 @@
 import { Module, Commit, Dispatch } from "vuex";
 import { State as stateRoot } from "..";
 import { Horario, Clinica, Consulta } from "@/interfaces";
-import { RESET_STATE, SET_CLINICA, SET_HORARIOS } from "./mutation-types";
+import {
+  RESET_STATE,
+  SET_CLINICA,
+  SET_CONSULTAS,
+  SET_HORARIOS,
+} from "./mutation-types";
 
 import { getClinicas, getConsultas, getHorarios } from "@/services";
 
@@ -21,13 +26,13 @@ import {
 } from "@/utils";
 import { MIN_INTERVAL } from "@/constants";
 
-interface ClinicaConsulta {
-  [ISODate: string]: [Consulta];
+interface ClinicaConsultas {
+  [ISODate: string]: Consulta[];
 }
 
 export interface StateClinica extends Clinica {
   horarios: Horario[];
-  consultas: ClinicaConsulta;
+  consultas: ClinicaConsultas;
 }
 
 const clinica: Module<StateClinica, stateRoot> = {
@@ -38,7 +43,7 @@ const clinica: Module<StateClinica, stateRoot> = {
   },
   getters: {
     getWeekConsultas(state, getters, rootState) {
-      const week_consultas: ClinicaConsulta = {};
+      const week_consultas: ClinicaConsultas = {};
       const consultas = state.consultas;
       const current_date = rootState.calendar.current_date;
       const weekDay = current_date.getDay();
@@ -47,14 +52,14 @@ const clinica: Module<StateClinica, stateRoot> = {
       let iso_date: string;
       for (let wd = 0; wd < 7; wd++) {
         iso_date = start_week.addDays(wd).toISODate();
-        if (consultas[iso_date]) week_consultas[wd] = consultas[iso_date];
+        if (consultas[iso_date]) week_consultas[wd] = [...consultas[iso_date]];
       }
 
       return week_consultas;
     },
     getWeekDayRange(state, getters) {
       const horarios = state.horarios;
-      const week_consultas: ClinicaConsulta = getters.getWeekConsultas;
+      const week_consultas: ClinicaConsultas = getters.getWeekConsultas;
 
       let am_inicio = 3600 * 24 - 60;
       let pm_fim = 0;
@@ -74,9 +79,8 @@ const clinica: Module<StateClinica, stateRoot> = {
 
       for (const d in week_consultas)
         for (const c of week_consultas[d]) {
-          if (c.hora_in_seconds < am_inicio) am_inicio = c.hora_in_seconds;
-          else if (c.hora_in_seconds >= pm_fim)
-            pm_fim = c.hora_in_seconds + c.duracao;
+          if (c.his < am_inicio) am_inicio = c.his;
+          else if (c.his >= pm_fim) pm_fim = c.his + c.duracao;
         }
 
       if (am_inicio > pm_fim) {
@@ -98,7 +102,8 @@ const clinica: Module<StateClinica, stateRoot> = {
       }[] = [];
 
       const horarios = state.horarios;
-      const week_consultas = getters.getWeekConsultas as ClinicaConsulta;
+      const week_consultas = getters.getWeekConsultas as ClinicaConsultas;
+
       const { am_inicio, pm_fim, interval } = getters.getWeekDayRange as {
         am_inicio: number;
         pm_fim: number;
@@ -129,15 +134,13 @@ const clinica: Module<StateClinica, stateRoot> = {
         ciis = 0;
         chi = ch;
         for (; ch < pm_fim; ch += MIN_INTERVAL) {
-          if (consulta && ch == consulta.hora_in_seconds) {
-            ch += consulta.duracao;
-
+          if (consulta && ch == consulta.his) {
             if (ciis)
               week.push({
                 week_day: wd,
                 hora_in_seconds: chi,
                 intervals: ciis,
-                valid_horario: false,
+                valid_horario: ciis == num_min_intervals,
               });
 
             week.push({
@@ -145,9 +148,16 @@ const clinica: Module<StateClinica, stateRoot> = {
               week_day: wd,
               hora_in_seconds: ch,
               intervals: consulta.duracao / MIN_INTERVAL,
+              valid_horario: true,
             });
 
+            ch += consulta.duracao;
             consulta = day_consultas.shift();
+
+            chh =
+              h.pm_inicio && h.am_fim && h.am_fim >= ch && h.pm_inicio < ch
+                ? (h.pm_inicio as number)
+                : ch;
 
             ch -= MIN_INTERVAL;
             ciis = 0;
@@ -173,6 +183,7 @@ const clinica: Module<StateClinica, stateRoot> = {
               h.am_fim == chh + MIN_INTERVAL * num_min_intervals
                 ? (h.pm_inicio as number)
                 : chh + MIN_INTERVAL * num_min_intervals;
+
             ch += MIN_INTERVAL * (num_min_intervals - 1);
 
             ciis = 0;
@@ -266,12 +277,19 @@ const clinica: Module<StateClinica, stateRoot> = {
     getDayDetails: (state) => (d: string, wd: number) => {
       const day_consultas = state.consultas[d];
       const horario = state.horarios.find((hrr) => hrr.dia_semana == wd);
-      console.log(state.horarios);
-      const details = { occupied: 0, free: 0 };
+
+      const details: {
+        consultas: Consulta[];
+        hs_free: [
+          { hours: number; minutes: number; hhmm: string },
+          { hours: number; minutes: number; hhmm: string }
+        ][];
+      } = { consultas: [], hs_free: [] };
 
       if (!horario) return details;
 
       const intervalo = horario.intervalo as number;
+      let consulta: Consulta | undefined;
 
       for (
         let h = horario.am_inicio as number;
@@ -286,17 +304,18 @@ const clinica: Module<StateClinica, stateRoot> = {
         )
           h = horario.pm_inicio as number;
         else {
-          if (
+          consulta =
             day_consultas &&
-            day_consultas.some(
+            day_consultas.find(
               (c) =>
-                h >= c.hora_in_seconds &&
-                c.hora_in_seconds < h + intervalo &&
-                c.hora_in_seconds + c.duracao > h
-            )
-          )
-            details.occupied++;
-          else details.free++;
+                h >= c.his && c.his < h + intervalo && c.his + c.duracao > h
+            );
+          if (consulta) details.consultas.push(consulta);
+          else
+            details.hs_free.push([
+              secondsToHorario(h),
+              secondsToHorario(h + intervalo),
+            ]);
         }
       }
       return details;
@@ -311,6 +330,9 @@ const clinica: Module<StateClinica, stateRoot> = {
     },
     [SET_HORARIOS](state, horarios: [Horario]) {
       state.horarios = horarios;
+    },
+    [SET_CONSULTAS](state, consultas: ClinicaConsultas) {
+      state.consultas = { ...state.consultas, ...consultas };
     },
     [RESET_STATE](state) {
       delete state.id;
@@ -331,9 +353,9 @@ const clinica: Module<StateClinica, stateRoot> = {
       rootState: stateRoot;
       dispatch: Dispatch;
     }) {
-      return getClinicas(rootState.auth.user?.clinica_id)
+      return getClinicas({}, rootState.auth.user?.clinica_id)
         .then((res) => {
-          commit(SET_CLINICA, res.data.data.clinica);
+          commit(SET_CLINICA, res.data.clinica);
           return dispatch("setHorarios");
         })
         .catch((error) => {
@@ -350,15 +372,15 @@ const clinica: Module<StateClinica, stateRoot> = {
       state: StateClinica;
       dispatch: Dispatch;
     }) {
-      return getHorarios(state.id as number).then((res) => {
-        const horarios = res.data.data.horarios;
+      return getHorarios({ clinica_id: state.id as number }).then((res) => {
+        const horarios = res.data.horarios;
 
         for (const h of horarios) {
-          if (h.am_inicio) h.am_inicio = timeStringToS(h.am_inicio as string);
+          h.am_inicio = timeStringToS(h.am_inicio as string);
           if (h.am_fim) h.am_fim = timeStringToS(h.am_fim as string);
           if (h.pm_inicio) h.pm_inicio = timeStringToS(h.pm_inicio as string);
-          if (h.pm_fim) h.pm_fim = timeStringToS(h.pm_fim as string);
-          if (h.intervalo) h.intervalo = timeStringToS(h.intervalo as string);
+          h.pm_fim = timeStringToS(h.pm_fim as string);
+          h.intervalo = timeStringToS(h.intervalo as string);
           h.dia_semana = h.dia_semana + 1 >= 7 ? 0 : h.dia_semana + 1;
         }
         horarios.sort(sortHorarios);
@@ -368,12 +390,16 @@ const clinica: Module<StateClinica, stateRoot> = {
       });
     },
     setConsultas(
-      { state, rootState }: { state: StateClinica; rootState: stateRoot },
+      {
+        commit,
+        state,
+        rootState,
+      }: { commit: Commit; state: StateClinica; rootState: stateRoot },
       params = undefined
     ) {
       const clinica_id = state.id;
       const current_date = rootState.calendar.current_date;
-      let date_start, date_end, cliente_id, id;
+      let date_start, date_end, cliente_id;
       if (!params) {
         date_start = new Date(
           current_date.getFullYear(),
@@ -389,21 +415,26 @@ const clinica: Module<StateClinica, stateRoot> = {
         date_start = params.date_start;
         date_end = params.date_end;
         cliente_id = params.cliente_id;
-        id = params.id;
       }
-      return getConsultas(
-        {
-          clinica_id,
-          cliente_id,
-          date_start,
-          date_end,
-        },
-        id
-      )
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => console.log(err.response.data));
+      return getConsultas({
+        clinica_id,
+        cliente_id,
+        date_start,
+        date_end,
+      }).then((res) => {
+        const consutlas_array = res.data.consultas;
+
+        const consultas: ClinicaConsultas = consutlas_array.reduce((cs, cc) => {
+          const marcada = cc.marcada as Date;
+
+          if (!cs[marcada.toISODate()]) cs[marcada.toISODate()] = [];
+          cs[marcada.toISODate()].push(cc);
+
+          return cs;
+        }, {} as ClinicaConsultas);
+
+        commit(SET_CONSULTAS, consultas);
+      });
     },
     resetState({ commit }: { commit: Commit }) {
       commit(RESET_STATE);

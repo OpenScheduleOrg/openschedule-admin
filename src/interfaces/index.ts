@@ -20,9 +20,18 @@ export interface APIResponseFail {
   detail: { [param: string]: string };
 }
 
-export type APIResponse = AxiosResponse<{
+export type APIResponse = {
   status: "success" | "fail" | "error";
   message?: string;
   data: APIResponseSuccess & APIResponseFail;
   path?: string;
-}>;
+};
+
+export type AxiosAPIResponse = AxiosResponse<APIResponse>;
+
+export type DayTime = {
+  his: number;
+  hours: number;
+  minutes: number;
+  hhmm: string;
+};

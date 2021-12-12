@@ -32,6 +32,7 @@ const auth: Module<StateAuth, stateRoot> = {
   actions: {
     loginFailure({ commit }: { commit: Commit }, error) {
       commit(LOGIN_FAILURE);
+      console.log(error)
       return Promise.reject(error);
     },
     login(
@@ -40,7 +41,7 @@ const auth: Module<StateAuth, stateRoot> = {
     ) {
       return login(payload.username, payload.password, payload.rememberMe)
         .then((res) => {
-          commit(LOGIN_SUCCESS, res.data.data.funcionario);
+          commit(LOGIN_SUCCESS, res.data.funcionario);
           return dispatch("clinica/setClinica", null, {
             root: true,
           });
@@ -61,7 +62,7 @@ const auth: Module<StateAuth, stateRoot> = {
       }
       return getLoged()
         .then((res) => {
-          commit(LOGIN_SUCCESS, res.data.data.funcionario);
+          commit(LOGIN_SUCCESS, res.data.funcionario);
           return dispatch("clinica/setClinica", null, {
             root: true,
           });

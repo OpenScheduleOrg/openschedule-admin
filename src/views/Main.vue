@@ -50,7 +50,7 @@ export default defineComponent({
 #main.grid-container {
   grid-template:
     [header-left] "hd hd" 11vh [header-right]
-    [main-left] "nav  main" 1fr / 22vw 1fr [main-right];
+    [main-left] "nav  main" 1fr / 1fr 16fr [main-right];
   grid-template-rows: 11vh minmax(0, 1fr);
   grid-gap: 0.15rem;
   height: 100vh;

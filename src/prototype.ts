@@ -20,3 +20,14 @@ Date.prototype.monthSize = function (month = null, year = null) {
 Date.prototype.toISODate = function () {
   return this.toISOString().split("T")[0];
 };
+
+
+Date.prototype.toJSON = function () {
+  const tzoffseet = this.getTimezoneOffset();
+  this.setMinutes(this.getMinutes() - tzoffseet);
+  let isoformat = this.toISOString();
+  isoformat = isoformat.replace("Z", "");
+  this.setMinutes(this.getMinutes() + tzoffseet);
+
+  return isoformat;
+};

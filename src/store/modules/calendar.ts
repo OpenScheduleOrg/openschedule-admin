@@ -9,7 +9,7 @@ import { Month, Period, Week } from "@/constants";
 import { monthBetween, setPeriod, getPeriod } from "@/utils";
 
 import { SixWeeksDay } from "@/interfaces/store";
-import { Horario } from "@/interfaces";
+import { Consulta, Horario } from "@/interfaces";
 const today = new Date();
 
 export interface StateCalendar {
@@ -107,8 +107,10 @@ const calendar: Module<StateCalendar, stateRoot> = {
         state.current_date.getFullYear() === today.getFullYear()
       );
     },
+
     getSixWeeks(state, getters, rootState, rootGetters) {
       const current_date = state.current_date;
+      const today = new Date();
       const days: SixWeeksDay[] = [];
 
       const start_month = new Date(
@@ -116,7 +118,13 @@ const calendar: Module<StateCalendar, stateRoot> = {
         current_date.getMonth() + state.offset_month,
         1
       );
-      let day_details: { ocuppied: number; free: number };
+      let day_details: {
+        consultas: Consulta[];
+        hs_free: [
+          { hours: number; minutes: number; hhmm: string },
+          { hours: number; minutes: number; hhmm: string }
+        ][];
+      };
 
       let d: Date = start_month.addDays(-start_month.getDay() - 1);
       for (let i = 0; i < 42; i++) {
@@ -138,14 +146,65 @@ const calendar: Module<StateCalendar, stateRoot> = {
             state.current_date.getDate() == d.getDate() &&
             state.current_date.getMonth() == d.getMonth() &&
             state.current_date.getFullYear() == d.getFullYear(),
-          isValidDay: day_details.ocuppied > 0 || day_details.free > 0,
-          hs_occup: day_details.ocuppied,
-          hs_free: day_details.free,
+          isValidDay:
+            day_details.consultas.length > 0 || day_details.hs_free.length > 0,
+          consultas: day_details.consultas,
+          hs_free: day_details.hs_free,
         };
       }
 
       return days;
     },
+    getDatePickerSixWeeks:
+      (state, getters, rootState, rootGetters) => (selected_date: Date) => {
+        const days: SixWeeksDay[] = [];
+        const today = new Date();
+        const current_date = state.current_date;
+
+        const start_month = new Date(
+          selected_date.getFullYear(),
+          selected_date.getMonth(),
+          1
+        );
+        let day_details: {
+          consultas: Consulta[];
+          hs_free: [
+            { hours: number; minutes: number; hhmm: string },
+            { hours: number; minutes: number; hhmm: string }
+          ][];
+        };
+
+        let d: Date = start_month.addDays(-start_month.getDay() - 1);
+        for (let i = 0; i < 42; i++) {
+          d = d.addDays(1);
+          day_details = rootGetters["clinica/getDayDetails"](
+            d.toISODate,
+            d.getDay()
+          );
+          days[i] = {
+            day: d.getDate(),
+            month: d.getMonth(),
+            year: d.getFullYear(),
+            outMonth: d.getMonth() != start_month.getMonth(),
+            isToday:
+              today.getDate() == d.getDate() &&
+              today.getMonth() == d.getMonth() &&
+              today.getFullYear() == d.getFullYear(),
+            isSelected:
+              current_date.getDate() == d.getDate() &&
+              current_date.getMonth() == d.getMonth() &&
+              current_date.getFullYear() == d.getFullYear(),
+            isValidDay:
+              day_details.consultas.length > 0 ||
+              day_details.hs_free.length > 0,
+            consultas: day_details.consultas,
+            hs_free: day_details.hs_free,
+          };
+        }
+
+        return days;
+      },
+
     getMonthOffset(state) {
       const offset_date = new Date(state.current_date.valueOf());
 
@@ -234,12 +293,16 @@ const calendar: Module<StateCalendar, stateRoot> = {
       dispatch: Dispatch;
       state: StateCalendar;
     }) {
-      const current_date = state.current_date.addDays(0);
+      const current_date = new Date(
+        state.current_date.getFullYear(),
+        state.current_date.getMonth(),
+        state.current_date.getDate()
+      );
       const offset_month = state.offset_month;
 
       current_date.setMonth(current_date.getMonth() + offset_month);
-      const date_start = current_date.addDays(-60);
-      const date_end = current_date.addDays(60);
+      const date_start = current_date.addDays(-7);
+      const date_end = current_date.addDays(40);
       dispatch(
         "clinica/setConsultas",
         { date_start, date_end },

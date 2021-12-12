@@ -1,11 +1,11 @@
 <template>
-  <input type="hour" />
+  <h1>Select</h1>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "InputHour",
+  name: "Select",
 });
 </script>

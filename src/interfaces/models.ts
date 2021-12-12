@@ -1,10 +1,13 @@
+import { DayTime } from ".";
+
 export interface Consulta {
   id?: number;
   clinica_id: number;
   cliente_id: number;
   marcada: string | Date;
   duracao: number;
-  hora_in_seconds: number;
+  his: number;
+  intervalo?: { start: DayTime; end: DayTime };
   descricao: string;
   realizada: boolean;
   clinica_nome?: string;

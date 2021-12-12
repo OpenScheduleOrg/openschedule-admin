@@ -1,3 +1,5 @@
+import { Consulta } from ".";
+
 export interface SixWeeksDay {
   day: number;
   month: number;
@@ -6,8 +8,11 @@ export interface SixWeeksDay {
   isSelected?: boolean;
   outMonth?: boolean;
   isValidDay?: boolean;
-  hs_occup: number;
-  hs_free: number;
+  consultas: Consulta[];
+  hs_free: [
+    { hours: number; minutes: number; hhmm: string },
+    { hours: number; minutes: number; hhmm: string }
+  ][];
 }
 
 export interface AgendaParams {

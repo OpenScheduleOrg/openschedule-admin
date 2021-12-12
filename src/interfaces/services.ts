@@ -34,7 +34,7 @@ export type UpdateConsulta = (
   descricao: string | null
 ) => Promise<APIResponse>;
 
-export type GetConsulta = (
+export type GetConsultas = (
   params: {
     clinica_id?: number;
     cliente_id?: number;
@@ -57,8 +57,10 @@ export type UpdateCliente = (
   cliente: Cliente
 ) => Promise<APIResponse>;
 
-export type GetClientes = (params: {}, id?: number) => Promise<APIResponse>;
-
+export type GetClientes = (
+  params: { nome: string; telefone: string; cpf: string; nascimento: Date },
+  id?: number
+) => Promise<APIResponse>;
 /* 
 
 
@@ -71,8 +73,8 @@ export type UpdateClinica = (
 ) => Promise<APIResponse>;
 
 export type GetClinicas = (
-  id?: number | "",
-  clinica?: Clinica
+  params: { telfone?: string; nome?: string; endereco?: string },
+  id?: number
 ) => Promise<APIResponse>;
 
 /* 
@@ -88,8 +90,8 @@ export type UpdateFuncionario = (
 ) => Promise<APIResponse>;
 
 export type GetFuncionarios = (
-  id?: number | "",
-  funcionario?: Funcionario
+  params: { email?: string; username?: string; nome?: string },
+  id?: number
 ) => Promise<APIResponse>;
 
 /* 
@@ -103,4 +105,6 @@ export type UpdateHorario = (
   horario: Horario
 ) => Promise<APIResponse>;
 
-export type GetHorarios = (clinica_id: number) => Promise<APIResponse>;
+export type GetHorarios = (params: {
+  clinica_id: number;
+}) => Promise<APIResponse>;
