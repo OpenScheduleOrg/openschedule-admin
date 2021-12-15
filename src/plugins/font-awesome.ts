@@ -8,12 +8,17 @@ import {
   faPortrait,
   faExclamationCircle,
   faCaretDown,
+  faUserAlt,
+  faCheckCircle,
+  faTimesCircle,
+  faMinusCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faWindowClose,
   faIdCard,
   faClock,
 } from "@fortawesome/free-regular-svg-icons";
+import { faWhatsappSquare } from "@fortawesome/free-brands-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -28,7 +33,12 @@ library.add(
   faIdCard,
   faClock,
   faExclamationCircle,
-  faCaretDown
+  faCaretDown,
+  faUserAlt,
+  faWhatsappSquare,
+  faCheckCircle,
+  faTimesCircle,
+  faMinusCircle
 );
 
 export default FontAwesomeIcon;

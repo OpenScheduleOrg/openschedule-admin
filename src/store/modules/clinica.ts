@@ -332,7 +332,7 @@ const clinica: Module<StateClinica, stateRoot> = {
       state.horarios = horarios;
     },
     [SET_CONSULTAS](state, consultas: ClinicaConsultas) {
-      state.consultas = { ...state.consultas, ...consultas };
+      state.consultas = consultas;
     },
     [RESET_STATE](state) {
       delete state.id;
@@ -399,17 +399,17 @@ const clinica: Module<StateClinica, stateRoot> = {
     ) {
       const clinica_id = state.id;
       const current_date = rootState.calendar.current_date;
-      let date_start, date_end, cliente_id;
+      let date_start: Date, date_end: Date, cliente_id;
       if (!params) {
         date_start = new Date(
           current_date.getFullYear(),
-          current_date.getMonth() - 3,
-          current_date.getDate()
+          current_date.getMonth(),
+          -7
         );
         date_end = new Date(
           current_date.getFullYear(),
-          current_date.getMonth() + 3,
-          current_date.getDate() + 1
+          current_date.getMonth() + 1,
+          +8
         );
       } else {
         date_start = params.date_start;
@@ -432,6 +432,19 @@ const clinica: Module<StateClinica, stateRoot> = {
 
           return cs;
         }, {} as ClinicaConsultas);
+        if (date_end && date_start) {
+          let current_date: Date;
+          for (const isodate in state.consultas) {
+            current_date = new Date(isodate);
+
+            if (
+              current_date.valueOf() < date_start.valueOf() ||
+              current_date.valueOf() > date_end.valueOf()
+            ) {
+              consultas[isodate] = state.consultas[isodate];
+            }
+          }
+        }
 
         commit(SET_CONSULTAS, consultas);
       });

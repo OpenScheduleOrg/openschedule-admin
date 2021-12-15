@@ -74,8 +74,12 @@
             alt="w3schools"
           />
           <div>
-            <span :title="user.nome + ' ' + user.sobrenome">{{ user.nome }} {{ user.sobrenome }}</span>
-            <span class="text-continous" :title="user.email">{{ user.email }}</span>
+            <span :title="user.nome + ' ' + user.sobrenome"
+              >{{ user.nome }} {{ user.sobrenome }}</span
+            >
+            <span class="text-continous" :title="user.email">{{
+              user.email
+            }}</span>
           </div>
         </li>
         <hr />
@@ -229,7 +233,7 @@ img {
   position: absolute;
   display: block;
   padding: 0.5rem 1rem 4px 4px;
-  z-index: 10;
+  z-index: 32;
   top: 10vh;
   right: 5px;
   background-color: var(--bg-dropdown);

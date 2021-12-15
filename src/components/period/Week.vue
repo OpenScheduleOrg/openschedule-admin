@@ -45,32 +45,112 @@
         <transition name="fade" mode="out-in">
           <div
             :style="{ '--intervals': ch.intervals }"
-            :class="['day-' + ch.week_day, 'num-interval', 'has-consulta']"
+            :class="[
+              'day-' + ch.week_day,
+              'num-interval',
+              'has-consulta',
+              ch.consulta.realizada ? 'cc-consulta-realizada' : '',
+              !ch.consulta.realizada &&
+              now.valueOf() > ch.consulta.marcada.valueOf() + ch.consulta.his
+                ? 'cc-no-consulta-realizada'
+                : '',
+            ]"
             v-if="ch.consulta"
-            @click="
-              showConsulta(ch.hora_in_seconds, ch.consulta.marcada.toISODate())
-            "
+            @click="updateConsulta(ch.his, ch.consulta.marcada.toISODate())"
+            :key="ch.consulta.marcada.valueOf()"
+            @mouseenter="posFullDetail"
           >
-            <div class="cc-consulta-intervalo">
+            <div class="cc-consulta-detail">
               <span class="cc-consulta-start">{{
                 ch.consulta.intervalo.start.hhmm
               }}</span>
+              <strong class="cc-full-name"
+                >{{ ch.consulta.cliente_nome }}
+                {{ ch.consulta.cliente_sobrenome }}
+              </strong>
               <span class="cc-consulta-end">{{
                 ch.consulta.intervalo.end.hhmm
               }}</span>
             </div>
-            <div class="cc-consulta-detail">
-              <span
-                :title="
-                  ch.consulta.cliente_nome + ch.consulta.cliente_sobrenome
-                "
-                class="text-continous cc-full-name"
-                >{{ ch.consulta.cliente_nome }}
-                {{ ch.consulta.cliente_sobrenome }}</span
-              >
-              <p class="cc-consulta-descricao">
-                {{ ch.consulta.descricao }}
-              </p>
+            <div class="cc-consulta-full-detail">
+              <div class="cc-consulta-row">
+                <span>
+                  {{ Week[ch.consulta.marcada.getDay()][0] }}
+                  {{ ch.consulta.marcada.getDate() }} de
+                  {{ Month[ch.consulta.marcada.getMonth()][0] }} de
+                  {{ ch.consulta.marcada.getFullYear() }}
+                </span>
+                <span>
+                  {{ ch.consulta.intervalo.start.hhmm }} até
+                  {{ ch.consulta.intervalo.end.hhmm }}
+                </span>
+              </div>
+              <div class="cc-consulta-row">
+                <label for="consulta.paciente-nome"
+                  ><font-awesome-icon
+                    :icon="['fa', 'user-alt']"
+                  ></font-awesome-icon
+                ></label>
+                <span id="consulta.paciente-nome"
+                  >{{ ch.consulta.cliente_nome }}
+                  {{ ch.consulta.cliente_sobrenome }}</span
+                >
+              </div>
+              <div class="cc-consulta-row">
+                <label for="consulta.paciente-telefone"
+                  ><font-awesome-icon
+                    :icon="['fab', 'whatsapp-square']"
+                  ></font-awesome-icon
+                ></label>
+                <span id="consulta.paciente-telefone"
+                  >{{
+                    "(" +
+                    ch.consulta.cliente_telefone.slice(0, 2) +
+                    ")" +
+                    " 9 " +
+                    ch.consulta.cliente_telefone.slice(2, 6) +
+                    "-" +
+                    ch.consulta.cliente_telefone.slice(6)
+                  }}
+                </span>
+              </div>
+              <div class="cc-consulta-row">
+                <template
+                  v-if="
+                    now.valueOf() <
+                    ch.consulta.marcada.valueOf() + ch.consulta.his
+                  "
+                >
+                  <label for="consulta.status"
+                    ><font-awesome-icon
+                      :icon="['fa', 'minus-circle']"
+                    ></font-awesome-icon
+                  ></label>
+                  <span id="consulta.status"> Aguardando </span></template
+                >
+                <template v-else-if="ch.consulta.realizada">
+                  <label for="consulta.status"
+                    ><font-awesome-icon
+                      :icon="['fa', 'check-circle']"
+                    ></font-awesome-icon
+                  ></label>
+                  <span id="consulta.status"> Realizada </span>
+                </template>
+                <template v-else>
+                  <label for="consulta.status"
+                    ><font-awesome-icon
+                      :icon="['fa', 'times-circle']"
+                    ></font-awesome-icon
+                  ></label>
+                  <span id="consulta.status"> Não realizada </span></template
+                >
+              </div>
+              <div class="cc-consulta-row">
+                <fieldset class="cc-consulta-descricao">
+                  <legend>Descrição</legend>
+                  {{ ch.consulta.descricao }}
+                </fieldset>
+              </div>
             </div>
           </div>
           <div
@@ -95,12 +175,15 @@
 import { getUTCOffset } from "@/utils";
 import { defineComponent } from "vue";
 import { mapState, mapGetters } from "vuex";
+import { Month, Week } from "@/constants";
 
 export default defineComponent({
   name: "Week",
   data() {
     return {
       utc_offset: getUTCOffset(),
+      Month,
+      Week,
     };
   },
   computed: {
@@ -108,7 +191,7 @@ export default defineComponent({
       week_days: "calendar/getWeekDays",
       aw: "clinica/getWeek",
     }),
-    ...mapState("calendar", ["current_date", "period"]),
+    ...mapState("calendar", ["current_date", "period", "now"]),
   },
   methods: {
     newConsulta(hs: number, wd: number) {
@@ -125,6 +208,57 @@ export default defineComponent({
           year: new_current_date.getFullYear(),
         },
       });
+    },
+    posFullDetail() {
+      const mgt = document.querySelector("main.grid-item") as Element;
+      const consultas_full_detail = document.querySelectorAll(
+        ".cc-consulta-full-detail"
+      );
+
+      const max_bottom =
+        mgt.getBoundingClientRect().height + mgt.getBoundingClientRect().top;
+      const max_right =
+        mgt.getBoundingClientRect().width + mgt.getBoundingClientRect().left;
+      const max_top = mgt.getBoundingClientRect().top;
+
+      let fd_height: number =
+        consultas_full_detail[0] &&
+        consultas_full_detail[0].getBoundingClientRect().height;
+      let fd_width: number =
+        consultas_full_detail[0] &&
+        consultas_full_detail[0].getBoundingClientRect().width;
+
+      let e_top, e_right, test_top, test_bottom, test_right;
+      for (const e of consultas_full_detail) {
+        e_top = e.getBoundingClientRect().top;
+        e_right = e.getBoundingClientRect().left;
+
+        test_bottom = e_top + fd_height > max_bottom;
+        test_top = e_top < max_top;
+        test_right = e_right + fd_width > max_right;
+
+        if (
+          (test_bottom && test_right) ||
+          (test_bottom && e.classList.contains("consulta-in-right-top"))
+        ) {
+          e.classList.add("consulta-in-right-bottom");
+          e.classList.remove("consulta-in-right-top");
+        } else if (
+          (test_right && test_top) ||
+          (test_top && e.classList.contains("consulta-in-right-bottom"))
+        ) {
+          e.classList.add("consulta-in-right-top");
+          e.classList.remove("consulta-in-right-bottom");
+        } else if (test_bottom) {
+          e.classList.add("consulta-in-bottom");
+          e.classList.remove("consulta-in-top");
+        } else if (test_top) {
+          e.classList.add("consulta-in-top");
+          e.classList.remove("consulta-in-right-bottom");
+        } else if (test_right) {
+          e.classList.add("consulta-in-right");
+        }
+      }
     },
   },
 });
@@ -145,10 +279,12 @@ export default defineComponent({
   grid-template:
     "tz wr" 15%
     "hc wha" 1fr / 1fr 19fr;
-  height: 100%;
   font-size: 1rem;
+  min-width: 900px;
+  min-height: 400px;
   grid-gap: 2.5vh 0.75vh;
   background-color: var(--bg-period-week);
+  overflow-x: hidden;
 }
 
 .num-interval {
@@ -158,6 +294,10 @@ export default defineComponent({
 
 #period-week:hover::-webkit-scrollbar-thumb {
   background: rgb(110, 110, 110) !important;
+}
+
+#period-week::-webkit-scrollbar-thumb:hover {
+  background: rgb(17, 17, 17) !important;
 }
 
 #period-week .grid-container {
@@ -171,7 +311,7 @@ export default defineComponent({
   top: 0;
   height: 100%;
   width: 100%;
-  z-index: 888;
+  z-index: 8;
 }
 
 .timezone {
@@ -246,7 +386,7 @@ export default defineComponent({
 
 .hours-column,
 .week-hours-area {
-  grid-auto-rows: 5vh;
+  grid-auto-rows: minmax(34px, 1fr);
   margin-bottom: 2.4vh;
 }
 
@@ -310,6 +450,7 @@ export default defineComponent({
   background-color: var(--bg-valid-horario);
   border-radius: 6px 0 6px 0;
   transition: all 0.7s;
+  cursor: pointer;
 }
 .week-hours-area .valid-horario:hover {
   background-color: var(--bg-valid-horario-hv);
@@ -328,56 +469,154 @@ export default defineComponent({
   min-width: 0;
 }
 
+.has-consulta.cc-consulta-realizada {
+  background-color: green;
+}
+.has-consulta.cc-no-consulta-realizada {
+  background-color: rgb(148, 0, 12);
+}
+
 .week-hours-area .has-consulta:hover {
   box-shadow: 0 0 0.6em rgb(163, 163, 163);
-  background-color: rgb(9, 104, 228);
-  z-index: 1000;
-}
-
-.has-consulta .cc-consulta-intervalo {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.cc-consulta-intervalo .cc-consulta-start,
-.cc-consulta-intervalo .cc-consulta-end {
-  font-size: 0.9em;
-  display: inline;
-}
-
-.cc-consulta-intervalo .cc-consulta-start {
-  font-weight: bold;
-}
-
-.cc-consulta-intervalo .cc-consulta-end {
-  color: rgba(255, 255, 255, 0.815);
 }
 
 .has-consulta .cc-consulta-detail {
   display: flex;
-  height: 100%;
-  flex: 1;
-  margin-left: 3px;
-  padding: 2px 2px;
-  min-width: 0;
   flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+}
+
+.has-consulta .cc-consulta-full-detail {
+  display: flex;
+  position: absolute;
+  height: 250px;
+  width: 200%;
+  z-index: 16;
+  top: 50%;
+  left: 50%;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s;
+  border-radius: 2px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0 0.7em rgb(56, 56, 56);
+  color: rgb(40, 40, 40);
+  font-size: 0.9rem;
+  flex-direction: column;
+  padding: 4px;
+}
+
+.has-consulta .cc-consulta-full-detail span {
+  display: block;
+  text-align: center;
+}
+.has-consulta .cc-consulta-full-detail > .cc-consulta-row {
+  display: flex;
+  align-items: center;
+  margin: 0 1.2em;
+}
+
+.cc-consulta-row label {
+  color: rgb(125, 125, 125);
+  font-size: 1.4em;
+  margin-right: 1em;
+}
+
+.fa-whatsapp-square {
+  margin-left: 1px;
+}
+
+.cc-consulta-row span {
+  font-size: 0.95em;
+  color: black;
+}
+
+.has-consulta .cc-consulta-full-detail > .cc-consulta-row:first-child {
+  flex-direction: column;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.has-consulta .cc-consulta-full-detail > .cc-consulta-row:last-child {
+  flex: 1;
+  margin-bottom: 4px;
+}
+
+.cc-consulta-row .cc-consulta-descricao {
+  height: 100%;
+  width: 100%;
+  border: solid 1.5px rgba(0, 0, 0, 0.568);
+  font-size: 0.85em;
+  text-align: justify;
+  padding: 0px 6px 4px 6px;
+  border-radius: 3px;
+}
+
+.cc-consulta-row .cc-consulta-descricao > legend {
+  font-size: 1.1em;
+  padding: 3px;
+}
+
+.has-consulta:hover .cc-consulta-full-detail {
+  transition-delay: 0.5s;
+  opacity: 1;
+  visibility: visible;
+  cursor: initial;
+}
+
+.has-consulta .consulta-in-bottom {
+  transform: translateY(-100%);
+}
+
+.has-consulta .consulta-in-top {
+  transform: translateY(0);
+}
+
+.has-consulta .consulta-in-right {
+  transform: translateX(-100%);
+}
+
+.has-consulta .consulta-in-right-bottom {
+  transform: translate(-100%, -100%);
+}
+
+.has-consulta .consulta-in-right-top {
+  transform: translate(-100%, 0);
+}
+
+.cc-consulta-detail .cc-consulta-start,
+.cc-consulta-detail .cc-consulta-end {
+  font-size: 0.9em;
+  display: block;
+  width: 100%;
+}
+
+.cc-consulta-detail .cc-consulta-start {
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.cc-consulta-detail .cc-consulta-end {
+  color: rgba(255, 255, 255, 0.815);
+  text-align: end;
 }
 
 .cc-consulta-detail .cc-full-name {
-  display: block;
-  width: 100%;
+  display: -webkit-box;
+  text-align: center;
+  font-size: 1.15em;
+  overflow: hidden;
+  margin-left: 8px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .cc-consulta-detail .cc-consulta-descricao {
   display: -webkit-box;
   width: 100%;
   font-size: 0.8em;
-  overflow: hidden;
-  text-align: justify;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
 }
 
 .week-hours-area .invalid-horario {

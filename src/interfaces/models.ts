@@ -11,6 +11,9 @@ export interface Consulta {
   descricao: string;
   realizada: boolean;
   clinica_nome?: string;
+  clinica_telefone?: string;
+  clinica_cpf?: string;
+  clinica_endereco?: string;
   cliente_nome?: string;
   clinica_tipo?: string;
 }

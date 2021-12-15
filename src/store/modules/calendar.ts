@@ -4,6 +4,7 @@ import {
   SET_PERIOD,
   SET_CURRENT_DATE,
   SET_OFFSET_MONTH,
+  SET_NOW,
 } from "./mutation-types";
 import { Month, Period, Week } from "@/constants";
 import { monthBetween, setPeriod, getPeriod } from "@/utils";
@@ -16,6 +17,7 @@ export interface StateCalendar {
   period: Period;
   current_date: Date;
   offset_month: number;
+  now: Date;
 }
 
 const initialPeriod = getPeriod();
@@ -26,6 +28,78 @@ const calendar: Module<StateCalendar, stateRoot> = {
     period: initialPeriod,
     current_date: today,
     offset_month: 0,
+    now: new Date(),
+  },
+  mutations: {
+    [SET_PERIOD](state, period: Period) {
+      setPeriod(period);
+      state.period = period;
+    },
+    [SET_CURRENT_DATE](state, new_current_date: Date) {
+      state.offset_month = 0;
+      state.current_date = new_current_date;
+    },
+    [SET_OFFSET_MONTH](state, offset) {
+      state.offset_month = state.offset_month + offset;
+    },
+    [SET_NOW](state) {
+      state.now = new Date();
+    },
+  },
+  actions: {
+    setCurrentDate(
+      {
+        commit,
+        dispatch,
+      }: {
+        commit: Commit;
+        dispatch: Dispatch;
+      },
+      new_current_date: Date
+    ) {
+      commit(SET_CURRENT_DATE, new_current_date);
+      dispatch("clinica/setConsultas", null, { root: true });
+    },
+    setPeriod(
+      { commit, dispatch }: { commit: Commit; dispatch: Dispatch },
+      period
+    ) {
+      commit(SET_PERIOD, period);
+      dispatch("clinica/updateConsultas", null, { root: true });
+    },
+    setNow({ commit }: { commit: Commit }) {
+      commit(SET_NOW);
+    },
+    setOffsetMonth(
+      { commit, dispatch }: { commit: Commit; dispatch: Dispatch },
+      offset: -1 | 1
+    ) {
+      commit(SET_OFFSET_MONTH, offset);
+      dispatch("updateConsultas");
+    },
+    updateConsultas({
+      dispatch,
+      state,
+    }: {
+      dispatch: Dispatch;
+      state: StateCalendar;
+    }) {
+      const current_date = new Date(
+        state.current_date.getFullYear(),
+        state.current_date.getMonth(),
+        state.current_date.getDate()
+      );
+      const offset_month = state.offset_month;
+
+      current_date.setMonth(current_date.getMonth() + offset_month);
+      const date_start = current_date.addDays(-7);
+      const date_end = current_date.addDays(40);
+      dispatch(
+        "clinica/setConsultas",
+        { date_start, date_end },
+        { root: true }
+      );
+    },
   },
   getters: {
     getDateString(state) {
@@ -247,67 +321,6 @@ const calendar: Module<StateCalendar, stateRoot> = {
       }
 
       return week;
-    },
-  },
-  mutations: {
-    [SET_PERIOD](state, period: Period) {
-      setPeriod(period);
-      state.period = period;
-    },
-    [SET_CURRENT_DATE](state, new_current_date: Date) {
-      state.offset_month = 0;
-      state.current_date = new_current_date;
-    },
-    [SET_OFFSET_MONTH](state, offset) {
-      state.offset_month = state.offset_month + offset;
-    },
-  },
-  actions: {
-    setCurrentDate(
-      {
-        commit,
-        dispatch,
-      }: {
-        commit: Commit;
-        dispatch: Dispatch;
-      },
-      new_current_date: Date
-    ) {
-      commit(SET_CURRENT_DATE, new_current_date);
-      dispatch("updateConsultas");
-    },
-    setPeriod({ commit }: { commit: Commit }, period) {
-      commit(SET_PERIOD, period);
-    },
-    setOffsetMonth(
-      { commit, dispatch }: { commit: Commit; dispatch: Dispatch },
-      offset: -1 | 1
-    ) {
-      commit(SET_OFFSET_MONTH, offset);
-      dispatch("updateConsultas");
-    },
-    updateConsultas({
-      dispatch,
-      state,
-    }: {
-      dispatch: Dispatch;
-      state: StateCalendar;
-    }) {
-      const current_date = new Date(
-        state.current_date.getFullYear(),
-        state.current_date.getMonth(),
-        state.current_date.getDate()
-      );
-      const offset_month = state.offset_month;
-
-      current_date.setMonth(current_date.getMonth() + offset_month);
-      const date_start = current_date.addDays(-7);
-      const date_end = current_date.addDays(40);
-      dispatch(
-        "clinica/setConsultas",
-        { date_start, date_end },
-        { root: true }
-      );
     },
   },
 };
