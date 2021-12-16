@@ -1,5 +1,11 @@
 import { Consulta } from ".";
 
+export type DayDetails = {
+  start: { his: number, hours: number; minutes: number; hhmm: string };
+  end: { his: number, hours: number; minutes: number; hhmm: string };
+  selected?: Boolean;
+}[];
+
 export interface SixWeeksDay {
   day: number;
   month: number;
@@ -9,10 +15,7 @@ export interface SixWeeksDay {
   outMonth?: boolean;
   isValidDay?: boolean;
   consultas: Consulta[];
-  hs_free: [
-    { hours: number; minutes: number; hhmm: string },
-    { hours: number; minutes: number; hhmm: string }
-  ][];
+  hs_free: DayDetails;
 }
 
 export interface AgendaParams {

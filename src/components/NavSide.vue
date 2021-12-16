@@ -5,7 +5,7 @@
         <div class="cc-calendar-nav">
           <span class="cc-calendar-month-year"> {{ calendar_month }}</span>
           <div class="cc-nav-month">
-            <span class="noselect cc-prev-next" @click="setMonth(-1)" >
+            <span class="noselect cc-prev-next" @click="setMonth(-1)">
               <font-awesome-icon icon="chevron-left" />
             </span>
             <span class="noselect cc-prev-next" @click="setMonth(1)">
@@ -32,7 +32,7 @@
                 'is-selected': d.isSelected,
                 'out-month': d.outMonth,
                 'is-today': d.isToday,
-                'is-invalid-day': !d.hs_free.length,
+                'is-invalid-day': !d.consultas.length && !d.hs_free.length,
               }"
               :to="{
                 name: period,
@@ -112,9 +112,8 @@ ul {
   list-style-type: none;
 }
 
-#nav-calendar{
+#nav-calendar {
   padding: 0 8px;
-
 }
 
 nav {

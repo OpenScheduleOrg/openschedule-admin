@@ -3,6 +3,7 @@ export const SET_NOW = "SET_NOW";
 export const SET_PERIOD = "SET_PERIOD";
 export const SET_CURRENT_DATE = "SET_CURRENT_DATE";
 export const SET_OFFSET_MONTH = "SET_OFFSET_MONTH";
+export const SET_OFFSET_MONTH_PICKER = "SET_OFFSET_MONTH_PICKER";
 
 //MODULE CLINICA
 export const SET_CLINICA = "SET_CLINICA";

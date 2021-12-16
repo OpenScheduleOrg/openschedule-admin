@@ -25,6 +25,7 @@ import {
   sortConsultas,
 } from "@/utils";
 import { MIN_INTERVAL } from "@/constants";
+import { DayDetails } from "@/interfaces/store";
 
 interface ClinicaConsultas {
   [ISODate: string]: Consulta[];
@@ -280,10 +281,7 @@ const clinica: Module<StateClinica, stateRoot> = {
 
       const details: {
         consultas: Consulta[];
-        hs_free: [
-          { hours: number; minutes: number; hhmm: string },
-          { hours: number; minutes: number; hhmm: string }
-        ][];
+        hs_free: DayDetails;
       } = { consultas: [], hs_free: [] };
 
       if (!horario) return details;
@@ -312,10 +310,10 @@ const clinica: Module<StateClinica, stateRoot> = {
             );
           if (consulta) details.consultas.push(consulta);
           else
-            details.hs_free.push([
-              secondsToHorario(h),
-              secondsToHorario(h + intervalo),
-            ]);
+            details.hs_free.push({
+              start: secondsToHorario(h),
+              end: secondsToHorario(h + intervalo),
+            });
         }
       }
       return details;

@@ -194,13 +194,12 @@ export default defineComponent({
     ...mapState("calendar", ["current_date", "period", "now"]),
   },
   methods: {
-    newConsulta(hs: number, wd: number) {
+    async newConsulta(his: number, wd: number) {
       const new_current_date = this.$store.getters[
         "clinica/getConsultaDatetime"
-      ](hs, wd);
+      ](his, wd);
 
-      this.$emit("new-consulta", hs);
-      this.$router.push({
+      await this.$router.push({
         name: this.period,
         params: {
           day: new_current_date.getDate(),
@@ -208,6 +207,8 @@ export default defineComponent({
           year: new_current_date.getFullYear(),
         },
       });
+
+      this.$emit("new-consulta", his);
     },
     posFullDetail() {
       const mgt = document.querySelector("main.grid-item") as Element;

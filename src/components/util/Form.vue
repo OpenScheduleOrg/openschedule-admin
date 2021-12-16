@@ -18,8 +18,21 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   flex-wrap: wrap;
-  padding: 2px;
-  font-size: 1rem;
+  font-size: 0.8rem;
+}
+
+.cc-form .cc-form-dynamic-row {
+  display: grid;
+  align-items: center;
+  width: 100%;
+  grid-template-columns: 1fr;
+  grid-gap: 1em;
+}
+.cc-form .cc-form-group-col-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.cc-form .cc-form-group-col-3 {
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .cc-form-group {
@@ -27,7 +40,6 @@ export default defineComponent({
   flex-direction: column;
   flex: 1 1 100%;
   width: 100%;
-  padding: 0.1rem 0.1rem;
   --line-color: rgba(41, 41, 41, 0.438);
   --line-hover: rgb(0, 85, 197);
   --line-focus: rgb(0, 98, 226);
@@ -50,6 +62,19 @@ export default defineComponent({
   --label-color: rgba(134, 1, 1, 0.6);
 }
 
+.cc-form-group .cc-field-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.cc-form-group .cc-field-icon {
+  font-size: 1.2em !important;
+  margin: 12px 8px 8px 8px;
+  transition: all 0.3s;
+}
+
 .cc-form-group .cc-input-readonly {
   color: rgb(100, 100, 100);
   opacity: 0.8;
@@ -60,6 +85,7 @@ export default defineComponent({
   padding: 8px 0 0 0;
   border-radius: 4px 4px 0 0;
   font-size: 0.95em;
+  width: 100%;
 }
 
 .cc-form-group .cc-input-field::after,
@@ -72,7 +98,7 @@ export default defineComponent({
   transform: scalex(0);
   background-color: rgba(0, 0, 0, 0);
   bottom: 0;
-  transition: all 0.5s;
+  transition: all 0.3s;
 }
 
 .cc-form-group .cc-input-field::before {
@@ -85,12 +111,15 @@ export default defineComponent({
   background-color: var(--line-hover);
 }
 
+/*
 .cc-form-group .cc-input-field:not(.cc-input-readonly):hover::before,
-.cc-form-group .cc-input-field:not(.cc-input-readonly):focus-within::before {
+.cc-form-group .cc-input-field:not(.cc-input-readonly):focus-within::before,
+.cc-form-group .cc-input-field:not(.cc-input-readonly).cc-manual-focus::before {
   transform: scaleX(0);
-}
+}*/
 
-.cc-form-group .cc-input-field:not(.cc-input-readonly):focus-within:after {
+.cc-form-group .cc-input-field:not(.cc-input-readonly):focus-within:after,
+.cc-form-group .cc-input-field:not(.cc-input-readonly).cc-manual-focus::after {
   transform: scaleY(1.5);
   background-color: var(--line-focus);
 }
@@ -109,7 +138,7 @@ export default defineComponent({
 .cc-form-group .cc-input-field:focus-within .cc-field-name,
 .cc-form-group .cc-input-field.cc-input-not-empty .cc-field-name {
   color: var(--label-color-hover);
-  font-size: 0.8em;
+  font-size: 1.1em;
   left: 0;
   top: 0;
 }
@@ -118,7 +147,7 @@ export default defineComponent({
   .cc-input-field.cc-input-readonly.cc-input-not-empty
   .cc-field-name {
   color: var(--label-color);
-  font-size: 0.8em;
+  font-size: 1.1em;
   left: 0;
   top: 0;
 }
@@ -146,5 +175,9 @@ export default defineComponent({
 .cc-advise *:first-child {
   font-size: 0.9em;
   margin-right: 2px;
+}
+
+.cc-not-editable {
+  pointer-events: none;
 }
 </style>

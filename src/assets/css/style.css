@@ -140,13 +140,6 @@ button:disabled {
   cursor: initial;
 }
 
-.modal-title {
-  font-size: 1.8rem;
-  padding: 6px;
-  color: var(--font-main);
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-}
 
 .fade-enter-from {
   opacity: 0;
@@ -179,6 +172,7 @@ button:disabled {
   flex-direction: column;
   font-size: 0.8rem;
   border-radius: 4px;
+  box-shadow: 0 0 0.4em rgb(163, 163, 163);
 }
 
 .cc-calendar-header,
@@ -194,6 +188,9 @@ button:disabled {
 
 .cc-calendar-main {
   padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .cc-calendar-detail {
@@ -288,6 +285,7 @@ button:disabled {
   font-size: 0.9em;
   font-weight: bold;
   margin: 2px 0;
+  justify-content: center;
 }
 
 .cc-week-days {
@@ -317,9 +315,10 @@ button:disabled {
   background-color: rgba(0, 0, 0, 0.512);
 }
 
+/*
 .cc-select-date.is-selected {
   pointer-events: none;
-}
+}*/
 
 .cc-select-date.is-today:not(.is-selected):hover {
   transition: all 0.4s;

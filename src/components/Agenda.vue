@@ -1,5 +1,5 @@
 <template>
-  <router-view @new-consulta="setHs" v-slot="{ Component }">
+  <router-view @new-consulta="setHis" v-slot="{ Component }">
     <transition name="fade" mode="out-in">
       <component :is="Component"> </component>
     </transition>
@@ -7,7 +7,7 @@
   <consulta-form
     v-if="show_consulta_form"
     @close_modal="show_consulta_form = false"
-    :hs="hs"
+    :his="his"
   ></consulta-form>
 </template>
 
@@ -22,19 +22,19 @@ export default defineComponent({
     ConsultaForm,
   },
   data(): {
-    hs: number | undefined;
+    his: number | undefined;
     show_consulta_form: boolean;
     show_consulta_detail: boolean;
   } {
     return {
-      hs: undefined,
+      his: undefined,
       show_consulta_form: false,
       show_consulta_detail: false,
     };
   },
   methods: {
-    setHs(hs: number) {
-      this.hs = hs;
+    setHis(his: number) {
+      this.his = his;
       this.show_consulta_form = true;
     },
   },

@@ -21,7 +21,7 @@ export const Week = [
   ["Terça-feira", "Ter"],
   ["Quarta-feira", "Qua"],
   ["Quinta-feira", "Qui"],
-  ["Sexta-feira", "Seg"],
+  ["Sexta-feira", "Sex"],
   ["Sábado", "Sab"],
 ];
 

@@ -1,11 +1,9 @@
 <template>
   <transition name="modal">
     <div ref="modal_mask" @click="closeModal($event)" class="modal-mask">
-      <div  class="modal-container">
+      <div class="modal-container">
         <span id="close-modal" @click="$emit('close_modal')"
-          ><font-awesome-icon
-            :icon="['fa', 'times']"
-          ></font-awesome-icon
+          ><font-awesome-icon :icon="['fa', 'times']"></font-awesome-icon
         ></span>
         <slot></slot>
       </div>
@@ -20,13 +18,13 @@ export default defineComponent({
   name: "Modal",
   methods: {
     closeModal(e: Event) {
-      if(e.target == this.$refs.modal_mask) this.$emit("close_modal")
+      if (e.target == this.$refs.modal_mask) this.$emit("close_modal");
     },
   },
 });
 </script>
 
-<style scoped>
+<style>
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -47,7 +45,7 @@ export default defineComponent({
   min-height: 20%;
   background-color: var(--bg-light);
   border-radius: 4px;
-  padding: 0.1rem;
+  padding: 0.25em;
 }
 
 #close-modal {
@@ -63,5 +61,12 @@ export default defineComponent({
 #close-modal:hover {
   transition: color 0.3s;
   color: rgba(31, 31, 31, 0.55);
+}
+
+.modal-title {
+  font-size: 1.6rem;
+  padding: 6px;
+  color: var(--font-main);
+  border-bottom: 1px solid rgb(174, 174, 174);
 }
 </style>
