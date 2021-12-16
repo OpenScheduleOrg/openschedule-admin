@@ -172,14 +172,14 @@ import { Month, Week } from "@/constants";
 export default defineComponent({
   name: "DatePicker",
   data() {
-    const current_date = this.modelValue;
+    const current_date = this.modelValue || new Date();
     const current_month_text = Month[current_date.getMonth()][1];
     const current_wd_text = Week[current_date.getDay()][1];
     const offset_date = new Date(
-      this.modelValue.getFullYear(),
-      this.modelValue.getMonth()
+      current_date.getFullYear(),
+      current_date.getMonth()
     );
-    const four_two = this.getSixWeeks(offset_date, this.modelValue);
+    const four_two = this.getSixWeeks(offset_date, current_date);
     const offset_month_year =
       Month[offset_date.getMonth()][0] + " de " + offset_date.getFullYear();
 
@@ -216,9 +216,15 @@ export default defineComponent({
     readonly: Boolean,
     advise: String,
   },
+  watch: {
+    modelValue(n) {
+      if (n) this.setNewCurrentDate(n);
+    },
+  },
   emits: ["update:modelValue"],
   computed: {
     date_text() {
+      if (!this.modelValue) return "Campo vazio";
       return this.current_date.toLocaleDateString();
     },
   },
@@ -257,7 +263,7 @@ export default defineComponent({
         " de " +
         this.offset_date.getFullYear();
 
-      this.show_calendar = !this.show_calendar;
+      this.show_calendar = false;
 
       this.$emit("update:modelValue", new_date);
     },

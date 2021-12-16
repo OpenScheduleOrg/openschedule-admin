@@ -156,7 +156,7 @@ const clinica: Module<StateClinica, stateRoot> = {
             consulta = day_consultas.shift();
 
             chh =
-              h.pm_inicio && h.am_fim && h.am_fim >= ch && h.pm_inicio < ch
+              h.pm_inicio && h.am_fim && h.am_fim <= ch && h.pm_inicio > ch
                 ? (h.pm_inicio as number)
                 : ch;
 

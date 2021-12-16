@@ -4,3 +4,4 @@ export { default as DatePicker } from "./DatePicker.vue";
 export { default as DateConsultaPicker } from "./DateConsultaPicker.vue";
 export { default as HorarioPicker } from "./HorarioPicker.vue";
 export { default as TextArea } from "./TextArea.vue";
+export { default as InputCheck } from "./InputCheck.vue";

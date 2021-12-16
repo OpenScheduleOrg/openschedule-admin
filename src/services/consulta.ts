@@ -4,6 +4,7 @@ import {
   GetConsultas,
   CreateConsulta,
   UpdateConsulta,
+  DeleteConsulta,
 } from "@/interfaces/services";
 import { APIResponse, AxiosAPIResponse } from "@/interfaces";
 import { AxiosError } from "axios";
@@ -23,12 +24,12 @@ export const createConsulta: CreateConsulta = async (consulta) =>
 
 export const updateConsulta: UpdateConsulta = async (
   id,
-  marcada = null,
-  realizada = null,
-  descricao = null
+  marcada,
+  realizada,
+  descricao
 ) =>
   await axios
-    .put("/consulta" + id, { marcada, realizada, descricao })
+    .put("/consulta/" + id, { marcada, realizada, descricao })
     .then((res: AxiosAPIResponse) => res.data)
     .catch((e: AxiosError<APIResponse>) => {
       let msg = "Um erro inesperado ocorreu.";
@@ -81,3 +82,6 @@ export const getConsultas: GetConsultas = async (params, id = undefined) =>
       }
       return Promise.reject({ msg, res: e.response?.data });
     });
+
+export const deleteConsulta: DeleteConsulta = (id) =>
+  axios.delete("/consulta/" + id);

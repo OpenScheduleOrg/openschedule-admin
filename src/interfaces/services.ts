@@ -25,14 +25,21 @@ export type Logout = () => Promise<APIResponse>;
 
 
 */
-export type CreateConsulta = (consulta: Consulta) => Promise<APIResponse>;
+export type CreateConsulta = (consulta: {
+  marcada: Date | string;
+  descricao?: string;
+  realizada: boolean;
+  cliente_id: number;
+  clinica_id: number;
+}) => Promise<APIResponse>;
 
 export type UpdateConsulta = (
   id: number,
-  marcada: string | null,
-  realizada: boolean | null,
-  descricao: string | null
+  marcada?: Date,
+  realizada?: boolean | null,
+  descricao?: string | null
 ) => Promise<APIResponse>;
+
 
 export type GetConsultas = (
   params: {
@@ -58,7 +65,7 @@ export type UpdateCliente = (
 ) => Promise<APIResponse>;
 
 export type GetClientes = (
-  params: { nome: string; telefone: string; cpf: string; nascimento: Date },
+  params: { nome?: string; telefone?: string; cpf?: string; nascimento?: Date },
   id?: number
 ) => Promise<APIResponse>;
 /* 

@@ -51,12 +51,13 @@
               'has-consulta',
               ch.consulta.realizada ? 'cc-consulta-realizada' : '',
               !ch.consulta.realizada &&
-              now.valueOf() > ch.consulta.marcada.valueOf() + ch.consulta.his
+              now.valueOf() >
+                ch.consulta.marcada.valueOf() + ch.consulta.duracao * 1000
                 ? 'cc-no-consulta-realizada'
                 : '',
             ]"
             v-if="ch.consulta"
-            @click="updateConsulta(ch.his, ch.consulta.marcada.toISODate())"
+            @click="updateConsulta(ch.consulta)"
             :key="ch.consulta.marcada.valueOf()"
             @mouseenter="posFullDetail"
           >
@@ -64,6 +65,7 @@
               <span class="cc-consulta-start">{{
                 ch.consulta.intervalo.start.hhmm
               }}</span>
+
               <strong class="cc-full-name"
                 >{{ ch.consulta.cliente_nome }}
                 {{ ch.consulta.cliente_sobrenome }}
@@ -118,7 +120,7 @@
                 <template
                   v-if="
                     now.valueOf() <
-                    ch.consulta.marcada.valueOf() + ch.consulta.his
+                    ch.consulta.marcada.valueOf() + ch.consulta.duracao * 1000
                   "
                 >
                   <label for="consulta.status"
@@ -176,6 +178,7 @@ import { getUTCOffset } from "@/utils";
 import { defineComponent } from "vue";
 import { mapState, mapGetters } from "vuex";
 import { Month, Week } from "@/constants";
+import { Consulta } from "@/interfaces";
 
 export default defineComponent({
   name: "Week",
@@ -209,6 +212,18 @@ export default defineComponent({
       });
 
       this.$emit("new-consulta", his);
+    },
+    async updateConsulta(s_consulta: Consulta) {
+      await this.$router.push({
+        name: this.period,
+        params: {
+          day: s_consulta.marcada.getDate(),
+          month: s_consulta.marcada.getMonth() + 1,
+          year: s_consulta.marcada.getFullYear(),
+        },
+      });
+
+      this.$emit("update-consulta", s_consulta);
     },
     posFullDetail() {
       const mgt = document.querySelector("main.grid-item") as Element;
@@ -561,7 +576,7 @@ export default defineComponent({
 }
 
 .has-consulta:hover .cc-consulta-full-detail {
-  transition-delay: 0.5s;
+  transition-delay: 0.8s;
   opacity: 1;
   visibility: visible;
   cursor: initial;

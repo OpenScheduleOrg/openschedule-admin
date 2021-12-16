@@ -137,10 +137,17 @@ export default defineComponent({
 
 .cc-form-group .cc-input-field:focus-within .cc-field-name,
 .cc-form-group .cc-input-field.cc-input-not-empty .cc-field-name {
-  color: var(--label-color-hover);
   font-size: 1.1em;
   left: 0;
   top: 0;
+}
+.cc-form-group:not(.cc-input-is-invalid)
+  .cc-input-field:focus-within
+  .cc-field-name,
+.cc-form-group:not(.cc-input-is-invalid)
+  .cc-input-field.cc-input-not-empty
+  .cc-field-name {
+  color: var(--label-color-hover);
 }
 
 .cc-form-group

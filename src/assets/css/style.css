@@ -140,7 +140,6 @@ button:disabled {
   cursor: initial;
 }
 
-
 .fade-enter-from {
   opacity: 0;
 }
@@ -160,6 +159,28 @@ button:disabled {
   transition: all 0.7s;
 }
 .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-slide-modal-enter-from {
+  opacity: 0;
+}
+
+.fade-slide-modal-enter-active {
+  transition: all 0.5s;
+}
+
+.fade-slide-modal-enter-to {
+  opacity: 1;
+}
+.fade-slide-modal-leave-from {
+  opacity: 1;
+}
+
+.fade-slide-modal-leave-active {
+  transition: all 0.5s;
+}
+.fade-slide-modal-leave-to {
   opacity: 0;
 }
 
