@@ -12,7 +12,7 @@ import { secondsToHorario } from "@/utils";
 
 export const createConsulta: CreateConsulta = async (consulta) =>
   await axios
-    .post("/consulta", consulta)
+    .post("/consultas", consulta)
     .then((res: AxiosAPIResponse) => res.data)
     .catch((e: AxiosError<APIResponse>) => {
       let msg = "Um erro inesperado ocorreu.";
@@ -29,7 +29,7 @@ export const updateConsulta: UpdateConsulta = async (
   descricao
 ) =>
   await axios
-    .put("/consulta/" + id, { marcada, realizada, descricao })
+    .put("/consultas/" + id, { marcada, realizada, descricao })
     .then((res: AxiosAPIResponse) => res.data)
     .catch((e: AxiosError<APIResponse>) => {
       let msg = "Um erro inesperado ocorreu.";
@@ -84,4 +84,4 @@ export const getConsultas: GetConsultas = async (params, id = undefined) =>
     });
 
 export const deleteConsulta: DeleteConsulta = (id) =>
-  axios.delete("/consulta/" + id);
+  axios.delete("/consultas/" + id);

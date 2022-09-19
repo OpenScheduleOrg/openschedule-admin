@@ -387,6 +387,16 @@ export default defineComponent({
         nhis
       );
     },
+    "$store.state.calendar.current_date": function (nmarcada) {
+      this.consulta.marcada = new Date(
+        nmarcada.getFullYear(),
+        nmarcada.getMonth(),
+        nmarcada.getDate(),
+        0,
+        0,
+        this.consulta.his
+      );
+    },
     "cliente.cpf": async function (n) {
       this.validate.cliente.cpf = "";
       if (n.length == 14) {

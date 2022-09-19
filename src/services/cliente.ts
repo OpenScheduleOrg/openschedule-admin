@@ -10,7 +10,7 @@ import { AxiosError } from "axios";
 
 export const createCliente: CreateCliente = async (cliente) =>
   axios
-    .post("/cliente", cliente)
+    .post("/clientes", cliente)
     .then((res: AxiosAPIResponse) => res.data)
     .catch((e: AxiosError<APIResponse>) => {
       let msg = "Um erro inesperado ocorreu.";
@@ -22,7 +22,7 @@ export const createCliente: CreateCliente = async (cliente) =>
 
 export const updateCliente: UpdateCliente = async (id, cliente) =>
   axios
-    .put("/cliente/" + id, cliente)
+    .put("/clientes/" + id, cliente)
     .then((res: AxiosAPIResponse) => res.data)
     .catch((e: AxiosError<APIResponse>) => {
       let msg = "Um erro inesperado ocorreu.";

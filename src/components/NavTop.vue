@@ -65,7 +65,7 @@
           src="https://www.w3schools.com/howto/img_avatar.png"
           alt="w3schools"
         />
-        <span>{{ user.nome }} {{ user.sobrenome }}</span>
+        <span>{{ user?.nome }} {{ user?.sobrenome }}</span>
       </button>
       <ul div class="drop-content" ref="drop-content">
         <li class="user-detail">
@@ -74,11 +74,11 @@
             alt="w3schools"
           />
           <div>
-            <span :title="user.nome + ' ' + user.sobrenome"
-              >{{ user.nome }} {{ user.sobrenome }}</span
+            <span :title="user?.nome + ' ' + user?.sobrenome"
+              >{{ user?.nome }} {{ user?.sobrenome }}</span
             >
-            <span class="text-continous" :title="user.email">{{
-              user.email
+            <span class="text-continous" :title="user?.email">{{
+              user?.email
             }}</span>
           </div>
         </li>
@@ -112,7 +112,7 @@ export default defineComponent({
   data() {
     return {
       user: this.$store.state.auth.user,
-      periods: Periods[navigator.language],
+      periods: Periods["pt-BR"],
     };
   },
   computed: {
