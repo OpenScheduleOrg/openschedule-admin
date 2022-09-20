@@ -14,6 +14,7 @@
       @close_modal="(show_consulta_form = false), (consulta = undefined)"
       :his="his"
       :s_consulta="consulta"
+      :s_cliente="cliente"
     ></consulta-form>
   </transition>
 </template>
@@ -22,7 +23,8 @@
 import { defineComponent } from "vue";
 import { agendaGuard } from "@/router/guards";
 import ConsultaForm from "./consulta/ConsultaForm.vue";
-import { Consulta } from "@/interfaces";
+import { Consulta, Cliente, APIResponse } from "@/interfaces";
+import { getClientes } from "@/services/cliente";
 
 export default defineComponent({
   name: "Agenda",
@@ -33,11 +35,13 @@ export default defineComponent({
     his: number | undefined;
     show_consulta_form: boolean;
     consulta?: Consulta;
+    cliente?: Cliente;
   } {
     return {
       his: undefined,
       show_consulta_form: false,
       consulta: undefined,
+      cliente: undefined
     };
   },
   methods: {
@@ -45,7 +49,13 @@ export default defineComponent({
       this.his = his;
       this.show_consulta_form = true;
     },
-    setConsulta(c: Consulta) {
+    async setConsulta(c: Consulta) {
+      const res = (await getClientes({}, c.cliente_id).catch((e) => {
+        console.error(e);
+        this.$emit("close_modal");
+      })) as APIResponse;
+
+      this.cliente  = res.data.cliente;
       this.consulta = c;
       this.show_consulta_form = true;
     },

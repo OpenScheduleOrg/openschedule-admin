@@ -119,6 +119,7 @@ import {
 } from "../util";
 
 import { getClientes, createCliente, updateCliente } from "@/services/cliente";
+import { formatCpf, formatTelefone } from "@/utils";
 import {
   createConsulta,
   deleteConsulta,
@@ -130,7 +131,7 @@ import { secondsToHorario } from "@/utils";
 
 export default defineComponent({
   name: "ConsultaForm",
-  props: ["his", "s_consulta"],
+  props: ["his", "s_consulta", "s_cliente"],
   data(): {
     validate: { cliente: { nome: string; cpf: string; telefone: string } };
     initial_iso_date: string;
@@ -166,7 +167,7 @@ export default defineComponent({
       ),
       duracao: 0,
     };
-    const cliente: Cliente = {
+    let cliente: Cliente = {
       id: 0,
       nascimento: new Date(),
       nome: "",
@@ -178,7 +179,10 @@ export default defineComponent({
 
     if (this.s_consulta) {
       consulta = this.s_consulta;
-      this.setCliente(consulta.cliente_id);
+      cliente = this.s_cliente;
+      cliente.nascimento  = cliente.nascimento && new Date(cliente.nascimento + "T00:00:00.000-03:00" as string);
+      cliente.cpf = formatCpf(cliente.cpf);
+      cliente.telefone = formatTelefone(cliente.telefone);
     }
 
     const hs_free_list = this.getHsFree(
@@ -193,7 +197,7 @@ export default defineComponent({
       consulta,
       cliente,
       validate: { cliente: { nome: "", cpf: "", telefone: "" } },
-      hs_free_list,
+      hs_free_list
     };
   },
   components: {
@@ -210,34 +214,6 @@ export default defineComponent({
     ...mapState("calendar", ["current_date", "now"]),
   },
   methods: {
-    async setCliente(cliente_id: number) {
-      const res = (await getClientes({}, cliente_id).catch((e) => {
-        console.error(e);
-        this.$emit("close_modal");
-      })) as APIResponse;
-      const res_cliente = res.data.cliente;
-      this.cliente.id = res_cliente.id;
-      this.cliente.nome = res_cliente.nome;
-      this.cliente.sobrenome = res_cliente.sobrenome;
-      this.cliente.nascimento =
-        res_cliente.nascimento && new Date(res_cliente.nascimento as string);
-      this.cliente.cpf =
-        res_cliente.cpf.slice(0, 3) +
-        "." +
-        res_cliente.cpf.slice(3, 6) +
-        "." +
-        res_cliente.cpf.slice(6, 9) +
-        "-" +
-        res_cliente.cpf.slice(9);
-      this.cliente.telefone =
-        "(" +
-        res_cliente.telefone.slice(0, 2) +
-        ") 9 " +
-        res_cliente.telefone.slice(2, 6) +
-        "-" +
-        res_cliente.telefone.slice(6);
-      this.cliente.endereco = res_cliente.endereco;
-    },
     closeAll(ev: Event) {
       return ev;
     },
@@ -266,7 +242,6 @@ export default defineComponent({
                 },
                 ...hs_free.slice(i),
               ];
-              console.log(hs_free);
               return hs_free;
             }
             continue;
@@ -289,6 +264,8 @@ export default defineComponent({
     },
     async commitChange() {
       let cliente: Cliente;
+
+      (this.cliente.nascimento as Date)?.setHours(12);
       const nome = this.cliente.nome;
       const sobrenome = this.cliente.sobrenome;
       const nascimento = this.cliente.nascimento as Date;
@@ -398,11 +375,11 @@ export default defineComponent({
       );
     },
     "cliente.cpf": async function (n) {
+
       this.validate.cliente.cpf = "";
       if (n.length == 14) {
         const cpf: string = n.replace(/\.|-/g, "");
         const res = await getClientes({ cpf });
-        console.log(res);
         const cliente = res.data && (res.data.cliente || res.data.clientes[0]);
         if (cliente) {
           this.cliente.id = cliente.id;
@@ -419,7 +396,7 @@ export default defineComponent({
 
           this.cliente.endereco = cliente.endereco;
           this.cliente.nascimento =
-            cliente.nascimento && new Date(cliente.nascimento);
+            cliente.nascimento && new Date(cliente.nascimento + "T00:00:00.000-03:00");
         }
       }
     },
@@ -445,7 +422,7 @@ export default defineComponent({
             cliente.cpf.slice(9);
           this.cliente.endereco = cliente.endereco;
           this.cliente.nascimento =
-            cliente.nascimento && new Date(cliente.nascimento);
+            cliente.nascimento && new Date(cliente.nascimento+ "T00:00:00.000-03:00");
         }
       }
     },

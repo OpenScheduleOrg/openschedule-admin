@@ -68,3 +68,26 @@ export function secondsToHorario(s: number): DayTime {
 
   return { his: s, hours, minutes, hhmm };
 }
+
+export function formatCpf(cpf: string): string {
+  return (
+    cpf.slice(0, 3) +
+    "." +
+    cpf.slice(3, 6) +
+    "." +
+    cpf.slice(6, 9) +
+    "-" +
+    cpf.slice(9)
+  );
+}
+
+export function formatTelefone(telefone: string): string {
+  return (
+    "(" +
+    telefone.slice(0, 2) +
+    ") 9 " +
+    telefone.slice(2, 6) +
+    "-" +
+    telefone.slice(6)
+  );
+}

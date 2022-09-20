@@ -232,6 +232,8 @@ export default defineComponent({
     getSixWeeks(offset_date, current_date) {
       const days = [];
       const today = new Date();
+      console.log("Date picker");
+      console.log(current_date);
 
       let d = offset_date.addDays(-offset_date.getDay() - 1);
       for (let i = 0; i < 42; i++) {
@@ -264,6 +266,7 @@ export default defineComponent({
         this.offset_date.getFullYear();
 
       this.show_calendar = false;
+      console.log("New current date")
 
       this.$emit("update:modelValue", new_date);
     },
