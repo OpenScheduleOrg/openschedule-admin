@@ -49,5 +49,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/uchoamp/consuchat-admin.git"
+  },
+  "vue": {
+    "pages": {
+      "index": {
+        "entry": "src/main"
+      }
+    }
   }
 }

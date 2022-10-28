@@ -1,5 +1,5 @@
-import { Period } from "@/constants";
-import { Consulta, DayTime, Horario } from "@/interfaces";
+import { Period } from "@/common/constants";
+import { Consulta, DayTime, Horario } from "@/data/interfaces";
 
 export function monthBetween(date: Date): Date {
   const month = date.getMonth();

@@ -1,8 +1,8 @@
 import { Module, Commit, Dispatch } from "vuex";
 import { State as stateRoot } from "..";
-import { Funcionario } from "@/interfaces";
+import { Funcionario } from "@/data/interfaces";
 import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from "./mutation-types";
-import { login, getLoged, logout } from "@/services/auth";
+import { login, getLoged, logout } from "@/domain/services/auth";
 
 export interface StateAuth {
   status: boolean;
@@ -32,7 +32,7 @@ const auth: Module<StateAuth, stateRoot> = {
   actions: {
     loginFailure({ commit }: { commit: Commit }, error) {
       commit(LOGIN_FAILURE);
-      console.log(error)
+      console.log(error);
       return Promise.reject(error);
     },
     login(

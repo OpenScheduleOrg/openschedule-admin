@@ -7,11 +7,11 @@ import {
   SET_NOW,
   SET_OFFSET_MONTH_PICKER,
 } from "./mutation-types";
-import { Month, Period, Week } from "@/constants";
+import { Month, Period, Week } from "@/common/constants";
 import { monthBetween, setPeriod, getPeriod } from "@/utils";
 
-import { DayDetails, SixWeeksDay } from "@/interfaces/store";
-import { Consulta, Horario } from "@/interfaces";
+import { DayDetails, SixWeeksDay } from "@/data/interfaces/store";
+import { Consulta, Horario } from "@/data/interfaces";
 const today = new Date();
 
 export interface StateCalendar {
