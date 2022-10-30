@@ -9,9 +9,3 @@ const axiosInstance: Axios = axios.create({
 });
 
 export default axiosInstance;
-
-export * from "./auth";
-export * from "./cliente";
-export * from "./clinica";
-export * from "./consulta";
-export * from "./horario";

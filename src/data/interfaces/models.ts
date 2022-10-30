@@ -4,7 +4,7 @@ export interface Consulta {
   id?: number;
   clinica_id: number;
   cliente_id: number;
-  marcada:  Date;
+  marcada: Date;
   duracao: number;
   his: number;
   intervalo?: { start: DayTime; end: DayTime };
@@ -15,6 +15,7 @@ export interface Consulta {
   clinica_cpf?: string;
   clinica_endereco?: string;
   cliente_nome?: string;
+  cliente_telefone?: string;
   clinica_tipo?: string;
 }
 

@@ -2,7 +2,6 @@ import { Module, Commit, Dispatch } from "vuex";
 import { State as stateRoot } from "..";
 import { Funcionario } from "@/data/interfaces";
 import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from "./mutation-types";
-import { login, getLoged, logout } from "@/domain/services/auth";
 
 export interface StateAuth {
   status: boolean;
@@ -35,21 +34,20 @@ const auth: Module<StateAuth, stateRoot> = {
       console.log(error);
       return Promise.reject(error);
     },
-    login(
-      { commit, dispatch }: { commit: Commit; dispatch: Dispatch },
-      payload
-    ) {
-      return login(payload.username, payload.password, payload.rememberMe)
-        .then((res) => {
-          commit(LOGIN_SUCCESS, res.data.funcionario);
-          return dispatch("clinica/setClinica", null, {
-            root: true,
-          });
-        })
-        .catch((error) => dispatch("loginFailure", error));
+    login({ commit, dispatch }: { commit: Commit; dispatch: Dispatch }) {
+      commit(LOGIN_SUCCESS, {
+        id: 1,
+        nome: "Foo",
+        sobrenome: "Bar",
+        username: "foobar",
+        email: "foobar@email.com",
+        clinica_id: 1,
+      });
+      return dispatch("clinica/setClinica", null, {
+        root: true,
+      });
     },
     setLoged({
-      commit,
       dispatch,
       state,
     }: {
@@ -60,17 +58,9 @@ const auth: Module<StateAuth, stateRoot> = {
       if (state.status) {
         return Promise.resolve();
       }
-      return getLoged()
-        .then((res) => {
-          commit(LOGIN_SUCCESS, res.data.funcionario);
-          return dispatch("clinica/setClinica", null, {
-            root: true,
-          });
-        })
-        .catch((error) => dispatch("loginFailure", error));
+      return Promise.reject(dispatch("loginFailure", undefined));
     },
     logout({ commit }: { commit: Commit }) {
-      logout();
       commit(LOGOUT);
     },
   },

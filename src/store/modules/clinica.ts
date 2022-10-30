@@ -8,8 +8,6 @@ import {
   SET_HORARIOS,
 } from "./mutation-types";
 
-import { getClinicas, getConsultas, getHorarios } from "@/domain/services";
-
 interface WeekCell {
   consulta?: Consulta;
   week_day: number;
@@ -18,12 +16,7 @@ interface WeekCell {
   intervals: number;
 }
 
-import {
-  timeStringToS,
-  sortHorarios,
-  secondsToHorario,
-  sortConsultas,
-} from "@/utils";
+import { secondsToHorario, sortConsultas } from "@/utils";
 import { MIN_INTERVAL } from "@/common/constants";
 import { DayDetails } from "@/data/interfaces/store";
 
@@ -301,20 +294,17 @@ const clinica: Module<StateClinica, stateRoot> = {
           h <= horario.pm_inicio
         )
           h = horario.pm_inicio as number;
-        else {
-          consulta =
-            day_consultas &&
-            day_consultas.find(
-              (c) =>
-                h >= c.his && c.his < h + intervalo && c.his + c.duracao > h
-            );
-          if (consulta) details.consultas.push(consulta);
-          else
-            details.hs_free.push({
-              start: secondsToHorario(h),
-              end: secondsToHorario(h + intervalo),
-            });
-        }
+        consulta =
+          day_consultas &&
+          day_consultas.find(
+            (c) => h >= c.his && c.his < h + intervalo && c.his + c.duracao > h
+          );
+        if (consulta) details.consultas.push(consulta);
+        else
+          details.hs_free.push({
+            start: secondsToHorario(h),
+            end: secondsToHorario(h + intervalo),
+          });
       }
       return details;
     },
@@ -344,107 +334,104 @@ const clinica: Module<StateClinica, stateRoot> = {
   actions: {
     setClinica({
       commit,
-      rootState,
       dispatch,
     }: {
       commit: Commit;
       rootState: stateRoot;
       dispatch: Dispatch;
     }) {
-      return getClinicas({}, rootState.auth.user?.clinica_id)
-        .then((res) => {
-          commit(SET_CLINICA, res.data.clinica);
-          return dispatch("setHorarios");
-        })
-        .catch((error) => {
-          dispatch("resetState");
-          return Promise.reject(error);
-        });
+      commit(SET_CLINICA, {
+        id: 1,
+        nome: "Foo Bar",
+        endereco: "Rua X",
+        telefone: "9878797867",
+      });
+      return dispatch("setHorarios");
     },
     setHorarios({
       commit,
-      state,
       dispatch,
     }: {
       commit: Commit;
       state: StateClinica;
       dispatch: Dispatch;
     }) {
-      return getHorarios({ clinica_id: state.id as number }).then((res) => {
-        const horarios = res.data.horarios;
-
-        for (const h of horarios) {
-          h.am_inicio = timeStringToS(h.am_inicio as string);
-          if (h.am_fim) h.am_fim = timeStringToS(h.am_fim as string);
-          if (h.pm_inicio) h.pm_inicio = timeStringToS(h.pm_inicio as string);
-          h.pm_fim = timeStringToS(h.pm_fim as string);
-          h.intervalo = timeStringToS(h.intervalo as string);
-          h.dia_semana = h.dia_semana + 1 >= 7 ? 0 : h.dia_semana + 1;
-        }
-        horarios.sort(sortHorarios);
-        commit(SET_HORARIOS, horarios);
-
-        return dispatch("setConsultas");
-      });
+      commit(SET_HORARIOS, [
+        {
+          almoco: true,
+          am_inicio: 25200,
+          am_fim: 25200 + 4 * 3600,
+          pm_inicio: 50400,
+          pm_fim: 61200,
+          intervalo: 3600,
+          dia_semana: 1,
+        },
+        {
+          almoco: true,
+          am_inicio: 25200,
+          am_fim: 25200 + 4 * 3600,
+          pm_inicio: 50400,
+          pm_fim: 61200,
+          intervalo: 3600,
+          dia_semana: 2,
+        },
+        {
+          almoco: true,
+          am_inicio: 25200,
+          am_fim: 25200 + 4 * 3600,
+          pm_inicio: 50400,
+          pm_fim: 61200,
+          intervalo: 1800,
+          dia_semana: 3,
+        },
+        {
+          almoco: true,
+          am_inicio: 25200,
+          am_fim: 25200 + 4 * 3600,
+          pm_inicio: 50400,
+          pm_fim: 61200,
+          intervalo: 1800,
+          dia_semana: 4,
+        },
+      ]);
+      return dispatch("setConsultas");
     },
-    setConsultas(
-      {
-        commit,
-        state,
-        rootState,
-      }: { commit: Commit; state: StateClinica; rootState: stateRoot },
-      params = undefined
-    ) {
-      const clinica_id = state.id;
-      const current_date = rootState.calendar.current_date;
-      let date_start: Date, date_end: Date, cliente_id;
-      if (!params) {
-        date_start = new Date(
-          current_date.getFullYear(),
-          current_date.getMonth(),
-          -7
-        );
-        date_end = new Date(
-          current_date.getFullYear(),
-          current_date.getMonth() + 1,
-          +8
-        );
-      } else {
-        date_start = params.date_start;
-        date_end = params.date_end;
-        cliente_id = params.cliente_id;
-      }
-      return getConsultas({
-        clinica_id,
-        cliente_id,
-        date_start,
-        date_end,
-      }).then((res) => {
-        const consutlas_array = res.data.consultas;
 
-        const consultas: ClinicaConsultas = consutlas_array.reduce((cs, cc) => {
-          const marcada = cc.marcada as Date;
-
-          if (!cs[marcada.toISODate()]) cs[marcada.toISODate()] = [];
-          cs[marcada.toISODate()].push(cc);
-
-          return cs;
-        }, {} as ClinicaConsultas);
-        if (date_end && date_start) {
-          let current_date: Date;
-          for (const isodate in state.consultas) {
-            current_date = new Date(isodate);
-
-            if (
-              current_date.valueOf() < date_start.valueOf() ||
-              current_date.valueOf() > date_end.valueOf()
-            ) {
-              consultas[isodate] = state.consultas[isodate];
-            }
-          }
-        }
-
-        commit(SET_CONSULTAS, consultas);
+    setConsultas({
+      commit,
+    }: {
+      commit: Commit;
+      state: StateClinica;
+      rootState: stateRoot;
+    }) {
+      commit(SET_CONSULTAS, {
+        "2022-10-31": [
+          {
+            id: 69,
+            clinica_id: 1,
+            cliente_id: 1,
+            marcada: new Date("2022-10-31"),
+            duracao: 3600,
+            his: 25200,
+            intervalo: {
+              start: {
+                his: 25200,
+                hours: 7,
+                minutes: 0,
+                hhmm: "07:00",
+              },
+              end: {
+                his: 25200 + 3600,
+                hours: 8,
+                minutes: 0,
+                hhmm: "08:00",
+              },
+            },
+            descricao: "",
+            cliente_nome: "Marcos Pacheco",
+            cliente_telefone: "8681732880",
+          },
+        ],
       });
     },
     resetState({ commit }: { commit: Commit }) {

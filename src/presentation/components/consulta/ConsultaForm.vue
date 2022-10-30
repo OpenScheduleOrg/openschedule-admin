@@ -118,13 +118,7 @@ import {
   InputCheck,
 } from "../util";
 
-import { getClientes, createCliente, updateCliente } from "@/domain/services/cliente";
-import {
-  createConsulta,
-  deleteConsulta,
-  updateConsulta,
-} from "@/domain/services/consulta";
-import { APIResponse, Cliente, Consulta } from "@/data/interfaces";
+import { Cliente, Consulta } from "@/data/interfaces";
 
 import { secondsToHorario } from "@/utils";
 
@@ -211,10 +205,21 @@ export default defineComponent({
   },
   methods: {
     async setCliente(cliente_id: number) {
-      const res = (await getClientes({}, cliente_id).catch((e) => {
-        console.error(e);
-        this.$emit("close_modal");
-      })) as APIResponse;
+      // Mock cliente
+      const res = {
+        data: {
+          cliente: {
+            id: 1,
+            nome: "Foo",
+            sobrenome: "Bar",
+            nascimento: new Date().toString(),
+            cpf: "99889098723",
+            telefone: "8938232312",
+            endereco: "Rua X",
+          },
+        },
+      };
+
       const res_cliente = res.data.cliente;
       this.cliente.id = res_cliente.id;
       this.cliente.nome = res_cliente.nome;
@@ -266,7 +271,6 @@ export default defineComponent({
                 },
                 ...hs_free.slice(i),
               ];
-              console.log(hs_free);
               return hs_free;
             }
             continue;
@@ -290,9 +294,9 @@ export default defineComponent({
     async commitChange() {
       let cliente: Cliente;
       const nome = this.cliente.nome;
-      const sobrenome = this.cliente.sobrenome;
-      const nascimento = this.cliente.nascimento as Date;
-      const endereco = this.cliente.endereco;
+      //const sobrenome = this.cliente.sobrenome;
+      //const nascimento = this.cliente.nascimento as Date;
+      //const endereco = this.cliente.endereco;
       const cpf = this.cliente.cpf.replace(/\.|-/g, "");
       const telefone = this.cliente.telefone.replace(/\(|\)|-|(?:\s9\s)/g, "");
       let valid = true;
@@ -311,50 +315,47 @@ export default defineComponent({
       }
       if (valid) {
         if (!this.cliente.id) {
-          const res = await createCliente({
-            nome,
-            sobrenome,
-            nascimento,
-            endereco,
-            cpf,
-            telefone,
-          });
+          // Mock cliente
+          const res = {
+            data: {
+              cliente: {
+                id: 1,
+                nome: "Foo",
+                sobrenome: "Bar",
+                nascimento: new Date().toString(),
+                cpf: "99889098723",
+                telefone: "8938232312",
+                endereco: "Rua X",
+              },
+            },
+          };
+
           cliente = res.data && res.data.cliente;
-          console.log(cliente);
           if (cliente) {
             this.cliente = cliente;
             this.consulta.cliente_id = cliente.id as number;
           }
-        } else {
-          updateCliente(this.cliente.id, {
-            nome,
-            sobrenome,
-            nascimento,
-            endereco,
-            cpf,
-            telefone,
-          });
         }
       } else {
         return;
       }
 
       const consulta_id = this.consulta.id;
-      const marcada = this.consulta.marcada as Date;
-      const clinica_id = this.consulta.clinica_id;
-      const cliente_id = this.consulta.cliente_id;
-      const descricao = this.consulta.descricao;
-      const realizada = this.consulta.realizada;
+      //const marcada = this.consulta.marcada as Date;
+      //const clinica_id = this.consulta.clinica_id;
+      //const cliente_id = this.consulta.cliente_id;
+      //const descricao = this.consulta.descricao;
+      //const realizada = this.consulta.realizada;
       if (consulta_id) {
-        updateConsulta(consulta_id, marcada, realizada, descricao);
+        /* updateConsulta(consulta_id, marcada, realizada, descricao); */
       } else {
-        createConsulta({
+        /* createConsulta({
           marcada,
           descricao,
           realizada,
           clinica_id,
           cliente_id,
-        });
+        }); */
       }
       this.$store.dispatch("clinica/setConsultas");
       this.$emit("close_modal");
@@ -362,7 +363,6 @@ export default defineComponent({
 
     async cancelarConsulta() {
       if (confirm("Você deseja realmente cancelar essa consulta?")) {
-        deleteConsulta(this.consulta.id as number);
         this.$store.dispatch("clinica/setConsultas");
         this.$emit("close_modal");
       }
@@ -390,10 +390,24 @@ export default defineComponent({
     "cliente.cpf": async function (n) {
       this.validate.cliente.cpf = "";
       if (n.length == 14) {
-        const cpf: string = n.replace(/\.|-/g, "");
-        const res = await getClientes({ cpf });
-        console.log(res);
-        const cliente = res.data && (res.data.cliente || res.data.clientes[0]);
+        //const cpf: string = n.replace(/\.|-/g, "");
+
+        // Mock cliente
+        const res = {
+          data: {
+            cliente: {
+              id: 1,
+              nome: "Foo",
+              sobrenome: "Bar",
+              nascimento: new Date().toString(),
+              cpf: "99889098723",
+              telefone: "8938232312",
+              endereco: "Rua X",
+            },
+          },
+        };
+
+        const cliente = res.data && res.data.cliente;
         if (cliente) {
           this.cliente.id = cliente.id;
           this.consulta.cliente_id = cliente.id as number;
@@ -417,9 +431,24 @@ export default defineComponent({
       this.validate.cliente.telefone = "";
       this.validate.cliente.cpf = "";
       if (n.length == 16) {
-        const telefone: string = n.replace(/\(|\)|-|(?:\s9\s)/g, "");
-        const res = await getClientes({ telefone });
-        const cliente = res.data && (res.data.cliente || res.data.clientes[0]);
+        // const telefone: string = n.replace(/\(|\)|-|(?:\s9\s)/g, "");
+        // Mock cliente
+        const res = {
+          data: {
+            cliente: {
+              id: 1,
+              nome: "Foo",
+              sobrenome: "Bar",
+              nascimento: new Date().toString(),
+              cpf: "99889098723",
+              telefone: "8938232312",
+              endereco: "Rua X",
+            },
+          },
+        };
+
+        const cliente = res.data && res.data.cliente 
+
         if (cliente) {
           this.cliente.id = cliente.id as number;
           this.consulta.cliente_id = cliente.id as number;
