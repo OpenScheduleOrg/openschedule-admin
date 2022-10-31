@@ -65,7 +65,7 @@
           src="https://www.w3schools.com/howto/img_avatar.png"
           alt="w3schools"
         />
-        <span>{{ user.nome }} {{ user.sobrenome }}</span>
+        <span>{{ current_user?.name }}</span>
       </button>
       <ul div class="drop-content" ref="drop-content">
         <li class="user-detail">
@@ -74,11 +74,11 @@
             alt="w3schools"
           />
           <div>
-            <span :title="user.nome + ' ' + user.sobrenome"
-              >{{ user.nome }} {{ user.sobrenome }}</span
+            <span :title="current_user?.name"
+              >{{ current_user?.name }}</span
             >
-            <span class="text-continous" :title="user.email">{{
-              user.email
+            <span class="text-continous" :title="current_user?.email">{{
+              current_user?.email
             }}</span>
           </div>
         </li>
@@ -111,7 +111,7 @@ export default defineComponent({
   name: "NavTop",
   data() {
     return {
-      user: this.$store.state.auth.user,
+      current_user: this.$store.state.auth.current_user,
       periods: Periods[navigator.language],
     };
   },

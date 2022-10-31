@@ -12,6 +12,6 @@ export const RESET_STATE = "RESET_STATE";
 export const SET_CONSULTAS = "SET_CONSULTAS";
 
 //MODULE AUTH
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const LOGIN_FAILURE = "LOGIN_FAILURE";
-export const LOGOUT = "LOGOUT";
+export const SET_AUTH_STATE = "SET_AUTH_STATE";
+export const RESET_AUTH_STATE = "RESET_AUTH_STATE";
+export const REFRESH_TOKEN = "REFRESH_TOKEN";

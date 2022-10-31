@@ -1,67 +1,100 @@
 import { Module, Commit, Dispatch } from "vuex";
 import { State as stateRoot } from "..";
-import { Funcionario } from "@/data/interfaces";
-import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from "./mutation-types";
+import {
+  SET_AUTH_STATE,
+  RESET_AUTH_STATE,
+  REFRESH_TOKEN,
+} from "./mutation-types";
+import { CredentialModel, CurrentUser } from "@/domain/models";
+import { AuthInfo } from "@/domain/models";
+import { authService } from "@/domain/services";
+import { LocalStorageManager } from "@/data/storage";
 
 export interface StateAuth {
-  status: boolean;
-  user: Funcionario | null;
+  access_token?: string;
+  current_user?: CurrentUser;
+  exp: number;
 }
 
 const auth: Module<StateAuth, stateRoot> = {
   namespaced: true,
-  state: {
-    status: false,
-    user: null,
-  },
+  state: { exp: 0 },
   mutations: {
-    [LOGIN_SUCCESS](state, user: Funcionario) {
-      state.status = true;
-      state.user = user;
+    [SET_AUTH_STATE](state, auth_info: AuthInfo) {
+      state.current_user = auth_info.current_user;
+      state.access_token = auth_info.tokens.access_token;
+      state.exp = auth_info.tokens.exp_access_token;
     },
-    [LOGIN_FAILURE](state) {
-      state.status = false;
-      state.user = null;
+    [REFRESH_TOKEN](state, auth_info: AuthInfo) {
+      state.access_token = auth_info.tokens.access_token;
+      state.exp = auth_info.tokens.exp_access_token;
     },
-    [LOGOUT](state) {
-      state.status = false;
-      state.user = null;
+    [RESET_AUTH_STATE](state) {
+      delete state.current_user;
+      delete state.access_token;
+      state.exp = 0;
     },
   },
   actions: {
-    loginFailure({ commit }: { commit: Commit }, error) {
-      commit(LOGIN_FAILURE);
-      console.log(error);
-      return Promise.reject(error);
+    async login(
+      { commit }: { commit: Commit; dispatch: Dispatch },
+      credentials: CredentialModel
+    ) {
+      const auth_info = await authService.login(credentials);
+      if (auth_info.tokens.session_token)
+        LocalStorageManager.saveSessionToken(auth_info.tokens.session_token);
+
+      commit(SET_AUTH_STATE, auth_info);
     },
-    login({ commit, dispatch }: { commit: Commit; dispatch: Dispatch }) {
-      commit(LOGIN_SUCCESS, {
-        id: 1,
-        nome: "Foo",
-        sobrenome: "Bar",
-        username: "foobar",
-        email: "foobar@email.com",
-        clinica_id: 1,
-      });
-      return dispatch("clinica/setClinica", null, {
-        root: true,
-      });
+    async restoreSession({ commit }: { commit: Commit; dispatch: Dispatch }) {
+      const session_token = LocalStorageManager.getSessionToken();
+      if (session_token) {
+        const auth_info = await authService.restoreSession(session_token);
+        if (auth_info.tokens.session_token)
+          LocalStorageManager.saveSessionToken(auth_info.tokens.session_token);
+
+        commit(SET_AUTH_STATE, auth_info);
+        return Promise.resolve();
+      }
+
+      console.warn("Session token not found");
+      return Promise.reject();
     },
-    setLoged({
-      dispatch,
+    logout({ commit }: { commit: Commit }) {
+      LocalStorageManager.removeSessionToken();
+      commit(RESET_AUTH_STATE);
+    },
+    async getAccessToken({
+      commit,
       state,
     }: {
       commit: Commit;
-      dispatch: Dispatch;
       state: StateAuth;
     }) {
-      if (state.status) {
-        return Promise.resolve();
+      let access_token = state.access_token;
+      const session_token = LocalStorageManager.getSessionToken();
+
+      const exp = state.exp * 1000;
+      if (exp - 600000 < Date.now()) {
+        try {
+          let auth_info;
+          if (exp - 100000 < Date.now() && session_token) {
+            auth_info = await authService.restoreSession(session_token);
+          } else {
+            auth_info = await authService.refreshToken(
+              state.access_token as string
+            );
+          }
+
+          commit(REFRESH_TOKEN, auth_info);
+          access_token = auth_info.tokens.access_token;
+        } catch (err) {
+          console.warn("Could not get new token");
+          console.error(err);
+        }
       }
-      return Promise.reject(dispatch("loginFailure", undefined));
-    },
-    logout({ commit }: { commit: Commit }) {
-      commit(LOGOUT);
+
+      return access_token;
     },
   },
 };

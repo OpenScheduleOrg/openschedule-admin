@@ -4,11 +4,11 @@ import auth, { StateAuth } from "./modules/auth";
 import calendar, { StateCalendar } from "./modules/calendar";
 import clinica, { StateClinica } from "./modules/clinica";
 
-export interface State {
+export type State = {
   calendar: StateCalendar;
   auth: StateAuth;
   clinica: StateClinica;
-}
+};
 
 // define injection key
 export const key: InjectionKey<Store<State>> = Symbol();

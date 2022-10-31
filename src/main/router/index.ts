@@ -10,6 +10,9 @@ const children: RouteRecordRaw[] = [
   {
     path: "/agenda",
     name: SyName.rootAgenda,
+    beforeEnter: () => {
+      store.dispatch("clinica/setClinica");
+    },
     component: () => import("@/presentation/components/Agenda.vue"),
     children: [
       {
@@ -124,15 +127,11 @@ const routes: RouteRecordRaw[] = [
     name: SyName.home,
     component: () => import("@/presentation/views/Main.vue"),
     beforeEnter(to, from, next) {
-      if (!store.state.auth.status)
+      if (!store.state.auth.current_user)
         store
-          .dispatch("auth/setLoged")
-          .then(() => {
-            agendaGuard(to, from, next);
-          })
-          .catch(() => {
-            next({ name: SyNames.login });
-          });
+          .dispatch("auth/restoreSession")
+          .then(() => agendaGuard(to, from, next))
+          .catch(() => next({ name: SyNames.login }));
       else if (to.name === SyName.home)
         next({ name: store.state.calendar.period });
       else agendaGuard(to, from, next);

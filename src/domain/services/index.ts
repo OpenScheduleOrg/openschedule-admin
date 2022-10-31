@@ -1,11 +1,5 @@
-import axios, { Axios } from "axios";
+import { httpAuthClient } from "@/data/http";
 
-const axiosInstance: Axios = axios.create({
-  baseURL: process.env.VUE_APP_API_URI,
-  headers: {
-    "content-type": "application/json",
-  },
-  withCredentials: true,
-});
+import { AuthService } from "./auth-service";
 
-export default axiosInstance;
+export const authService = new AuthService(httpAuthClient);
