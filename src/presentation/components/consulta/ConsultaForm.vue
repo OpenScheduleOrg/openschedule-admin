@@ -205,6 +205,7 @@ export default defineComponent({
   },
   methods: {
     async setCliente(cliente_id: number) {
+      console.log(cliente_id)
       // Mock cliente
       const res = {
         data: {

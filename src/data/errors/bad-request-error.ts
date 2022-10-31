@@ -1,6 +1,6 @@
-export class UnexpectedError extends Error {
-  constructor() {
-    super("Algo de errado ocorreu.");
-    this.name = "UnexpectedError";
+export class BadRequestError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "BadRequestError";
   }
 }
