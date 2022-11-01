@@ -5,10 +5,11 @@ import {
   RESET_AUTH_STATE,
   REFRESH_TOKEN,
 } from "./mutation-types";
-import { CredentialModel, CurrentUser } from "@/domain/models";
+import { CurrentUser } from "@/domain/models";
 import { AuthInfo } from "@/domain/models";
 import { authService } from "@/domain/services";
 import { LocalStorageManager } from "@/data/storage";
+import { Credentials } from "@/domain/params";
 
 export interface StateAuth {
   access_token?: string;
@@ -38,7 +39,7 @@ const auth: Module<StateAuth, stateRoot> = {
   actions: {
     async login(
       { commit }: { commit: Commit; dispatch: Dispatch },
-      credentials: CredentialModel
+      credentials: Credentials
     ) {
       const auth_info = await authService.login(credentials);
       if (auth_info.tokens.session_token)

@@ -1,6 +1,7 @@
-import { AuthInfo, CredentialModel } from "../models";
+import { AuthInfo } from "../models";
 import { TokenPayload, TokenResponse } from "@/data/models";
 import { HttpClient } from "@/data/http/http-client";
+import { Credentials } from "../params";
 
 export class AuthService {
   constructor(private readonly httpClient: HttpClient) {}
@@ -9,7 +10,7 @@ export class AuthService {
     username,
     password,
     remember_me,
-  }: CredentialModel): Promise<AuthInfo> => {
+  }: Credentials): Promise<AuthInfo> => {
     const basic_credentails = `Basic ${btoa(username + ":" + password)}`;
 
     const token_response = await this.httpClient.post<TokenResponse>(`signin`, {
