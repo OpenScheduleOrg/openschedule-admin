@@ -118,7 +118,7 @@ import {
   InputCheck,
 } from "../util";
 
-import { Cliente, Consulta } from "@/data/interfaces";
+import { Cliente, Consulta } from "@/store/models";
 
 import { secondsToHorario } from "@/utils";
 

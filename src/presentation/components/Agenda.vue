@@ -22,7 +22,7 @@
 import { defineComponent } from "vue";
 import { agendaGuard } from "@/main/router/guards";
 import ConsultaForm from "./consulta/ConsultaForm.vue";
-import { Consulta } from "@/data/interfaces";
+import { Consulta } from "@/store/models";
 
 export default defineComponent({
   name: "Agenda",

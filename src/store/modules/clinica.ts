@@ -1,6 +1,6 @@
 import { Module, Commit, Dispatch } from "vuex";
 import { State as stateRoot } from "..";
-import { Horario, Clinica, Consulta } from "@/data/interfaces";
+import { Horario, Clinica, Consulta, DayDetails } from "@/store/models";
 import {
   RESET_STATE,
   SET_CLINICA,
@@ -18,7 +18,6 @@ interface WeekCell {
 
 import { secondsToHorario, sortConsultas } from "@/utils";
 import { MIN_INTERVAL } from "@/common/constants";
-import { DayDetails } from "@/data/interfaces/store";
 
 interface ClinicaConsultas {
   [ISODate: string]: Consulta[];

@@ -1,4 +1,11 @@
-import { DayTime } from ".";
+export * from "./store";
+
+export type DayTime = {
+  his: number;
+  hours: number;
+  minutes: number;
+  hhmm: string;
+};
 
 export interface Consulta {
   id?: number;

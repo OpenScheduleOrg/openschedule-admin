@@ -10,8 +10,8 @@ import {
 import { Month, Period, Week } from "@/common/constants";
 import { monthBetween, setPeriod, getPeriod } from "@/utils";
 
-import { DayDetails, SixWeeksDay } from "@/data/interfaces/store";
-import { Consulta, Horario } from "@/data/interfaces";
+import { DayDetails, SixWeeksDay } from "@/store/models";
+import { Consulta, Horario } from "@/store/models";
 const today = new Date();
 
 export interface StateCalendar {

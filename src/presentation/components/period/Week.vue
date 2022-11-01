@@ -178,7 +178,7 @@ import { getUTCOffset } from "@/utils";
 import { defineComponent } from "vue";
 import { mapState, mapGetters } from "vuex";
 import { Month, Week } from "@/common/constants";
-import { Consulta } from "@/data/interfaces";
+import { Consulta } from "@/store/models";
 
 export default defineComponent({
   name: "Week",
