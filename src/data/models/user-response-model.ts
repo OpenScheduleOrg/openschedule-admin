@@ -3,4 +3,5 @@ export type UserResponseModel = {
   name: string;
   username: string;
   email: string;
+  clinic_id: string;
 };
