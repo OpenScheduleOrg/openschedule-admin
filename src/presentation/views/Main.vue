@@ -13,8 +13,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import NavTop from "@/presentation/components/NavTop.vue";
-import NavSide from "@/presentation/components/NavSide.vue";
+import NavTop from "@/presentation/components/navigation/NavTop.vue";
+import NavSide from "@/presentation/components/navigation/NavSide.vue";
 
 function setScrolled() {
   const els_scrolled = document.getElementsByClassName("scrolled");
@@ -49,9 +49,9 @@ export default defineComponent({
 <style scoped>
 #main.grid-container {
   grid-template:
-    [header-left] "hd hd" 11vh [header-right]
-    [main-left] "nav  main" 2fr / 1fr 8fr [main-right];
-  grid-template-rows: 11vmin minmax(0, 1fr);
+    [header-left] "hd hd" 10.5vh [header-right]
+    [main-left] "nav  main" 2fr / 1fr 9fr [main-right];
+  grid-template-rows: 10.5vmin minmax(0, 1fr);
   grid-gap: 0.15rem;
   height: 100vh;
   width: 100vw;

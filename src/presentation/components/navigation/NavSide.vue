@@ -50,32 +50,24 @@
   <nav id="nav-main">
     <ul>
       <li>
-        <router-link class="nav-link" to="/clinica">Clínica </router-link>
+        <router-link class="nav-link" to="/clinics">Clínicas</router-link>
+      </li>
+      <li>
+        <router-link class="nav-link" to="/specialties">Especialidades</router-link>
+      </li>
+      <li>
+        <router-link class="nav-link" to="/professionals">Profissionais</router-link>
+      </li>
+      <li>
+        <router-link class="nav-link" to="/patients">Pacientes</router-link>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <router-link class="nav-link" to="/users">Usuários</router-link>
       </li>
     </ul>
 
-    <ul>
-      <li>
-        <router-link class="nav-link" to="/cliente/new"
-          >Novo cliente</router-link
-        >
-      </li>
-      <li>
-        <router-link class="nav-link" to="/clientes">Clientes</router-link>
-      </li>
-    </ul>
-    <ul>
-      <li>
-        <router-link class="nav-link" to="/funcionario/new"
-          >Novo funcionário</router-link
-        >
-      </li>
-      <li>
-        <router-link class="nav-link" to="/funcionarios"
-          >Funcionários</router-link
-        >
-      </li>
-    </ul>
   </nav>
 </template>
 

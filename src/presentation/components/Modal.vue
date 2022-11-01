@@ -1,6 +1,6 @@
 <template>
   <transition name="modal">
-    <div ref="modal_mask" @click="closeModal($event)" class="modal-mask">
+    <div ref="modal_mask" @mousedown="closeModal($event)" class="modal-mask">
       <div class="modal-container">
         <span id="close-modal" @click="$emit('close_modal')"
           ><font-awesome-icon :icon="['fa', 'times']"></font-awesome-icon

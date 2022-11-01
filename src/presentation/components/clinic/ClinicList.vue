@@ -1,6 +1,6 @@
 <template>
     <h1>
-        FuncionarioForm
+        ClinicList
     </h1>
 </template>
 
@@ -9,7 +9,6 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "FuncionarioForm"
+    name: "ClinicList"
 });
-
 </script>

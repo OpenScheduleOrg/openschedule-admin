@@ -28,7 +28,7 @@
         :class="{ 'big-jump': h.bigjump }"
         v-for="h in aw.column_hms"
         :key="h.minutes + h.hours * 60"
-        :style="{ '--intervals': h.intervals }"
+        :style="{ '--intervals': h.intervals } as any"
       >
         <span class="hhmm">{{ h.hhmm }}</span>
         <div class="interval-fill"></div>
@@ -44,7 +44,7 @@
       >
         <transition name="fade" mode="out-in">
           <div
-            :style="{ '--intervals': ch.intervals }"
+            :style="{ '--intervals': ch.intervals } as any"
             :class="[
               'day-' + ch.week_day,
               'num-interval',
@@ -156,7 +156,7 @@
             </div>
           </div>
           <div
-            :style="{ '--intervals': ch.intervals }"
+            :style="{ '--intervals': ch.intervals } as any"
             :class="[
               'day-' + ch.week_day,
               'num-interval',

@@ -40,6 +40,7 @@
 
 html {
   font-family: "Oxygen", "Roboto", sans-serif;
+  font-size: .9em;
 }
 
 body,
@@ -68,20 +69,33 @@ body,
 }
 
 .noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
-.no-select-children > * {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+
+.no-select-children>* {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
   pointer-events: none;
 }
 
@@ -151,6 +165,7 @@ button:disabled {
 .fade-enter-to {
   opacity: 1;
 }
+
 .fade-leave-from {
   opacity: 1;
 }
@@ -158,6 +173,7 @@ button:disabled {
 .fade-leave-active {
   transition: all 0.7s;
 }
+
 .fade-leave-to {
   opacity: 0;
 }
@@ -173,6 +189,7 @@ button:disabled {
 .fade-slide-modal-enter-to {
   opacity: 1;
 }
+
 .fade-slide-modal-leave-from {
   opacity: 1;
 }
@@ -180,6 +197,7 @@ button:disabled {
 .fade-slide-modal-leave-active {
   transition: all 0.5s;
 }
+
 .fade-slide-modal-leave-to {
   opacity: 0;
 }
@@ -221,18 +239,20 @@ button:disabled {
   grid-template-areas: "year day day day" "wdm day day day" "wdm day day day" "wdm day day day" "wdm day day day" "wdm day day day";
 }
 
-.cc-calendar-detail > * {
+.cc-calendar-detail>* {
   display: flex;
 }
 
 .cc-calendar-detail .cc-calendar-year {
   grid-area: year;
 }
+
 .cc-calendar-detail .cc-calendar-wd-month {
   grid-area: wdm;
   font-size: 2em;
   align-items: center;
 }
+
 .cc-calendar-detail .cc-calendar-day {
   grid-area: day;
   align-items: center;
@@ -260,11 +280,12 @@ button:disabled {
   font-size: 0.9em;
 }
 
-.cc-nav-month > * {
+.cc-nav-month>* {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .cc-prev-next {
   height: 1.5rem;
   width: 1.5rem;
@@ -314,8 +335,8 @@ button:disabled {
   border-bottom: 1px solid rgba(54, 54, 54, 0.349);
 }
 
-.cc-week-days > span,
-.cc-four-two > .cc-select-date {
+.cc-week-days>span,
+.cc-four-two>.cc-select-date {
   color: rgb(23, 23, 23);
   display: flex;
   align-items: center;
@@ -323,16 +344,17 @@ button:disabled {
   font-weight: bold;
 }
 
-.cc-four-two > .cc-select-date {
+.cc-four-two>.cc-select-date {
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.5s;
 }
 
-.cc-four-two > .cc-select-date:hover {
+.cc-four-two>.cc-select-date:hover {
   background-color: rgba(0, 0, 0, 0.212);
 }
-.cc-four-two > .cc-select-date:active {
+
+.cc-four-two>.cc-select-date:active {
   background-color: rgba(0, 0, 0, 0.512);
 }
 

@@ -1,6 +1,6 @@
 <template>
     <h1>
-        ConsultaDetail
+        ClinicDetail
     </h1>
 </template>
 
@@ -9,7 +9,6 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "ConsultaDetail"
+    name: "ClinicDetail"
 });
-
 </script>

@@ -36,65 +36,27 @@ const children: RouteRecordRaw[] = [
     ],
   },
   {
-    path: "/clinica",
-    name: "clinica",
-    component: () => import("@/presentation/components/Clinica.vue"),
+    path: "/clinics",
+    name: "clinics",
+    component: () => import("@/presentation/components/clinic/ClinicRoute.vue"),
     children: [
       {
-        path: "/clinica/update",
-        name: "updateClinica",
+        path: "/clinics/:id",
+        name: "clinic_detail",
         component: () =>
-          import("@/presentation/components/clinica/ClinicaForm.vue"),
-      },
-    ],
-  },
-  {
-    path: "/clientes",
-    name: "clientes",
-    component: () => import("@/presentation/components/Cliente.vue"),
-    children: [
-      {
-        path: "/clientes/:id",
-        name: "detailCliente",
-        component: () =>
-          import("@/presentation/components/cliente/ClienteDetail.vue"),
+          import("@/presentation/components/clinic/ClinicDetail.vue"),
       },
       {
-        path: "/clientes/:id/update",
-        name: "updateCliente",
+        path: "/clinics/new",
+        name: "clinic_new",
         component: () =>
-          import("@/presentation/components/cliente/ClienteForm.vue"),
+          import("@/presentation/components/clinic/ClinicForm.vue"),
       },
       {
-        path: "/cliente/new",
-        name: "newCliente",
+        path: "/clinics/:id/edit",
+        name: "clinic_edit",
         component: () =>
-          import("@/presentation/components/cliente/ClienteForm.vue"),
-      },
-    ],
-  },
-  {
-    path: "/funcionarios",
-    name: "funcinarios",
-    component: () => import("@/presentation/components/Funcionario.vue"),
-    children: [
-      {
-        path: "/funcionario/new",
-        name: "newFuncionario",
-        component: () =>
-          import("@/presentation/components/funcionario/FuncionarioForm.vue"),
-      },
-      {
-        path: "/funcionario/:id/update",
-        name: "updateFuncionario",
-        component: () =>
-          import("@/presentation/components/funcionario/FuncionarioForm.vue"),
-      },
-      {
-        path: "/funcionario/:id",
-        name: "detailFuncionario",
-        component: () =>
-          import("@/presentation/components/funcionario/FuncionarioDetail.vue"),
+          import("@/presentation/components/clinic/ClinicForm.vue"),
       },
     ],
   },
