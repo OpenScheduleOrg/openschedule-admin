@@ -10,7 +10,7 @@ export class AuthorizeHttpClient extends HttpClient {
     url: string,
     request: HttpRequest = { headers: {} }
   ): Promise<R> {
-    if (!request.headers.authorization)
+    if (request.headers || !request.headers.authorization)
       request.headers = {
         ...request.headers,
         authorization:
@@ -24,7 +24,7 @@ export class AuthorizeHttpClient extends HttpClient {
     url: string,
     request: HttpRequest = { headers: {} }
   ): Promise<R> {
-    if (!request.headers.authorization)
+    if (!request.headers || !request.headers.authorization)
       request.headers = {
         ...request.headers,
         authorization:
@@ -38,7 +38,7 @@ export class AuthorizeHttpClient extends HttpClient {
     url: string,
     request: HttpRequest = { headers: {} }
   ): Promise<R> {
-    if (!request.headers.authorization)
+    if (!request.headers || !request.headers.authorization)
       request.headers = {
         ...request.headers,
         authorization:
@@ -52,7 +52,7 @@ export class AuthorizeHttpClient extends HttpClient {
     url: string,
     request: HttpRequest = { headers: {} }
   ): Promise<void> {
-    if (!request.headers.authorization)
+    if (!request.headers || !request.headers.authorization)
       request.headers = {
         ...request.headers,
         authorization:
