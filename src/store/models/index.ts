@@ -40,7 +40,7 @@ export interface Cliente {
   cpf: string;
   telefone: string;
   endereco: string;
-  nascimento: Date | string | null;
+  nascimento: Date | string;
 }
 
 export interface Horario {

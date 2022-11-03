@@ -83,7 +83,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 import InputText from "./InputText.vue";
 import { mapState, mapGetters, mapActions } from "vuex";
@@ -110,7 +110,7 @@ export default defineComponent({
   },
   emits: ["update:modelValue"],
   methods: {
-    setNewCurrentDate(route) {
+    setNewCurrentDate(route: any) {
       this.$router.push(route);
       this.show_calendar = false;
     },

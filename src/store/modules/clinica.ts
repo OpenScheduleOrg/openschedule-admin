@@ -1,6 +1,6 @@
 import { Module, Commit, Dispatch } from "vuex";
 import { State as stateRoot } from "..";
-import { Horario, Clinica, Consulta, DayDetails } from "@/store/models";
+import { Horario, Clinica, Consulta, DayDetail } from "@/store/models";
 import {
   RESET_STATE,
   SET_CLINICA,
@@ -273,7 +273,7 @@ export const ClinicaModule: Module<StateClinica, stateRoot> = {
 
       const details: {
         consultas: Consulta[];
-        hs_free: DayDetails;
+        hs_free: DayDetail[];
       } = { consultas: [], hs_free: [] };
 
       if (!horario) return details;

@@ -28,7 +28,6 @@
           name="cc-input-field-text"
           :class="{ 'cc-horario-picker': true, 'cc-not-editable': true }"
           :value="selected_hrr"
-          @input="setValue"
           autocomplete="off"
           :readonly="readonly"
         />
@@ -52,7 +51,7 @@
         }"
       >
         <span
-          v-for="hr in list"
+          v-for="hr in schedules"
           :key="hr.start.his"
           :class="{ 'cc-is-selected': hr.selected }"
           @click="setHis(hr.start.his)"
@@ -68,19 +67,21 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { DayDetail } from "@/store/models";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "HorarioPicker",
   data() {
     let selected_hrr = "";
-    for (const hsf of this.list) {
+    const schedules = this.$props.list as DayDetail[]
+    for (let hsf of  schedules ) {
       if (hsf.selected) {
         selected_hrr = hsf.start.hhmm + " - " + hsf.end.hhmm;
       }
     }
-    return { selected_hrr, show_list_dropdown: false };
+    return { selected_hrr, show_list_dropdown: false, schedules };
   },
   props: {
     field_name: String,
@@ -98,16 +99,16 @@ export default defineComponent({
   },
   emits: ["update:modelValue"],
   methods: {
-    setHis(his) {
+    setHis(his: number) {
       this.$emit("update:modelValue", his);
-      for (const hrf of this.list) {
+      for (const hrf of this.list as DayDetail[]) {
         if (hrf.selected) hrf.selected = false;
         if (hrf.start.his == his) hrf.selected = true;
       }
       this.setSelected();
     },
     setSelected() {
-      for (const hsf of this.list) {
+      for (const hsf of this.list as DayDetail[]) {
         if (hsf.selected) {
           this.selected_hrr = hsf.start.hhmm + " - " + hsf.end.hhmm;
         }

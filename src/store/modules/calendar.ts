@@ -10,7 +10,7 @@ import {
 import { Month, Period, Week } from "@/common/constants";
 import { monthBetween, setPeriod, getPeriod } from "@/utils";
 
-import { DayDetails, SixWeeksDay } from "@/store/models";
+import { DayDetail, SixWeeksDay } from "@/store/models";
 import { Consulta, Horario } from "@/store/models";
 const today = new Date();
 
@@ -209,7 +209,7 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
       );
       let day_details: {
         consultas: Consulta[];
-        hs_free: DayDetails;
+        hs_free: DayDetail[];
       };
 
       let d: Date = start_month.addDays(-start_month.getDay() - 1);
@@ -271,7 +271,7 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
 
       let day_details: {
         consultas: Consulta[];
-        hs_free: DayDetails;
+        hs_free: DayDetail[];
       };
 
       let d: Date = start_month.addDays(-start_month.getDay() - 1);

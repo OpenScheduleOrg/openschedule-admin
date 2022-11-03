@@ -164,7 +164,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 import InputText from "./InputText.vue";
 import { Month, Week } from "@/common/constants";
@@ -201,7 +201,7 @@ export default defineComponent({
       show_months: false,
       show_years: false,
       months,
-      ten_years: [],
+      ten_years: [] as number[],
       decade_start,
       decade_end,
     };
@@ -229,7 +229,7 @@ export default defineComponent({
     },
   },
   methods: {
-    getSixWeeks(offset_date, current_date) {
+    getSixWeeks(offset_date: any, current_date: any) {
       const days = [];
       const today = new Date();
 
@@ -252,7 +252,7 @@ export default defineComponent({
 
       return days;
     },
-    setNewCurrentDate(new_date) {
+    setNewCurrentDate(new_date: Date) {
       this.current_date = new_date;
       this.current_month_text = Month[new_date.getMonth()][1];
       this.current_wd_text = Week[new_date.getDay()][1];
@@ -267,7 +267,7 @@ export default defineComponent({
 
       this.$emit("update:modelValue", new_date);
     },
-    setOffsetDateMonth(offset) {
+    setOffsetDateMonth(offset: number) {
       this.offset_date.setMonth(this.offset_date.getMonth() + offset);
       this.four_two = this.getSixWeeks(this.offset_date, this.current_date);
       this.offset_month_year =
@@ -275,14 +275,14 @@ export default defineComponent({
         " de " +
         this.offset_date.getFullYear();
     },
-    setOffsetDateYear(offset) {
+    setOffsetDateYear(offset: number) {
       this.offset_date = new Date(
         this.offset_date.getFullYear() + offset,
         this.offset_date.getMonth()
       );
       this.four_two = this.getSixWeeks(this.offset_date, this.current_date);
     },
-    setDateOffsetMonth(m) {
+    setDateOffsetMonth(m: number) {
       this.offset_date.setMonth(m);
       this.four_two = this.getSixWeeks(this.offset_date, this.current_date);
       this.offset_month_year =
@@ -292,7 +292,7 @@ export default defineComponent({
 
       this.show_months = false;
     },
-    setDateOffsetYear(y) {
+    setDateOffsetYear(y: number) {
       this.offset_date.setFullYear(y);
       this.four_two = this.getSixWeeks(this.offset_date, this.current_date);
       this.getTenYears();

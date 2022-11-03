@@ -130,7 +130,7 @@ export default defineComponent({
     initial_iso_date: string;
     initial_his: number;
     consulta: Consulta;
-    cliente: Cliente;
+    cliente: Cliente & {nascimento: Date};
     hs_free_list: {
       selected: boolean;
       start: { his: number; hhmm: string };
@@ -160,7 +160,7 @@ export default defineComponent({
       ),
       duracao: 0,
     };
-    const cliente: Cliente = {
+    const cliente = {
       id: 0,
       nascimento: new Date(),
       nome: "",
@@ -213,7 +213,7 @@ export default defineComponent({
             id: 1,
             nome: "Foo",
             sobrenome: "Bar",
-            nascimento: new Date().toString(),
+            nascimento: new Date(),
             cpf: "99889098723",
             telefone: "8938232312",
             endereco: "Rua X",
@@ -226,7 +226,7 @@ export default defineComponent({
       this.cliente.nome = res_cliente.nome;
       this.cliente.sobrenome = res_cliente.sobrenome;
       this.cliente.nascimento =
-        res_cliente.nascimento && new Date(res_cliente.nascimento as string);
+        res_cliente.nascimento && res_cliente.nascimento;
       this.cliente.cpf =
         res_cliente.cpf.slice(0, 3) +
         "." +
@@ -333,7 +333,7 @@ export default defineComponent({
 
           cliente = res.data && res.data.cliente;
           if (cliente) {
-            this.cliente = cliente;
+            this.cliente = cliente as any;
             this.consulta.cliente_id = cliente.id as number;
           }
         }
@@ -423,8 +423,7 @@ export default defineComponent({
             cliente.telefone.slice(6);
 
           this.cliente.endereco = cliente.endereco;
-          this.cliente.nascimento =
-            cliente.nascimento && new Date(cliente.nascimento);
+          this.cliente.nascimento = new Date(cliente.nascimento);
         }
       }
     },
@@ -465,7 +464,7 @@ export default defineComponent({
             cliente.cpf.slice(9);
           this.cliente.endereco = cliente.endereco;
           this.cliente.nascimento =
-            cliente.nascimento && new Date(cliente.nascimento);
+             new Date(cliente.nascimento);
         }
       }
     },
