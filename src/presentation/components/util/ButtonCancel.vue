@@ -2,10 +2,10 @@
   <button></button>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 
-export default definecomponent({
+export default defineComponent({
   name: "ButtonCancel",
 });
 </script>

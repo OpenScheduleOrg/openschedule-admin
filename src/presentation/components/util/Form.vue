@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -38,14 +38,14 @@ export default defineComponent({
 .cc-form-group {
   display: flex;
   flex-direction: column;
-  flex: 1 1 100%;
-  width: 100%;
+  flex: 1;
   --line-color: rgba(41, 41, 41, 0.438);
   --line-hover: rgb(0, 85, 197);
   --line-focus: rgb(0, 98, 226);
   --label-color: rgba(75, 75, 75, 0.75);
   --label-color-hover: rgba(2, 104, 238, 0.75);
   color: rgb(7, 120, 226);
+  padding-bottom: .4rem;
 }
 
 .cc-form-group.cc-input-is-valid {
@@ -84,7 +84,7 @@ export default defineComponent({
   position: relative;
   padding: 8px 0 0 0;
   border-radius: 4px 4px 0 0;
-  font-size: 0.95em;
+  font-size: 1em;
   width: 100%;
 }
 
@@ -161,7 +161,6 @@ export default defineComponent({
 
 .cc-form-group .cc-input-field > * {
   width: 100%;
-  font-size: 1em;
 }
 
 .cc-advise {

@@ -2,8 +2,7 @@
   <div
     :class="{
       'cc-form-group': true,
-      'cc-input-is-valid': valid && !advise,
-      'cc-input-is-invalid': advise,
+      'cc-input-is-invalid': !!validation_message,
     }"
   >
     <div class="cc-field-container">
@@ -15,8 +14,8 @@
           'cc-manual-focus': manual_focus,
         }"
       >
-        <label class="cc-field-name" for="input-field-text" v-if="field_name">{{
-          field_name
+        <label class="cc-field-name" for="input-field-text" v-if="label">{{
+          label
         }}</label>
 
         <input
@@ -28,132 +27,71 @@
           autocomplete="off"
           :readonly="readonly"
           :maxlength="maxlength"
-          @input="formatter"
+          @input="formatInput"
+          @focusout="validate"
         />
       </div>
     </div>
     <div class="cc-advise">
-      <font-awesome-icon v-if="advise" icon="exclamation-circle" />
-      <span> {{ advise }}</span>
+      <font-awesome-icon
+        v-if="!!validation_message"
+        icon="exclamation-circle"
+      />
+      <span> {{ validation_message }}</span>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
+import formatters from "@/utils/formatters";
+import validators from "@/utils/validators";
+
+type ComponentData = {
+  text?: string;
+  validation_message?: string;
+};
 
 export default defineComponent({
   name: "InputDate",
-  data() {
+  data(): ComponentData {
     const text = this.modelValue;
-    return { text };
+    return { text, validation_message: undefined };
+  },
+  methods: {
+    formatInput(e: Event) {
+      const formatter = formatters[this.$props.format as string];
+      if (formatter) formatter(e);
+      this.text = (e.target as HTMLInputElement).value;
+    },
+    validate() {
+      this.validation_message = undefined;
+
+      for (let name in this.$props.validators) {
+        const message = validators[name](
+          this.text,
+          this.$props.validators[name]
+        );
+        if (message) {
+          this.$emit("updateValidation", this.$props.name, false);
+          return (this.validation_message = message as string);
+        }
+      }
+      this.$emit("updateValidation", this.$props.name, true);
+    },
   },
   props: {
     modelValue: String,
-    field_name: String,
-    valid: Boolean,
+    name: String,
+    label: String,
     readonly: Boolean,
-    advise: String,
     maxlength: Number,
     not_editable: Boolean,
     manual_focus: Boolean,
     format: String,
+    validators: Object,
   },
-  emits: ["update:modelValue"],
-  methods: {
-    formatter(e) {
-      const el = e.target;
-      let value = e.target.value;
-      const key = e.data;
-
-      switch (this.format) {
-        case "cpf":
-          if (
-            key &&
-            key.match(/\D/) &&
-            (value.length != 4 || (value.length == 4 && !key.match(/\./))) &&
-            (value.length != 8 || (value.length == 8 && !key.match(/\./))) &&
-            (value.length != 12 || (value.length == 12 && !key.match(/-/)))
-          ) {
-            el.value = el.value.slice(0, -1);
-          } else if (value.length == 4) {
-            let v = value[3];
-            if (v != ".") {
-              value = value.slice(0, -1) + ".";
-              el.value = value + v;
-            }
-          } else if (value.length == 8) {
-            let v = value[7];
-            if (v != ".") {
-              value = value.slice(0, -1) + ".";
-              el.value = value + v;
-            }
-          } else if (value.length == 12) {
-            let v = value[11];
-            if (v != "-") {
-              value = value.slice(0, -1) + "-";
-              el.value = value + v;
-            }
-          }
-          break;
-        case "telefone":
-          if (
-            key &&
-            key.match(/\D/) &&
-            (value.length != 1 || (value.length == 1 && !key.match(/\(/))) &&
-            (value.length != 4 || (value.length == 4 && !key.match(/\)/))) &&
-            (value.length != 5 || (value.length == 5 && !key.match(/\s/))) &&
-            (value.length != 7 || (value.length == 7 && !key.match(/\s/))) &&
-            (value.length != 12 || (value.length == 12 && !key.match(/-/)))
-          ) {
-            el.value = el.value.slice(0, -1);
-          } else if (value.length == 1) {
-            let v = value[0];
-            if (v != "(") {
-              value = value.slice(0, -1) + "(";
-              el.value = value + v;
-            }
-          } else if (value.length == 4) {
-            let v = value[3];
-            if (v != ")") {
-              value = value.slice(0, -1) + ") 9 ";
-              el.value = value + v;
-            } else {
-              value = value + " 9 ";
-            }
-          } else if (value.length == 5 && key) {
-            let v = value[4];
-            if (v != " ") {
-              value = value.slice(0, -1) + " 9 ";
-              el.value = value + v;
-            } else {
-              value = value + "9 ";
-            }
-          } else if (value.length == 6 && key) {
-            let v = value[5];
-            if (v != "9") {
-              value = value.slice(0, -1) + "9 ";
-              el.value = value + v;
-            } else {
-              value = value + " ";
-            }
-          } else if (value.length == 7 && key) {
-            let v = value[6];
-            if (v != " ") {
-              value = value.slice(0, -1) + " ";
-              el.value = value + v;
-            }
-          } else if (value.length == 12) {
-            let v = value[11];
-            if (v != "-") {
-              value = value.slice(0, -1) + "-";
-              el.value = value + v;
-            }
-          }
-          break;
-      }
-    },
-  },
+  emits: ["update:modelValue", "updateValidation"],
   watch: {
     text(n) {
       this.$emit("update:modelValue", n);
