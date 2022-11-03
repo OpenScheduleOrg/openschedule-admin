@@ -17,7 +17,7 @@ export interface StateAuth {
   exp: number;
 }
 
-const auth: Module<StateAuth, stateRoot> = {
+export const AuthModule: Module<StateAuth, stateRoot> = {
   namespaced: true,
   state: { exp: 0 },
   mutations: {
@@ -99,5 +99,3 @@ const auth: Module<StateAuth, stateRoot> = {
     },
   },
 };
-
-export default auth;

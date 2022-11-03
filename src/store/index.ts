@@ -1,23 +1,31 @@
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as baseUseStore } from "vuex";
-import auth, { StateAuth } from "./modules/auth";
-import calendar, { StateCalendar } from "./modules/calendar";
-import clinica, { StateClinica } from "./modules/clinica";
+import {
+  StateAuth,
+  StateCalendar,
+  StateClinica,
+  StateClinics,
+  CalendarModule,
+  AuthModule,
+  ClinicaModule,
+  ClinicsModule,
+} from "./modules";
 
 export type State = {
-  calendar: StateCalendar;
   auth: StateAuth;
+  calendar: StateCalendar;
   clinica: StateClinica;
+  clinics: StateClinics;
 };
 
-// define injection key
 export const key: InjectionKey<Store<State>> = Symbol();
 
 export default createStore<State>({
   modules: {
-    calendar,
-    auth,
-    clinica,
+    auth: AuthModule,
+    calendar: CalendarModule,
+    clinica: ClinicaModule,
+    clinics: ClinicsModule,
   },
 });
 

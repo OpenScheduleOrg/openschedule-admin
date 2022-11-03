@@ -41,7 +41,7 @@ const children: RouteRecordRaw[] = [
     component: () => import("@/presentation/components/clinic/ClinicRoute.vue"),
     children: [
       {
-        path: "/clinics/:id",
+        path: "/clinics/:clinic_id",
         name: "clinic_detail",
         component: () =>
           import("@/presentation/components/clinic/ClinicDetail.vue"),
@@ -53,7 +53,7 @@ const children: RouteRecordRaw[] = [
           import("@/presentation/components/clinic/ClinicForm.vue"),
       },
       {
-        path: "/clinics/:id/edit",
+        path: "/clinics/:clinic_id/edit",
         name: "clinic_edit",
         component: () =>
           import("@/presentation/components/clinic/ClinicForm.vue"),

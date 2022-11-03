@@ -77,24 +77,24 @@
       </div>
     </div>
     <div class="cc-actions-wrapper">
-      <button class="cc-btn cc-btn-close" @click="$emit('close_modal')">
+      <button class="btn btn-close" @click="$emit('close_modal')">
         Fechar</button
       ><button
-        class="cc-btn cc-btn-delete"
+        class="btn btn-delete"
         v-if="consulta.id"
         @click="cancelarConsulta"
       >
         Cancelar
       </button>
       <button
-        class="cc-btn cc-btn-new"
+        class="btn btn-new"
         @click="commitChange"
         v-if="!consulta.id"
       >
         Marcar Consulta
       </button>
       <button
-        class="cc-btn cc-btn-update"
+        class="btn btn-update"
         @click="commitChange"
         v-if="consulta.id"
       >
@@ -503,64 +503,14 @@ export default defineComponent({
   padding: 8px 1rem;
   justify-content: flex-end;
 }
-.cc-actions-wrapper > .cc-btn {
+.cc-actions-wrapper > .btn {
   margin: 0 8px;
 }
 
-.cc-actions-wrapper .cc-btn {
+.cc-actions-wrapper .btn {
   min-width: 90px;
   height: 40px;
   border-radius: 4px;
   transition: all 0.25s ease-in;
-}
-
-.cc-btn.cc-btn-close {
-  background-color: white;
-  color: black;
-  border: solid 1px rgb(226, 16, 16);
-}
-
-.cc-btn.cc-btn-close:hover {
-  background-color: rgb(240, 240, 240);
-}
-
-.cc-btn.cc-btn-close:active {
-  background-color: rgb(235, 214, 214);
-}
-
-.cc-btn.cc-btn-new {
-  background-color: #028536;
-}
-
-.cc-btn.cc-btn-new:hover {
-  background-color: #00a223;
-}
-
-.cc-btn.cc-btn-new:active {
-  background-color: #00a960ee;
-}
-
-.cc-btn.cc-btn-update {
-  background-color: #006bd0;
-}
-
-.cc-btn.cc-btn-update:hover {
-  background-color: #0056a7;
-}
-
-.cc-btn.cc-btn-update:active {
-  background-color: #015db3;
-}
-
-.cc-btn.cc-btn-delete {
-  background-color: #d01500;
-}
-
-.cc-btn.cc-btn-delete:hover {
-  background-color: #bb1300;
-}
-
-.cc-btn.cc-btn-delete:active {
-  background-color: #a51100;
 }
 </style>

@@ -24,7 +24,7 @@ export interface StateCalendar {
 
 const initialPeriod = getPeriod();
 
-const calendar: Module<StateCalendar, stateRoot> = {
+export const CalendarModule: Module<StateCalendar, stateRoot> = {
   namespaced: true,
   state: {
     period: initialPeriod,
@@ -351,5 +351,3 @@ const calendar: Module<StateCalendar, stateRoot> = {
     },
   },
 };
-
-export default calendar;

@@ -28,7 +28,7 @@ export interface StateClinica extends Clinica {
   consultas: ClinicaConsultas;
 }
 
-const clinica: Module<StateClinica, stateRoot> = {
+export const ClinicaModule: Module<StateClinica, stateRoot> = {
   namespaced: true,
   state: {
     horarios: [],
@@ -438,5 +438,3 @@ const clinica: Module<StateClinica, stateRoot> = {
     },
   },
 };
-
-export default clinica;
