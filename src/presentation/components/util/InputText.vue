@@ -28,6 +28,7 @@
           :readonly="readonly"
           :maxlength="maxlength"
           @input="formatInput"
+          @keyup="validate"
           @focusout="validate"
         />
       </div>
@@ -90,6 +91,7 @@ export default defineComponent({
     manual_focus: Boolean,
     format: String,
     validators: Object,
+    validation: Object,
   },
   emits: ["update:modelValue", "updateValidation"],
   watch: {
@@ -98,6 +100,9 @@ export default defineComponent({
     },
     modelValue(n) {
       this.text = n;
+    },
+    validation(value) {
+      this.validation_message = value.message;
     },
   },
 });

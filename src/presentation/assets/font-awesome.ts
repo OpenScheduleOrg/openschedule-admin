@@ -15,6 +15,8 @@ import {
   faClock,
   faTrash,
   faPenSquare,
+  faPlus,
+  faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose, faIdCard } from "@fortawesome/free-regular-svg-icons";
 import { faWhatsappSquare } from "@fortawesome/free-brands-svg-icons";
@@ -39,7 +41,9 @@ library.add(
   faTimesCircle,
   faMinusCircle,
   faTrash,
-  faPenSquare
+  faPenSquare,
+  faPlus,
+  faSave
 );
 
 export default FontAwesomeIcon;

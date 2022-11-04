@@ -67,7 +67,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .container {
   padding-top: 1.2rem;
   padding-bottom: 1.2rem;

@@ -22,7 +22,7 @@
                 :label="'Telefone'"
                 v-model="body.phone"
                 :format="'phone'"
-                :validators="{ required: {} }"
+                :validators="{ required: {}, phone: {} }"
                 @updateValidation="updateValidation"
               />
               <input-text
@@ -75,14 +75,14 @@
 
 <script lang="ts">
 import { Form, InputText } from "../util";
-
-import { ClinicBody } from "@/domain/params";
 import { defineComponent } from "vue";
 import { mapActions } from "vuex";
-import { clinicService } from "@/domain/services";
 import hash from "object-hash";
 
-type ClinicFormData = {
+import { ClinicBody } from "@/domain/params";
+import { clinicService } from "@/domain/services";
+
+type ComponentData = {
   clinic_id?: number;
   isLoading: boolean;
   field_valid: { [field: string]: boolean };
@@ -93,7 +93,7 @@ type ClinicFormData = {
 export default defineComponent({
   name: "ClinicForm",
   components: { Form, InputText },
-  data(): ClinicFormData {
+  data(): ComponentData {
     const clinic_id = Number(this.$route.params.clinic_id);
     return {
       clinic_id,
