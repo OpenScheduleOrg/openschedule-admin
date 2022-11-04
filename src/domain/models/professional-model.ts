@@ -1,3 +1,5 @@
+import { ActingProfessionalModel } from "./acting-model";
+
 export type ProfessionalModel = {
   id: number;
   name: string;
@@ -5,4 +7,5 @@ export type ProfessionalModel = {
   reg_number: string;
   username: string;
   email: string;
+  actuations: ActingProfessionalModel[];
 };

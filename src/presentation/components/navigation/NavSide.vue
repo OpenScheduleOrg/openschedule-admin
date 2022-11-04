@@ -59,6 +59,9 @@
         <router-link class="nav-link" to="/professionals">Profissionais</router-link>
       </li>
       <li>
+        <router-link class="nav-link" to="/schedules">Horários</router-link>
+      </li>
+      <li>
         <router-link class="nav-link" to="/patients">Pacientes</router-link>
       </li>
     </ul>
