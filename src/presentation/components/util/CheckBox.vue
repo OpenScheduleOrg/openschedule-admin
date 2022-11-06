@@ -23,7 +23,7 @@
           type="checkbox"
           id="cc-input-field-checkbox"
           name="cc-input-field-check-box"
-          :class="{ 'cc-input-text-check': true }"
+          :class="{ 'cc-text-field-check': true }"
           v-model="result"
         />
       </div>
@@ -39,7 +39,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "InputCheck",
+  name: "CheckBox",
   data() {
     const result = this.modelValue;
     return { result };
@@ -65,7 +65,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.cc-input-text-check {
+.cc-text-field-check {
   padding: 12px 0 6px 0;
   cursor: pointer;
   margin: 4px;

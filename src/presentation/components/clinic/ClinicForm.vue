@@ -9,7 +9,7 @@
         <h1 class="modal-title">Nova Clínica</h1>
         <div class="form-wrap">
           <Form>
-            <input-text
+            <text-field
               v-model="body.name"
               :name="'name'"
               :label="'Nome'"
@@ -17,7 +17,7 @@
               @updateValidation="updateValidation"
             />
             <div class="cc-form-dynamic-row cc-form-group-col-2">
-              <input-text
+              <text-field
                 :name="'phone'"
                 :label="'Telefone'"
                 v-model="body.phone"
@@ -25,7 +25,7 @@
                 :validators="{ required: {}, phone: {} }"
                 @updateValidation="updateValidation"
               />
-              <input-text
+              <text-field
                 v-model="body.cnpj"
                 :name="'cnpj'"
                 :label="'CNPJ'"
@@ -34,7 +34,7 @@
                 @updateValidation="updateValidation"
               />
             </div>
-            <input-text
+            <text-field
               v-model="body.address"
               :name="'address'"
               :label="'Endereço'"
@@ -42,12 +42,12 @@
               @updateValidation="updateValidation"
             />
             <div class="cc-form-dynamic-row cc-form-group-col-2">
-              <input-text
+              <text-field
                 v-model="body.latitude"
                 :name="'latitude'"
                 :label="'Latitude'"
               />
-              <input-text
+              <text-field
                 v-model="body.longitude"
                 :name="'longitude'"
                 :label="'Longitude'"
@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { Form, InputText } from "../util";
+import { Form, TextField } from "../util";
 import { defineComponent } from "vue";
 import { mapActions } from "vuex";
 import hash from "object-hash";
@@ -92,7 +92,7 @@ type ComponentData = {
 
 export default defineComponent({
   name: "ClinicForm",
-  components: { Form, InputText },
+  components: { Form, TextField },
   data(): ComponentData {
     const clinic_id = Number(this.$route.params.clinic_id);
     return {

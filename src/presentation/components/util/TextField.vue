@@ -19,10 +19,10 @@
         }}</label>
 
         <input
-          type="text"
+          :type="'text'"
           id="cc-input-field-text"
           name="cc-input-field-text"
-          :class="{ 'cc-input-text': true, 'cc-not-editable': not_editable }"
+          :class="{ 'cc-text-field': true, 'cc-not-editable': not_editable }"
           v-model="text"
           autocomplete="off"
           :readonly="readonly"
@@ -54,7 +54,7 @@ type ComponentData = {
 };
 
 export default defineComponent({
-  name: "InputDate",
+  name: "TextField",
   data(): ComponentData {
     const text = this.modelValue;
     return { text, validation_message: undefined };
@@ -109,13 +109,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.cc-input-text {
+.cc-text-field {
   display: block;
   background-color: inherit;
   padding: 12px 0 6px 0;
   color: inherit;
 }
-.cc-input-not-empty .cc-input-text {
+.cc-input-not-empty .cc-text-field {
   color: rgb(65, 65, 65);
 }
 

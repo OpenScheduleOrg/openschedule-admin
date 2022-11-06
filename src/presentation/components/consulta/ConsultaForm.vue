@@ -22,14 +22,14 @@
             v-model="consulta.descricao"
             :field_name="'Descrição'"
           ></text-area>
-          <input-check
+          <check-box
             :field_name="'Consulta realizada?'"
             :valid="consulta.realizada"
             :invalid="
               !consulta.realizada && now.valueOf() > consulta.marcada.valueOf()
             "
             v-model="consulta.realizada"
-          ></input-check>
+          ></check-box>
         </Form>
       </div>
     </div>
@@ -38,17 +38,17 @@
       <div class="form-container">
         <Form>
           <div class="cc-form-dynamic-row cc-form-group-col-2">
-            <input-text
+            <text-field
               :field_name="'Nome'"
               v-model="cliente.nome"
               :advise="validate.cliente.nome"
             >
-            </input-text>
-            <input-text :field_name="'Sobrenome'" v-model="cliente.sobrenome">
-            </input-text>
+            </text-field>
+            <text-field :field_name="'Sobrenome'" v-model="cliente.sobrenome">
+            </text-field>
           </div>
           <div class="cc-form-dynamic-row cc-form-group-col-3">
-            <input-text
+            <text-field
               :field_name="'CPF'"
               :maxlength="14"
               v-model="cliente.cpf"
@@ -56,23 +56,23 @@
               :advise="validate.cliente.cpf"
               :readonly="!!cliente.id"
             >
-            </input-text>
-            <input-text
+            </text-field>
+            <text-field
               :field_name="'Telefone'"
               v-model="cliente.telefone"
               :maxlength="16"
               :format="'telefone'"
               :advise="validate.cliente.telefone"
             >
-            </input-text>
+            </text-field>
             <date-picker
               :field_name="'Nascimento'"
               v-model="cliente.nascimento"
             >
             </date-picker>
           </div>
-          <input-text v-model="cliente.endereco" :field_name="'Endereco'">
-          </input-text>
+          <text-field v-model="cliente.endereco" :field_name="'Endereco'">
+          </text-field>
         </Form>
       </div>
     </div>
@@ -110,12 +110,12 @@ import { mapState } from "vuex";
 import Modal from "../Modal.vue";
 import {
   Form,
-  InputText,
+  TextField,
   DateConsultaPicker,
   DatePicker,
   HorarioPicker,
   TextArea,
-  InputCheck,
+  CheckBox,
 } from "../util";
 
 import { Cliente, Consulta } from "@/store/models";
@@ -196,9 +196,9 @@ export default defineComponent({
     DatePicker,
     HorarioPicker,
     TextArea,
-    InputText,
+    TextField,
     DateConsultaPicker,
-    InputCheck,
+    CheckBox,
   },
   computed: {
     ...mapState("calendar", ["current_date", "now"]),

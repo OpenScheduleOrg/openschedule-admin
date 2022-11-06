@@ -3,13 +3,13 @@
     <div class="cc-date-picker">
       <div class="cc-field-container" @click="show_calendar = !show_calendar">
         <font-awesome-icon icon="calendar-alt" class="cc-field-icon" />
-        <input-text
+        <text-field
           :modelValue="current_date.toLocaleDateString()"
           :field_name="field_name"
           :maxlength="10"
           :not_editable="true"
           :manual_focus="show_calendar"
-        ></input-text>
+        ></text-field>
       </div>
       <div
         :class="{
@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import InputText from "./InputText.vue";
+import TextField from "./TextField.vue";
 import { mapState, mapGetters, mapActions } from "vuex";
 
 export default defineComponent({
@@ -94,7 +94,7 @@ export default defineComponent({
     return { show_calendar: false };
   },
   components: {
-    InputText,
+    TextField,
   },
   computed: {
     ...mapGetters({

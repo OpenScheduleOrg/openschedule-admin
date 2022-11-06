@@ -18,7 +18,7 @@
           <li v-for="clinic in clinics" :key="clinic.id">
             <div class="item-data">
               <strong>{{ clinic.name }} - {{ clinic.cnpj.maskCnpj() }}</strong>
-              <p>{{ clinic.cnpj.maskPhone() }}</p>
+              <p>{{ clinic.phone.maskPhone() }}</p>
               <p>{{ clinic.address }}</p>
             </div>
             <div class="item-operations">

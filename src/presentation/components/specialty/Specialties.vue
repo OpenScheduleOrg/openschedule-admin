@@ -4,7 +4,7 @@
       <h1>Especialidades</h1>
       <div class="list-header">
         <Form>
-          <input-text
+          <text-field
             v-model="body.description"
             :name="'description'"
             :label="'Nome da especialidade'"
@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { Form, InputText } from "../util";
+import { Form, TextField } from "../util";
 import { defineComponent } from "vue";
 
 import { specialtyService } from "@/domain/services";
@@ -83,7 +83,7 @@ type ComponentData = {
 
 export default defineComponent({
   name: "Specialties",
-  components: { Form, InputText },
+  components: { Form, TextField },
   data(): ComponentData {
     return {
       specialties: [],

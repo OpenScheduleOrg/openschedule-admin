@@ -3,14 +3,14 @@
     <div class="cc-date-picker">
       <div class="cc-field-container" @click="show_calendar = !show_calendar">
         <font-awesome-icon icon="calendar-alt" class="cc-field-icon" />
-        <input-text
+        <text-field
           :modelValue="date_text"
           ref="inpud-"
           :field_name="field_name"
           :maxlength="10"
           :not_editable="true"
           :manual_focus="show_calendar"
-        ></input-text>
+        ></text-field>
       </div>
       <div
         :class="{
@@ -166,7 +166,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import InputText from "./InputText.vue";
+import TextField from "./TextField.vue";
 import { Month, Week } from "@/common/constants";
 
 export default defineComponent({
@@ -207,7 +207,7 @@ export default defineComponent({
     };
   },
   components: {
-    InputText,
+    TextField,
   },
   props: {
     modelValue: Date,
