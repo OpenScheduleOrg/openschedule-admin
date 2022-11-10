@@ -1,4 +1,10 @@
-import { ActingProfessionalModel } from "./acting-model";
+export type ProfessionalActingModel = {
+  id: number;
+  clinic_id: number;
+  clinic_name: string;
+  specialty_id: number;
+  specialty_description: string;
+};
 
 export type ProfessionalModel = {
   id: number;
@@ -7,5 +13,5 @@ export type ProfessionalModel = {
   reg_number: string;
   username: string;
   email: string;
-  actuations: ActingProfessionalModel[];
+  actuations?: ProfessionalActingModel[];
 };

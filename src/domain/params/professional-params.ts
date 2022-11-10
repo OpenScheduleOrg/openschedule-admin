@@ -3,8 +3,8 @@ export type ProfessionalBody = {
   phone: string;
   username: string;
   email: string;
-  password: string;
-  reg_number: string;
+  password?: string;
+  reg_number?: string;
 };
 
 export type ProfessionalFilter = {

@@ -61,6 +61,26 @@ const children: RouteRecordRaw[] = [
       import("@/presentation/components/specialty/Specialties.vue"),
   },
   {
+    path: "/professionals",
+    name: "professionals",
+    component: () =>
+      import("@/presentation/components/professional/ProfessionalRoute.vue"),
+    children: [
+      {
+        path: "/professionals/new",
+        name: "professional_new",
+        component: () =>
+          import("@/presentation/components/professional/ProfessionalForm.vue"),
+      },
+      {
+        path: "/professionals/:professional_id/edit",
+        name: "professional_edit",
+        component: () =>
+          import("@/presentation/components/professional/ProfessionalForm.vue"),
+      },
+    ],
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("@/presentation/components/NotFound.vue"),
