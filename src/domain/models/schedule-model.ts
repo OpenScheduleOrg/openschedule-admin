@@ -7,4 +7,10 @@ export type ScheduleModel = {
   max_visits: number;
   week_day: number;
   acting_id: number;
+  clinic_id: number;
+  clinic_name: string;
+  speicalty_id: number;
+  specialty_description: string;
+  professional_id: string;
+  professional_name: string;
 };
