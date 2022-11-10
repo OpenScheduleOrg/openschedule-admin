@@ -44,6 +44,21 @@ export default {
     }
     return "CNPJ inválido";
   },
+  email: (value) => {
+    if (
+      value
+        ?.toLocaleLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+    )
+      return undefined;
+    return "E-mail inválido";
+  },
+  password: (value) => {
+    if (value?.match(/.{6,}/)) return undefined;
+    return "Senha deve possui mais de 6 caracteres";
+  },
 } as {
   [name: string]: (
     value: string | undefined,
