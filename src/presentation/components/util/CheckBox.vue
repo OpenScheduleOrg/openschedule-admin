@@ -21,7 +21,6 @@
 
         <input
           type="checkbox"
-          id="cc-input-field-checkbox"
           name="cc-input-field-check-box"
           :class="{ 'cc-text-field-check': true }"
           v-model="result"

@@ -24,7 +24,6 @@
         }}</label>
         <input
           type="text"
-          id="cc-input-field-text"
           name="cc-input-field-text"
           :class="{ 'cc-horario-picker': true, 'cc-not-editable': true }"
           :value="selected_hrr"

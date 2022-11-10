@@ -10,7 +10,6 @@
         :class="{
           'cc-input-field': true,
           'cc-input-not-empty': text,
-          'cc-input-readonly': readonly,
           'cc-manual-focus': manual_focus,
         }"
       >
@@ -19,13 +18,10 @@
         }}</label>
 
         <input
-          :type="'text'"
-          :class="{ 'cc-text-field': true, 'cc-not-editable': not_editable }"
+          :type="'password'"
+          :class="{ 'cc-text-field': true }"
           v-model="text"
-          autocomplete="off"
-          :readonly="readonly"
-          :maxlength="maxlength"
-          @input="formatInput"
+          autocomplete="new-password"
           @keyup="validate"
           @focusout="validate"
         />
@@ -43,7 +39,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import formatters from "@/utils/formatters";
 import validators from "@/utils/validators";
 
 type ComponentData = {
@@ -52,25 +47,19 @@ type ComponentData = {
 };
 
 export default defineComponent({
-  name: "TextField",
+  name: "PasswordField",
   data(): ComponentData {
-    const text = this.modelValue;
-    return { text, validation_message: undefined };
+    return { text: "", validation_message: undefined };
   },
   methods: {
-    formatInput(e: Event) {
-      const formatter = formatters[this.$props.format as string];
-      if (formatter) formatter(e);
-      this.text = (e.target as HTMLInputElement).value;
-    },
     validate() {
       this.validation_message = undefined;
+      const vals = { required: {}, password: {} } as {[validator: string]: any};
 
-      for (let name in this.$props.validators) {
-        const message = validators[name](
-          this.text,
-          this.$props.validators[name]
-        );
+      if (!this.required) delete vals["required"];
+
+      for (let name in vals) {
+        const message = validators[name](this.text, validators[name]);
         if (message) {
           this.$emit("updateValidation", this.$props.name, false);
           return (this.validation_message = message as string);
@@ -83,21 +72,15 @@ export default defineComponent({
     modelValue: String,
     name: String,
     label: String,
-    readonly: Boolean,
-    maxlength: Number,
-    not_editable: Boolean,
     manual_focus: Boolean,
     format: String,
-    validators: Object,
     validation: Object,
+    required: Boolean,
   },
   emits: ["update:modelValue", "updateValidation"],
   watch: {
     text(n) {
       this.$emit("update:modelValue", n);
-    },
-    modelValue(n) {
-      this.text = n;
     },
     validation(value) {
       this.validation_message = value.message;

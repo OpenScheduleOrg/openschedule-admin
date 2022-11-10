@@ -20,8 +20,6 @@
         }}</label>
 
         <textarea
-          id="cc-input-field-textarea"
-          name="cc-input-field-textarea"
           :class="{
             'cc-input-textarea': true,
             'cc-not-editable': not_editable,
