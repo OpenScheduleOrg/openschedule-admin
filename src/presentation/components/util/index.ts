@@ -7,3 +7,5 @@ export { default as HorarioPicker } from "./HorarioPicker.vue";
 export { default as TextArea } from "./TextArea.vue";
 export { default as CheckBox } from "./CheckBox.vue";
 export { default as SelectOption } from "./SelectOption.vue";
+export { default as NumberField } from "./NumberField.vue";
+export { default as TimePicker } from "./TimePicker.vue";
