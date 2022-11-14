@@ -11,6 +11,8 @@ import {
   ClinicsModule,
   StateProfessionals,
   ProfessionalsModule,
+  StateSchedules,
+  SchedulesModule,
 } from "./modules";
 
 export type State = {
@@ -19,6 +21,7 @@ export type State = {
   clinica: StateClinica;
   clinics: StateClinics;
   professional: StateProfessionals;
+  schedule: StateSchedules;
 };
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -30,6 +33,7 @@ export default createStore<State>({
     clinica: ClinicaModule,
     clinics: ClinicsModule,
     professionals: ProfessionalsModule,
+    schedules: SchedulesModule,
   },
 });
 

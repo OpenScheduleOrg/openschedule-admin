@@ -1,6 +1,6 @@
 export default {
   required: (value) => {
-    if (!value) return "Campo não pode ser vazio";
+    if (value === undefined || value === "") return "Campo não pode ser vazio";
     return undefined;
   },
   phone: (value) => {
@@ -60,8 +60,5 @@ export default {
     return "Senha deve possui mais de 6 caracteres";
   },
 } as {
-  [name: string]: (
-    value: string | undefined,
-    params?: any
-  ) => string | undefined;
+  [name: string]: (value: any | undefined, params?: any) => string | undefined;
 };

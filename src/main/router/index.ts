@@ -81,6 +81,26 @@ const children: RouteRecordRaw[] = [
     ],
   },
   {
+    path: "/schedules",
+    name: "schedules",
+    component: () =>
+      import("@/presentation/components/schedule/ScheduleRoute.vue"),
+    children: [
+      {
+        path: "/schedules/new",
+        name: "schedule_new",
+        component: () =>
+          import("@/presentation/components/schedule/ScheduleForm.vue"),
+      },
+      {
+        path: "/schedules/:schedule_id/edit",
+        name: "schedule_edit",
+        component: () =>
+          import("@/presentation/components/schedule/ScheduleForm.vue"),
+      },
+    ],
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("@/presentation/components/NotFound.vue"),

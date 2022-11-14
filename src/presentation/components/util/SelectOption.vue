@@ -176,7 +176,7 @@ export default defineComponent({
   visibility: hidden;
   opacity: 0;
   overflow: hidden;
-  transition: all 0.3s ease-out;
+  transition: all 0.2s ease-out;
   z-index: 888;
 }
 
