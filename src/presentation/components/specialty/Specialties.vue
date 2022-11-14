@@ -184,7 +184,7 @@ export default defineComponent({
   padding: 1.3rem 3rem;
 }
 
-.cc-form {
+.form {
   width: 240px;
 }
 
@@ -195,12 +195,13 @@ export default defineComponent({
 
 .list-wrapper .list-header {
   display: flex;
-  background-color: rgba(69, 69, 69, 0.094);
+  background-color: rgba(19, 19, 19, 0.06);
   padding: 0.6rem 1rem;
   border-radius: 0.4rem;
   justify-content: space-between;
   margin-bottom: 0.4rem;
   align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 .list-header .btn {
@@ -241,6 +242,7 @@ export default defineComponent({
   border-radius: 0.5rem;
   margin: 0.6rem 0;
   padding: 0.7rem 1rem;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
 li > * {

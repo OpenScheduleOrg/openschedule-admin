@@ -96,12 +96,13 @@ export default defineComponent({
 
 .list-wrapper .list-header {
   display: flex;
-  background-color: rgba(19, 19, 19, 0.15);
+  background-color: rgba(19, 19, 19, 0.06);
   padding: 0.5rem 1rem;
   border-radius: 0.4rem;
   justify-content: space-between;
   flex-direction: row-reverse;
   margin-bottom: 0.4rem;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 .list-header .btn {
@@ -135,10 +136,11 @@ export default defineComponent({
 
 .list-wrapper li {
   display: flex;
-  background-color: rgba(162, 162, 162, 0.25);
+  background-color: rgba(19, 19, 19, 0.10);
   border-radius: 0.5rem;
   margin: 0.6rem 0;
   padding: 0.7rem 1rem;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
 li > * {
