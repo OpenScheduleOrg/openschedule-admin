@@ -6,10 +6,12 @@
           <font-awesome-icon :icon="['fa', 'times']"></font-awesome-icon>
         </router-link>
 
-        <h1 class="modal-title">Cadastro profissional</h1>
+        <h1 class="modal-title">
+          {{ !professional_id ? "Cadastro " : "" }}Profissional
+        </h1>
         <div class="form-wrap">
           <Form>
-            <div class="cc-form-dynamic-row cc-form-group-col-1">
+            <div class="form-dynamic-row form-group-col-1">
               <text-field
                 v-model="body.name"
                 :name="'name'"
@@ -25,7 +27,7 @@
               />
              -->
             </div>
-            <div class="cc-form-dynamic-row cc-form-group-col-2">
+            <div class="form-dynamic-row form-group-col-2">
               <text-field
                 :name="'phone'"
                 :label="'Telefone'"
@@ -42,7 +44,7 @@
                 @updateValidation="updateValidation"
               />
             </div>
-            <div class="cc-form-dynamic-row cc-form-group-col-2">
+            <div class="form-dynamic-row form-group-col-2">
               <text-field
                 :name="'username'"
                 :label="'Login'"
@@ -59,7 +61,7 @@
                 @updateValidation="updateValidation"
               />
             </div>
-            <div class="cc-form-dynamic-row cc-form-group-col-2">
+            <div class="form-dynamic-row form-group-col-2">
               <select-option
                 :name="'specialty'"
                 :label="'Selectiona a especialidade'"
@@ -291,7 +293,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .modal-mask {
   position: fixed;
   z-index: 9998;

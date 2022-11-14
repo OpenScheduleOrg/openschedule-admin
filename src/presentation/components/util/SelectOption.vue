@@ -1,59 +1,63 @@
 <template>
   <div
     :class="{
-      'cc-form-group': true,
-      'cc-input-is-invalid': !!validation_message,
+      'form-group': true,
+      'input-is-invalid': !!validation_message,
     }"
   >
-    <div class="cc-field-container" @click="show_options ? hide() : show()">
+    <div class="field-container" @click="show_options ? hide() : show()">
       <div
         :class="{
-          'cc-input-field': true,
-          'cc-input-not-empty': show_options || selected,
-          'cc-input-readonly': readonly,
-          'cc-manual-focus': manual_focus,
+          'input-field': true,
+          'input-not-empty': show_options || selected,
+          'input-readonly': readonly,
+          'manual-focus': manual_focus,
         }"
       >
-        <label class="cc-field-name" for="input-field-text" v-if="label">{{
+        <label class="field-name" for="input-field-text" v-if="label">{{
           label
         }}</label>
         <input
           type="text"
-          :class="{ 'cc-horario-picker': true, 'cc-not-editable': true }"
+          :class="{ 'horario-picker': true, 'not-editable': true }"
           :value="selected?.label"
           autocomplete="off"
-          :readonly="readonly"
+          :readonly="true"
+          tabindex="-1"
         />
         <div
           :class="{
-            'cc-drop-icon-wrapper': true,
-            'cc-drop-open': show_options,
+            'drop-icon-wrapper': true,
+            'drop-open': show_options,
           }"
         >
           <font-awesome-icon
-            class="cc-drop-icon"
+            v-if="!readonly"
+            class="drop-icon"
             :icon="['fa', 'caret-down']"
           />
         </div>
       </div>
       <div
         :class="{
-          'cc-list-dropdown': true,
-          'cc-show-dowpdown': show_options,
+          'list-dropdown': true,
+          'show-dowpdown': show_options && !readonly,
         }"
       >
-        <span class="cc-empty-option" v-if="!options?.length">{{ empty_message }}</span>
+        <span class="empty-option" v-if="!options?.length">{{
+          empty_message
+        }}</span>
         <span
           v-for="op in (options as OptionSelect[])"
           :key="op.value"
-          :class="{ 'cc-is-selected': selected?.value == op.value }"
+          :class="{ 'is-selected': selected?.value == op.value }"
           @click="setSelected(op)"
         >
           {{ op.label }}
         </span>
       </div>
     </div>
-    <div class="cc-advise">
+    <div class="advise">
       <font-awesome-icon
         v-if="!!validation_message"
         icon="exclamation-circle"
@@ -130,21 +134,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.cc-form-group {
+.form-group {
   cursor: pointer;
 }
 
-.cc-horario-picker {
+.horario-picker {
   display: block;
   background-color: inherit;
   padding: 12px 0 6px 0;
   color: inherit;
 }
-.cc-input-not-empty .cc-horario-picker {
+.input-not-empty .horario-picker {
   color: rgb(65, 65, 65);
 }
 
-.cc-drop-icon-wrapper {
+.drop-icon-wrapper {
   position: absolute;
   top: 10px;
   transform: translateY(60%);
@@ -154,11 +158,11 @@ export default defineComponent({
   transition: all 0.3s;
 }
 
-.cc-drop-icon-wrapper.cc-drop-open {
+.drop-icon-wrapper.drop-open {
   transform: translateY(60%) rotate(180deg);
 }
 
-.cc-list-dropdown {
+.list-dropdown {
   max-height: 170px;
   position: absolute;
   width: 88%;
@@ -176,7 +180,7 @@ export default defineComponent({
   z-index: 888;
 }
 
-.cc-list-dropdown > span {
+.list-dropdown > span {
   display: block;
   text-align: center;
   margin: 3px 0;
@@ -185,27 +189,31 @@ export default defineComponent({
   transition: all 0.4s;
 }
 
-.cc-list-dropdown > span:not(.cc-empty-option):hover {
+.list-dropdown > span:not(.empty-option):hover {
   background-color: rgba(54, 54, 54, 0.25);
 }
 
-.cc-list-dropdown > .cc-empty-option{
+.list-dropdown > .empty-option {
   cursor: initial;
   color: rgba(54, 54, 54, 0.39);
   font-weight: bold;
 }
-.cc-list-dropdown > .cc-is-selected {
+.list-dropdown > .is-selected {
   background-color: rgba(5, 74, 201, 0.25);
 }
 
-.cc-list-dropdown > .cc-is-selected:hover {
+.list-dropdown > .is-selected:hover {
   background-color: rgba(5, 74, 201, 0.453);
 }
 
-.cc-show-dowpdown {
+.show-dowpdown {
   visibility: visible;
   opacity: 1;
   overflow-y: auto;
   top: 2em;
+}
+
+.input-readonly {
+ cursor: initial;
 }
 </style>

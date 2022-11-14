@@ -1,8 +1,8 @@
 <template>
-  <div class="cc-form-group">
-    <div class="cc-date-picker">
-      <div class="cc-field-container" @click="show_calendar = !show_calendar">
-        <font-awesome-icon icon="calendar-alt" class="cc-field-icon" />
+  <div class="form-group">
+    <div class="date-picker">
+      <div class="field-container" @click="show_calendar = !show_calendar">
+        <font-awesome-icon icon="calendar-alt" class="field-icon" />
         <text-field
           :modelValue="current_date.toLocaleDateString()"
           :field_name="field_name"
@@ -13,40 +13,40 @@
       </div>
       <div
         :class="{
-          'cc-calendar-picker': true,
-          'cc-show-calendar-picker': show_calendar,
+          'calendar-picker': true,
+          'show-calendar-picker': show_calendar,
         }"
       >
-        <div class="cc-calendar-header">
-          <div class="cc-calendar-detail">
-            <span class="cc-calendar-year"> {{ dpa.current_year }}</span>
-            <span class="cc-calendar-wd-month">
+        <div class="calendar-header">
+          <div class="calendar-detail">
+            <span class="calendar-year"> {{ dpa.current_year }}</span>
+            <span class="calendar-wd-month">
               {{ dpa.current_week_day }}, {{ dpa.current_month }}</span
             >
-            <span class="cc-calendar-day"> {{ dpa.current_day }}</span>
+            <span class="calendar-day"> {{ dpa.current_day }}</span>
           </div>
         </div>
-        <div class="cc-calendar-main">
-          <div class="cc-calendar-nav">
-            <span class="cc-calendar-month-year">
+        <div class="calendar-main">
+          <div class="calendar-nav">
+            <span class="calendar-month-year">
               {{ dpa.offset_month }} de {{ dpa.offset_year }}</span
             >
-            <div class="cc-nav-month">
-              <span class="noselect cc-prev-next" @click="setMonth(-1)">
+            <div class="nav-month">
+              <span class="noselect prev-next" @click="setMonth(-1)">
                 <font-awesome-icon icon="chevron-left" />
               </span>
               <span
-                class="noselect cc-go-today"
+                class="noselect go-today"
                 @click="setNewCurrentDate({ name: period })"
                 >Hoje</span
               >
-              <span class="noselect cc-prev-next" @click="setMonth(1)">
+              <span class="noselect prev-next" @click="setMonth(1)">
                 <font-awesome-icon icon="chevron-right" />
               </span>
             </div>
           </div>
-          <div class="cc-six-weeks">
-            <div class="cc-week-days">
+          <div class="six-weeks">
+            <div class="week-days">
               <span> D </span>
               <span> S </span>
               <span> T </span>
@@ -55,9 +55,9 @@
               <span> S </span>
               <span> S </span>
             </div>
-            <div class="cc-four-two">
+            <div class="four-two">
               <span
-                class="noselect cc-select-date"
+                class="noselect select-date"
                 v-for="d in dpa.six_weeks"
                 :key="d.day + '/' + d.month + '/' + d.year"
                 :class="{
@@ -123,24 +123,24 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.cc-field-container {
+.field-container {
   cursor: pointer;
 }
 
-.cc-date-picker {
+.date-picker {
   position: relative;
 }
 
-.cc-field-icon {
+.field-icon {
   margin-bottom: 18px;
 }
 
-.cc-date-picker:focus-within,
-.cc-date-picker:hover {
+.date-picker:focus-within,
+.date-picker:hover {
   color: var(--line-color-hover);
 }
 
-.cc-calendar-picker {
+.calendar-picker {
   position: absolute;
   top: 0;
   left: 0;
@@ -151,7 +151,7 @@ export default defineComponent({
   z-index: 88;
 }
 
-.cc-calendar-picker.cc-show-calendar-picker {
+.calendar-picker.show-calendar-picker {
   visibility: visible;
   opacity: 1;
   left: 40px;

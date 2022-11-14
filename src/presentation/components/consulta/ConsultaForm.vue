@@ -3,11 +3,11 @@
     <h1 class="modal-title" v-if="consulta.id">Consulta</h1>
     <h1 class="modal-title" v-if="!consulta.id">Nova consulta</h1>
 
-    <div class="cc-consulta-wrapper">
-      <h2 class="cc-form-title">Consulta</h2>
+    <div class="consulta-wrapper">
+      <h2 class="form-title">Consulta</h2>
       <div class="form-container">
         <Form>
-          <div class="cc-form-dynamic-row cc-form-group-col-2">
+          <div class="form-dynamic-row form-group-col-2">
             <date-consulta-picker
               ref="date_picker"
               :field_name="'Data Marcada'"
@@ -33,11 +33,11 @@
         </Form>
       </div>
     </div>
-    <div class="cc-cliente-wrapper">
-      <h2 class="cc-form-title">Cliente</h2>
+    <div class="cliente-wrapper">
+      <h2 class="form-title">Cliente</h2>
       <div class="form-container">
         <Form>
-          <div class="cc-form-dynamic-row cc-form-group-col-2">
+          <div class="form-dynamic-row form-group-col-2">
             <text-field
               :field_name="'Nome'"
               v-model="cliente.nome"
@@ -47,7 +47,7 @@
             <text-field :field_name="'Sobrenome'" v-model="cliente.sobrenome">
             </text-field>
           </div>
-          <div class="cc-form-dynamic-row cc-form-group-col-3">
+          <div class="form-dynamic-row form-group-col-3">
             <text-field
               :field_name="'CPF'"
               :maxlength="14"
@@ -76,7 +76,7 @@
         </Form>
       </div>
     </div>
-    <div class="cc-actions-wrapper">
+    <div class="actions-wrapper">
       <button class="btn btn-close" @click="$emit('close_modal')">
         Fechar</button
       ><button
@@ -485,28 +485,28 @@ export default defineComponent({
   margin-top: 0.5rem;
 }
 
-.cc-form-title {
+.form-title {
   font-size: 1.1rem;
   font-family: Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
     sans-serif;
   font-weight: 500;
 }
 
-.cc-consulta-wrapper,
-.cc-cliente-wrapper {
+.consulta-wrapper,
+.cliente-wrapper {
   margin: 1rem;
 }
 
-.cc-actions-wrapper {
+.actions-wrapper {
   display: flex;
   padding: 8px 1rem;
   justify-content: flex-end;
 }
-.cc-actions-wrapper > .btn {
+.actions-wrapper > .btn {
   margin: 0 8px;
 }
 
-.cc-actions-wrapper .btn {
+.actions-wrapper .btn {
   min-width: 90px;
   height: 40px;
   border-radius: 4px;

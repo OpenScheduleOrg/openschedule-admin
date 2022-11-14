@@ -6,7 +6,7 @@
           <font-awesome-icon :icon="['fa', 'times']"></font-awesome-icon>
         </router-link>
 
-        <h1 class="modal-title">Nova Clínica</h1>
+        <h1 class="modal-title">{{ !clinic_id ? "Nova " : "" }}Clínica</h1>
         <div class="form-wrap">
           <Form>
             <text-field
@@ -16,7 +16,7 @@
               :validators="{ required: {} }"
               @updateValidation="updateValidation"
             />
-            <div class="cc-form-dynamic-row cc-form-group-col-2">
+            <div class="form-dynamic-row form-group-col-2">
               <text-field
                 :name="'phone'"
                 :label="'Telefone'"
@@ -41,7 +41,7 @@
               :validators="{ required: {} }"
               @updateValidation="updateValidation"
             />
-            <div class="cc-form-dynamic-row cc-form-group-col-2">
+            <div class="form-dynamic-row form-group-col-2">
               <text-field
                 v-model="body.latitude"
                 :name="'latitude'"
@@ -181,7 +181,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .modal-mask {
   position: fixed;
   z-index: 9998;

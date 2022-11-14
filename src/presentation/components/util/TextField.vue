@@ -1,26 +1,26 @@
 <template>
   <div
     :class="{
-      'cc-form-group': true,
-      'cc-input-is-invalid': !!validation_message,
+      'form-group': true,
+      'input-is-invalid': !!validation_message,
     }"
   >
-    <div class="cc-field-container">
+    <div class="field-container">
       <div
         :class="{
-          'cc-input-field': true,
-          'cc-input-not-empty': text,
-          'cc-input-readonly': readonly,
-          'cc-manual-focus': manual_focus,
+          'input-field': true,
+          'input-not-empty': text,
+          'input-readonly': readonly,
+          'manual-focus': manual_focus,
         }"
       >
-        <label class="cc-field-name" for="input-field-text" v-if="label">{{
+        <label class="field-name" for="input-field-text" v-if="label">{{
           label
         }}</label>
 
         <input
           :type="'text'"
-          :class="{ 'cc-text-field': true, 'cc-not-editable': not_editable }"
+          :class="{ 'text-field': true, 'not-editable': not_editable }"
           v-model="text"
           autocomplete="off"
           :readonly="readonly"
@@ -31,7 +31,7 @@
         />
       </div>
     </div>
-    <div class="cc-advise">
+    <div class="advise">
       <font-awesome-icon
         v-if="!!validation_message"
         icon="exclamation-circle"
@@ -107,17 +107,17 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.cc-text-field {
+.text-field {
   display: block;
   background-color: inherit;
   padding: 12px 0 6px 0;
   color: inherit;
 }
-.cc-input-not-empty .cc-text-field {
+.input-not-empty .text-field {
   color: rgb(65, 65, 65);
 }
 
-.cc-not-editable {
+.not-editable {
   pointer-events: none;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
-  <div class="cc-form-group">
-    <div class="cc-date-picker">
-      <div class="cc-field-container" @click="show_calendar = !show_calendar">
-        <font-awesome-icon icon="calendar-alt" class="cc-field-icon" />
+  <div class="form-group">
+    <div class="date-picker">
+      <div class="field-container" @click="show_calendar = !show_calendar">
+        <font-awesome-icon icon="calendar-alt" class="field-icon" />
         <text-field
           :modelValue="date_text"
           ref="inpud-"
@@ -14,31 +14,31 @@
       </div>
       <div
         :class="{
-          'cc-calendar-picker': true,
-          'cc-show-calendar-picker': show_calendar,
+          'calendar-picker': true,
+          'show-calendar-picker': show_calendar,
         }"
       >
-        <div class="cc-calendar-header">
-          <div class="cc-calendar-detail">
-            <span class="cc-calendar-year">
+        <div class="calendar-header">
+          <div class="calendar-detail">
+            <span class="calendar-year">
               {{ current_date.getFullYear() }}</span
             >
-            <span class="cc-calendar-wd-month">
+            <span class="calendar-wd-month">
               {{ current_wd_text }}, {{ current_month_text }}</span
             >
-            <span class="cc-calendar-day"> {{ current_date.getDate() }}</span>
+            <span class="calendar-day"> {{ current_date.getDate() }}</span>
           </div>
         </div>
 
-        <div class="cc-calendar-main" v-if="show_years">
-          <div class="cc-calendar-nav cc-calendar-show-years">
-            <span class="cc-calendar-month-year">
+        <div class="calendar-main" v-if="show_years">
+          <div class="calendar-nav calendar-show-years">
+            <span class="calendar-month-year">
               {{ decade_start }} -
               {{ decade_end }}
             </span>
-            <div class="cc-nav-month">
+            <div class="nav-month">
               <span
-                class="noselect cc-prev-next"
+                class="noselect prev-next"
                 @click="
                   (decade_end = decade_start - 1),
                     (decade_start -= 10),
@@ -48,7 +48,7 @@
                 <font-awesome-icon icon="chevron-left" />
               </span>
               <span
-                class="noselect cc-prev-next"
+                class="noselect prev-next"
                 @click="
                   (decade_start = decade_end), (decade_end += 10), getTenYears()
                 "
@@ -57,9 +57,9 @@
               </span>
             </div>
           </div>
-          <div class="cc-ten-years">
+          <div class="ten-years">
             <span
-              class="noselect cc-select-date"
+              class="noselect select-date"
               v-for="y in ten_years"
               :key="y"
               :class="{
@@ -72,29 +72,29 @@
           </div>
         </div>
 
-        <div class="cc-calendar-main" v-else-if="show_months">
-          <div class="cc-calendar-nav cc-calendar-show-months">
+        <div class="calendar-main" v-else-if="show_months">
+          <div class="calendar-nav calendar-show-months">
             <span
-              class="cc-calendar-month-year"
+              class="calendar-month-year"
               @click="getTenYears(), (show_years = true)"
             >
               {{ offset_date.getFullYear() }}
             </span>
-            <div class="cc-nav-month">
+            <div class="nav-month">
               <span
-                class="noselect cc-prev-next"
+                class="noselect prev-next"
                 @click="setOffsetDateYear(-1)"
               >
                 <font-awesome-icon icon="chevron-left" />
               </span>
-              <span class="noselect cc-prev-next" @click="setOffsetDateYear(1)">
+              <span class="noselect prev-next" @click="setOffsetDateYear(1)">
                 <font-awesome-icon icon="chevron-right" />
               </span>
             </div>
           </div>
-          <div class="cc-twelve-months">
+          <div class="twelve-months">
             <span
-              class="noselect cc-select-date"
+              class="noselect select-date"
               v-for="m in months"
               :key="m.i"
               :class="{
@@ -107,33 +107,33 @@
           </div>
         </div>
 
-        <div class="cc-calendar-main" v-else>
-          <div class="cc-calendar-nav">
-            <span class="cc-calendar-month-year" @click="show_months = true">
+        <div class="calendar-main" v-else>
+          <div class="calendar-nav">
+            <span class="calendar-month-year" @click="show_months = true">
               {{ offset_month_year }}
             </span>
-            <div class="cc-nav-month">
+            <div class="nav-month">
               <span
-                class="noselect cc-prev-next"
+                class="noselect prev-next"
                 @click="setOffsetDateMonth(-1)"
               >
                 <font-awesome-icon icon="chevron-left" />
               </span>
               <span
-                class="noselect cc-go-today"
+                class="noselect go-today"
                 @click="setNewCurrentDate(new Date())"
                 >Hoje</span
               >
               <span
-                class="noselect cc-prev-next"
+                class="noselect prev-next"
                 @click="setOffsetDateMonth(1)"
               >
                 <font-awesome-icon icon="chevron-right" />
               </span>
             </div>
           </div>
-          <div class="cc-six-weeks">
-            <div class="cc-week-days">
+          <div class="six-weeks">
+            <div class="week-days">
               <span> D </span>
               <span> S </span>
               <span> T </span>
@@ -142,9 +142,9 @@
               <span> S </span>
               <span> S </span>
             </div>
-            <div class="cc-four-two">
+            <div class="four-two">
               <span
-                class="noselect cc-select-date"
+                class="noselect select-date"
                 v-for="d in four_two"
                 :key="d.day + '/' + d.month + '/' + d.year"
                 :class="{
@@ -167,14 +167,14 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import TextField from "./TextField.vue";
-import { Month, Week } from "@/common/constants";
+import { Month, WeekDayShort } from "@/common/constants";
 
 export default defineComponent({
   name: "DatePicker",
   data() {
     const current_date = this.modelValue || new Date();
     const current_month_text = Month[current_date.getMonth()][1];
-    const current_wd_text = Week[current_date.getDay()][1];
+    const current_wd_text = WeekDayShort[current_date.getDay()];
     const offset_date = new Date(
       current_date.getFullYear(),
       current_date.getMonth()
@@ -255,7 +255,7 @@ export default defineComponent({
     setNewCurrentDate(new_date: Date) {
       this.current_date = new_date;
       this.current_month_text = Month[new_date.getMonth()][1];
-      this.current_wd_text = Week[new_date.getDay()][1];
+      this.current_wd_text = WeekDayShort[new_date.getDay()];
       this.offset_date = new Date(new_date.getFullYear(), new_date.getMonth());
       this.four_two = this.getSixWeeks(this.offset_date, new_date);
       this.offset_month_year =
@@ -335,24 +335,24 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.cc-field-container {
+.field-container {
   cursor: pointer;
 }
 
-.cc-date-picker {
+.date-picker {
   position: relative;
 }
 
-.cc-field-icon {
+.field-icon {
   margin-bottom: 18px;
 }
 
-.cc-date-picker:focus-within,
-.cc-date-picker:hover {
+.date-picker:focus-within,
+.date-picker:hover {
   color: var(--line-color-hover);
 }
 
-.cc-calendar-picker {
+.calendar-picker {
   position: absolute;
   top: 0;
   left: 0;
@@ -362,7 +362,7 @@ export default defineComponent({
   z-index: 88;
 }
 
-.cc-calendar-picker.cc-show-calendar-picker {
+.calendar-picker.show-calendar-picker {
   visibility: visible;
   opacity: 1;
   left: 30px;
@@ -370,31 +370,31 @@ export default defineComponent({
   transform: translateY(-88%);
 }
 
-.cc-calendar-main {
+.calendar-main {
   height: 250px;
   width: 230px;
 }
 
-.cc-calendar-nav {
+.calendar-nav {
   height: 13%;
 }
-.cc-calendar-nav.cc-calendar-show-months,
-.cc-calendar-nav.cc-calendar-show-years {
+.calendar-nav.calendar-show-months,
+.calendar-nav.calendar-show-years {
   border-radius: 3px;
   background-color: rgb(240, 240, 240);
   margin: 0 -4px;
   margin-bottom: 3px;
 }
-.cc-calendar-nav.cc-calendar-show-months > *:first-child,
-.cc-calendar-nav.cc-calendar-show-years > *:first-child {
+.calendar-nav.calendar-show-months > *:first-child,
+.calendar-nav.calendar-show-years > *:first-child {
   margin-left: 30px;
 }
-.cc-calendar-nav.cc-calendar-show-months > *:last-child,
-.cc-calendar-nav.cc-calendar-show-years > *:last-child {
+.calendar-nav.calendar-show-months > *:last-child,
+.calendar-nav.calendar-show-years > *:last-child {
   margin-right: 30px;
 }
 
-.cc-calendar-main span {
+.calendar-main span {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -402,8 +402,8 @@ export default defineComponent({
   border-radius: 4px;
 }
 
-.cc-twelve-months,
-.cc-ten-years {
+.twelve-months,
+.ten-years {
   display: grid;
   height: 87%;
   gap: 2px;
@@ -411,12 +411,12 @@ export default defineComponent({
   grid-template-rows: 1fr 1fr 1fr 1fr;
 }
 
-.cc-ten-years > *:last-child {
+.ten-years > *:last-child {
   grid-column: 2;
 }
 
-.cc-twelve-months span:hover,
-.cc-ten-years span:hover {
+.twelve-months span:hover,
+.ten-years span:hover {
   background-color: rgba(0, 0, 0, 0.212);
 }
 </style>

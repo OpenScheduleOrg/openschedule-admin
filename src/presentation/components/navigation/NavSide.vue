@@ -1,20 +1,20 @@
 <template>
   <div id="nav-calendar">
-    <div class="cc-calendar-picker">
-      <div class="cc-calendar-main">
-        <div class="cc-calendar-nav">
-          <span class="cc-calendar-month-year"> {{ calendar_month }}</span>
-          <div class="cc-nav-month">
-            <span class="noselect cc-prev-next" @click="setMonth(-1)">
+    <div class="calendar-picker">
+      <div class="calendar-main">
+        <div class="calendar-nav">
+          <span class="calendar-month-year"> {{ calendar_month }}</span>
+          <div class="nav-month">
+            <span class="noselect prev-next" @click="setMonth(-1)">
               <font-awesome-icon icon="chevron-left" />
             </span>
-            <span class="noselect cc-prev-next" @click="setMonth(1)">
+            <span class="noselect prev-next" @click="setMonth(1)">
               <font-awesome-icon icon="chevron-right" />
             </span>
           </div>
         </div>
-        <div class="cc-six-weeks">
-          <div class="cc-week-days">
+        <div class="six-weeks">
+          <div class="week-days">
             <span> D </span>
             <span> S </span>
             <span> T </span>
@@ -23,9 +23,9 @@
             <span> S </span>
             <span> S </span>
           </div>
-          <div class="cc-four-two">
+          <div class="four-two">
             <router-link
-              class="noselect cc-select-date"
+              class="noselect select-date"
               v-for="d in six_weeks"
               :key="d.day + '/' + d.month + '/' + d.year"
               :class="{
@@ -97,7 +97,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.cc-calendar-picker {
+.calendar-picker {
   --day-size: 30px;
   background-color: rgb(236, 236, 236);
   padding: 0 9px;

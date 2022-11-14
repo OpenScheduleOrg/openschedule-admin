@@ -15,15 +15,17 @@ export const Periods: { [lang: string]: { [p in Period]: string } } = {
 };
 export const MIN_INTERVAL = 15 * 60;
 
-export const Week = [
-  ["Domingo", "Dom"],
-  ["Segunda-feira", "Seg"],
-  ["Terça-feira", "Ter"],
-  ["Quarta-feira", "Qua"],
-  ["Quinta-feira", "Qui"],
-  ["Sexta-feira", "Sex"],
-  ["Sábado", "Sab"],
+export const WeekDay = [
+  "Segunda-feira",
+  "Terça-feira",
+  "Quarta-feira",
+  "Quinta-feira",
+  "Sexta-feira",
+  "Sábado",
+  "Domingo",
 ];
+
+export const WeekDayShort = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
 
 export const Month = [
   ["Janeiro", "Jan"],

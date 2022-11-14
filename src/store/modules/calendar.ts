@@ -7,7 +7,7 @@ import {
   SET_NOW,
   SET_OFFSET_MONTH_PICKER,
 } from "./mutation-types";
-import { Month, Period, Week } from "@/common/constants";
+import { Month, Period, WeekDayShort } from "@/common/constants";
 import { monthBetween, setPeriod, getPeriod } from "@/utils";
 
 import { DayDetail, SixWeeksDay } from "@/store/models";
@@ -255,7 +255,7 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
         six_weeks?: SixWeeksDay[];
       } = {
         current_month: Month[current_date.getMonth()][1],
-        current_week_day: Week[current_date.getDay()][1],
+        current_week_day: WeekDayShort[current_date.getDay()][1],
         current_day: current_date.getDate(),
         current_year: current_date.getFullYear(),
       };
@@ -343,7 +343,7 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
             week_date.getDate() == today.getDate() &&
             week_date.getMonth() == today.getMonth() &&
             week_date.getFullYear() == today.getFullYear(),
-          weekDay: Week[week_date.getDay()][1],
+          weekDay: WeekDayShort[week_date.getDay()],
         });
       }
 

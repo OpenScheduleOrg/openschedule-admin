@@ -1,19 +1,19 @@
 <template>
   <div
     :class="{
-      'cc-form-group': true,
-      'cc-input-is-valid': valid,
-      'cc-input-is-invalid': invalid,
+      'form-group': true,
+      'input-is-valid': valid,
+      'input-is-invalid': invalid,
     }"
   >
-    <div class="cc-field-container">
+    <div class="field-container">
       <div
         :class="{
-          'cc-input-field-check': true,
+          'input-field-check': true,
         }"
       >
         <label
-          class="cc-field-name-checkbox"
+          class="field-name-checkbox"
           for="input-field-text"
           v-if="field_name"
           >{{ field_name }}</label
@@ -21,13 +21,13 @@
 
         <input
           type="checkbox"
-          name="cc-input-field-check-box"
-          :class="{ 'cc-text-field-check': true }"
+          name="input-field-check-box"
+          :class="{ 'text-field-check': true }"
           v-model="result"
         />
       </div>
     </div>
-    <div class="cc-advise">
+    <div class="advise">
       <font-awesome-icon v-if="advise" icon="exclamation-circle" />
       <span> {{ advise }}</span>
     </div>
@@ -64,17 +64,17 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.cc-text-field-check {
+.text-field-check {
   padding: 12px 0 6px 0;
   cursor: pointer;
   margin: 4px;
 }
 
-.cc-not-editable {
+.not-editable {
   pointer-events: none;
 }
 
-.cc-input-field-check {
+.input-field-check {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,11 +83,11 @@ export default defineComponent({
   font-size: 1.2em;
 }
 
-.cc-input-is-valid label {
+.input-is-valid label {
   color: rgb(0, 158, 32);
 }
 
-.cc-input-is-invalid label {
+.input-is-invalid label {
   color: red;
 }
 </style>

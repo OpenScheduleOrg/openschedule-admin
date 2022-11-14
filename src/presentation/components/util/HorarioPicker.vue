@@ -1,31 +1,31 @@
 <template>
   <div
     :class="{
-      'cc-form-group': true,
-      'cc-input-is-valid': valid && !advise,
-      'cc-input-is-invalid': advise,
+      'form-group': true,
+      'input-is-valid': valid && !advise,
+      'input-is-invalid': advise,
     }"
   >
     <div
-      class="cc-field-container"
+      class="field-container"
       @click="show_list_dropdown = !show_list_dropdown"
     >
-      <font-awesome-icon class="cc-field-icon" :icon="['fa', 'clock']" />
+      <font-awesome-icon class="field-icon" :icon="['fa', 'clock']" />
       <div
         :class="{
-          'cc-input-field': true,
-          'cc-input-not-empty': true,
-          'cc-input-readonly': readonly,
-          'cc-manual-focus': manual_focus,
+          'input-field': true,
+          'input-not-empty': true,
+          'input-readonly': readonly,
+          'manual-focus': manual_focus,
         }"
       >
-        <label class="cc-field-name" for="input-field-text" v-if="field_name">{{
+        <label class="field-name" for="input-field-text" v-if="field_name">{{
           field_name
         }}</label>
         <input
           type="text"
-          name="cc-input-field-text"
-          :class="{ 'cc-horario-picker': true, 'cc-not-editable': true }"
+          name="input-field-text"
+          :class="{ 'horario-picker': true, 'not-editable': true }"
           :value="selected_hrr"
           autocomplete="off"
           :readonly="readonly"
@@ -33,33 +33,33 @@
 
         <div
           :class="{
-            'cc-drop-icon-wrapper': true,
-            'cc-drop-open': show_list_dropdown,
+            'drop-icon-wrapper': true,
+            'drop-open': show_list_dropdown,
           }"
         >
           <font-awesome-icon
-            class="cc-drop-icon"
+            class="drop-icon"
             :icon="['fa', 'caret-down']"
           />
         </div>
       </div>
       <div
         :class="{
-          'cc-list-dropdown': true,
-          'cc-show-dowpdown': show_list_dropdown,
+          'list-dropdown': true,
+          'show-dowpdown': show_list_dropdown,
         }"
       >
         <span
           v-for="hr in schedules"
           :key="hr.start.his"
-          :class="{ 'cc-is-selected': hr.selected }"
+          :class="{ 'is-selected': hr.selected }"
           @click="setHis(hr.start.his)"
         >
           {{ hr.start.hhmm }} - {{ hr.end.hhmm }}
         </span>
       </div>
     </div>
-    <div class="cc-advise">
+    <div class="advise">
       <font-awesome-icon v-if="advise" icon="exclamation-circle" />
       <span> {{ advise }}</span>
     </div>
@@ -118,21 +118,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.cc-form-group {
+.form-group {
   cursor: pointer;
 }
 
-.cc-horario-picker {
+.horario-picker {
   display: block;
   background-color: inherit;
   padding: 12px 0 6px 0;
   color: inherit;
 }
-.cc-input-not-empty .cc-horario-picker {
+.input-not-empty .horario-picker {
   color: rgb(65, 65, 65);
 }
 
-.cc-drop-icon-wrapper {
+.drop-icon-wrapper {
   position: absolute;
   top: 0;
   transform: translateY(60%);
@@ -142,11 +142,11 @@ export default defineComponent({
   transition: all 0.3s;
 }
 
-.cc-drop-icon-wrapper.cc-drop-open {
+.drop-icon-wrapper.drop-open {
   transform: translateY(60%) rotate(180deg);
 }
 
-.cc-list-dropdown {
+.list-dropdown {
   position: absolute;
   width: 86%;
   color: rgb(24, 24, 24);
@@ -165,7 +165,7 @@ export default defineComponent({
   z-index: 888;
 }
 
-.cc-list-dropdown > span {
+.list-dropdown > span {
   display: block;
   text-align: center;
   margin: 3px 0;
@@ -174,18 +174,18 @@ export default defineComponent({
   transition: all 0.4s;
 }
 
-.cc-list-dropdown > span:hover {
+.list-dropdown > span:hover {
   background-color: rgba(54, 54, 54, 0.25);
 }
-.cc-list-dropdown > .cc-is-selected {
+.list-dropdown > .is-selected {
   background-color: rgba(5, 74, 201, 0.25);
 }
 
-.cc-list-dropdown > .cc-is-selected:hover {
+.list-dropdown > .is-selected:hover {
   background-color: rgba(5, 74, 201, 0.453);
 }
 
-.cc-show-dowpdown {
+.show-dowpdown {
   max-height: 200px;
   visibility: visible;
   opacity: 1;

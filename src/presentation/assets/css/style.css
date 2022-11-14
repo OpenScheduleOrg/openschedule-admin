@@ -270,7 +270,7 @@ button:disabled,
 }
 
 /* CALENDAR PICKER */
-.cc-calendar-picker {
+.calendar-picker {
   --day-size: 26px;
   display: flex;
   background-color: rgb(255, 255, 255);
@@ -281,53 +281,53 @@ button:disabled,
   box-shadow: 0 0 0.4em rgb(163, 163, 163);
 }
 
-.cc-calendar-header,
-.cc-calendar-main {
+.calendar-header,
+.calendar-main {
   padding: 0.4rem;
 }
 
-.cc-calendar-header {
+.calendar-header {
   background-color: var(--bg-blue);
   border-radius: 4px;
   padding-bottom: 4px;
 }
 
-.cc-calendar-main {
+.calendar-main {
   padding-top: 4px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.cc-calendar-detail {
+.calendar-detail {
   display: grid;
   height: 5em;
   color: white;
   grid-template-areas: "year day day day" "wdm day day day" "wdm day day day" "wdm day day day" "wdm day day day" "wdm day day day";
 }
 
-.cc-calendar-detail>* {
+.calendar-detail>* {
   display: flex;
 }
 
-.cc-calendar-detail .cc-calendar-year {
+.calendar-detail .calendar-year {
   grid-area: year;
 }
 
-.cc-calendar-detail .cc-calendar-wd-month {
+.calendar-detail .calendar-wd-month {
   grid-area: wdm;
   font-size: 2em;
   align-items: center;
 }
 
-.cc-calendar-detail .cc-calendar-day {
+.calendar-detail .calendar-day {
   grid-area: day;
   align-items: center;
   justify-content: center;
   font-size: 3.5em;
 }
 
-.cc-calendar-nav {
+.calendar-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -335,11 +335,11 @@ button:disabled,
   padding: 4px 0;
 }
 
-.cc-calendar-nav .cc-calendar-month-year {
+.calendar-nav .calendar-month-year {
   font-weight: bold;
 }
 
-.cc-nav-month {
+.nav-month {
   display: flex;
   width: 70px;
   align-items: center;
@@ -347,13 +347,13 @@ button:disabled,
   font-size: 0.9em;
 }
 
-.cc-nav-month>* {
+.nav-month>* {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.cc-prev-next {
+.prev-next {
   height: 1.5rem;
   width: 1.5rem;
   border-radius: 50%;
@@ -362,31 +362,31 @@ button:disabled,
   transition: background-color 0.2s;
 }
 
-.cc-nav-month .cc-go-today {
+.nav-month .go-today {
   padding: 2px 4px;
   cursor: pointer;
   border-radius: 1px;
   transition: background-color 0.2s;
 }
 
-.cc-prev-next:hover,
-.cc-go-today:hover {
+.prev-next:hover,
+.go-today:hover {
   background-color: rgba(0, 0, 0, 0.048);
   color: rgba(0, 0, 0, 0.726);
 }
 
-.cc-prev-next:active,
-.cc-go-today:active {
+.prev-next:active,
+.go-today:active {
   background-color: rgba(0, 0, 0, 0.253);
 }
 
-.cc-six-weeks {
+.six-weeks {
   display: flex;
   flex-direction: column;
 }
 
-.cc-week-days,
-.cc-four-two {
+.week-days,
+.four-two {
   display: grid;
   grid-template-columns: repeat(7, var(--day-size));
   grid-auto-rows: var(--day-size);
@@ -397,13 +397,13 @@ button:disabled,
   justify-content: center;
 }
 
-.cc-week-days {
+.week-days {
   border-top: 1px solid rgba(54, 54, 54, 0.349);
   border-bottom: 1px solid rgba(54, 54, 54, 0.349);
 }
 
-.cc-week-days>span,
-.cc-four-two>.cc-select-date {
+.week-days>span,
+.four-two>.select-date {
   color: rgb(23, 23, 23);
   display: flex;
   align-items: center;
@@ -411,46 +411,46 @@ button:disabled,
   font-weight: bold;
 }
 
-.cc-four-two>.cc-select-date {
+.four-two>.select-date {
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.5s;
 }
 
-.cc-four-two>.cc-select-date:hover {
+.four-two>.select-date:hover {
   background-color: rgba(0, 0, 0, 0.212);
 }
 
-.cc-four-two>.cc-select-date:active {
+.four-two>.select-date:active {
   background-color: rgba(0, 0, 0, 0.512);
 }
 
 /*
-.cc-select-date.is-selected {
+.select-date.is-selected {
   pointer-events: none;
 }*/
 
-.cc-select-date.is-today:not(.is-selected):hover {
+.select-date.is-today:not(.is-selected):hover {
   transition: all 0.4s;
   background-color: rgb(1, 73, 207) !important;
 }
 
-.cc-select-date.out-month {
+.select-date.out-month {
   color: rgba(0, 0, 0, 0.7);
 }
 
-.cc-select-date.is-invalid-day {
+.select-date.is-invalid-day {
   pointer-events: none;
   cursor: initial;
   color: rgba(0, 0, 0, 0.3);
 }
 
-.cc-select-date.is-selected.out-month {
+.select-date.is-selected.out-month {
   background-color: #2231d923 !important;
   color: var(--font-secundary) !important;
 }
 
-.cc-select-date.is-today.out-month {
+.select-date.is-today.out-month {
   transition: background-color 0.3s;
   background-color: #006fd6d3 !important;
   color: rgb(241, 240, 240) !important;

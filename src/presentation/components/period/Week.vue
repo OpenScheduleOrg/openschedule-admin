@@ -49,11 +49,11 @@
               'day-' + ch.week_day,
               'num-interval',
               'has-consulta',
-              ch.consulta.realizada ? 'cc-consulta-realizada' : '',
+              ch.consulta.realizada ? 'consulta-realizada' : '',
               !ch.consulta.realizada &&
               now.valueOf() >
                 ch.consulta.marcada.valueOf() + ch.consulta.duracao * 1000
-                ? 'cc-no-consulta-realizada'
+                ? 'no-consulta-realizada'
                 : '',
             ]"
             v-if="ch.consulta"
@@ -61,23 +61,23 @@
             :key="ch.consulta.marcada.valueOf()"
             @mouseenter="posFullDetail"
           >
-            <div class="cc-consulta-detail">
-              <span class="cc-consulta-start">{{
+            <div class="consulta-detail">
+              <span class="consulta-start">{{
                 ch.consulta.intervalo.start.hhmm
               }}</span>
 
-              <strong class="cc-full-name"
+              <strong class="full-name"
                 >{{ ch.consulta.cliente_nome }}
                 {{ ch.consulta.cliente_sobrenome }}
               </strong>
-              <span class="cc-consulta-end">{{
+              <span class="consulta-end">{{
                 ch.consulta.intervalo.end.hhmm
               }}</span>
             </div>
-            <div class="cc-consulta-full-detail">
-              <div class="cc-consulta-row">
+            <div class="consulta-full-detail">
+              <div class="consulta-row">
                 <span>
-                  {{ Week[ch.consulta.marcada.getDay()][0] }}
+                  {{ WeekDay[ch.consulta.marcada.getDay()] }}
                   {{ ch.consulta.marcada.getDate() }} de
                   {{ Month[ch.consulta.marcada.getMonth()][0] }} de
                   {{ ch.consulta.marcada.getFullYear() }}
@@ -87,7 +87,7 @@
                   {{ ch.consulta.intervalo.end.hhmm }}
                 </span>
               </div>
-              <div class="cc-consulta-row">
+              <div class="consulta-row">
                 <label for="consulta.paciente-nome"
                   ><font-awesome-icon
                     :icon="['fa', 'user-alt']"
@@ -98,7 +98,7 @@
                   {{ ch.consulta.cliente_sobrenome }}</span
                 >
               </div>
-              <div class="cc-consulta-row">
+              <div class="consulta-row">
                 <label for="consulta.paciente-telefone"
                   ><font-awesome-icon
                     :icon="['fab', 'whatsapp-square']"
@@ -116,7 +116,7 @@
                   }}
                 </span>
               </div>
-              <div class="cc-consulta-row">
+              <div class="consulta-row">
                 <template
                   v-if="
                     now.valueOf() <
@@ -147,8 +147,8 @@
                   <span id="consulta.status"> Não realizada </span></template
                 >
               </div>
-              <div class="cc-consulta-row">
-                <fieldset class="cc-consulta-descricao">
+              <div class="consulta-row">
+                <fieldset class="consulta-descricao">
                   <legend>Descrição</legend>
                   {{ ch.consulta.descricao }}
                 </fieldset>
@@ -177,7 +177,7 @@
 import { getUTCOffset } from "@/utils";
 import { defineComponent } from "vue";
 import { mapState, mapGetters } from "vuex";
-import { Month, Week } from "@/common/constants";
+import { Month, WeekDay } from "@/common/constants";
 import { Consulta } from "@/store/models";
 
 export default defineComponent({
@@ -186,7 +186,7 @@ export default defineComponent({
     return {
       utc_offset: getUTCOffset(),
       Month,
-      Week,
+      WeekDay,
     };
   },
   computed: {
@@ -228,7 +228,7 @@ export default defineComponent({
     posFullDetail() {
       const mgt = document.querySelector("main.grid-item") as Element;
       const consultas_full_detail = document.querySelectorAll(
-        ".cc-consulta-full-detail"
+        ".consulta-full-detail"
       );
 
       const max_bottom =
@@ -485,10 +485,10 @@ export default defineComponent({
   min-width: 0;
 }
 
-.has-consulta.cc-consulta-realizada {
+.has-consulta.consulta-realizada {
   background-color: green;
 }
-.has-consulta.cc-no-consulta-realizada {
+.has-consulta.no-consulta-realizada {
   background-color: rgb(148, 0, 12);
 }
 
@@ -496,7 +496,7 @@ export default defineComponent({
   box-shadow: 0 0 0.6em rgb(163, 163, 163);
 }
 
-.has-consulta .cc-consulta-detail {
+.has-consulta .consulta-detail {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -504,7 +504,7 @@ export default defineComponent({
   width: 100%;
 }
 
-.has-consulta .cc-consulta-full-detail {
+.has-consulta .consulta-full-detail {
   display: flex;
   position: absolute;
   height: 250px;
@@ -524,17 +524,17 @@ export default defineComponent({
   padding: 4px;
 }
 
-.has-consulta .cc-consulta-full-detail span {
+.has-consulta .consulta-full-detail span {
   display: block;
   text-align: center;
 }
-.has-consulta .cc-consulta-full-detail > .cc-consulta-row {
+.has-consulta .consulta-full-detail > .consulta-row {
   display: flex;
   align-items: center;
   margin: 0 1.2em;
 }
 
-.cc-consulta-row label {
+.consulta-row label {
   color: rgb(125, 125, 125);
   font-size: 1.4em;
   margin-right: 1em;
@@ -544,23 +544,23 @@ export default defineComponent({
   margin-left: 1px;
 }
 
-.cc-consulta-row span {
+.consulta-row span {
   font-size: 0.95em;
   color: black;
 }
 
-.has-consulta .cc-consulta-full-detail > .cc-consulta-row:first-child {
+.has-consulta .consulta-full-detail > .consulta-row:first-child {
   flex-direction: column;
   font-weight: 700;
   margin-bottom: 8px;
 }
 
-.has-consulta .cc-consulta-full-detail > .cc-consulta-row:last-child {
+.has-consulta .consulta-full-detail > .consulta-row:last-child {
   flex: 1;
   margin-bottom: 4px;
 }
 
-.cc-consulta-row .cc-consulta-descricao {
+.consulta-row .consulta-descricao {
   height: 100%;
   width: 100%;
   border: solid 1.5px rgba(0, 0, 0, 0.568);
@@ -570,12 +570,12 @@ export default defineComponent({
   border-radius: 3px;
 }
 
-.cc-consulta-row .cc-consulta-descricao > legend {
+.consulta-row .consulta-descricao > legend {
   font-size: 1.1em;
   padding: 3px;
 }
 
-.has-consulta:hover .cc-consulta-full-detail {
+.has-consulta:hover .consulta-full-detail {
   transition-delay: 0.8s;
   opacity: 1;
   visibility: visible;
@@ -602,24 +602,24 @@ export default defineComponent({
   transform: translate(-100%, 0);
 }
 
-.cc-consulta-detail .cc-consulta-start,
-.cc-consulta-detail .cc-consulta-end {
+.consulta-detail .consulta-start,
+.consulta-detail .consulta-end {
   font-size: 0.9em;
   display: block;
   width: 100%;
 }
 
-.cc-consulta-detail .cc-consulta-start {
+.consulta-detail .consulta-start {
   font-weight: bold;
   font-size: 1em;
 }
 
-.cc-consulta-detail .cc-consulta-end {
+.consulta-detail .consulta-end {
   color: rgba(255, 255, 255, 0.815);
   text-align: end;
 }
 
-.cc-consulta-detail .cc-full-name {
+.consulta-detail .full-name {
   display: -webkit-box;
   text-align: center;
   font-size: 1.15em;
@@ -629,7 +629,7 @@ export default defineComponent({
   -webkit-box-orient: vertical;
 }
 
-.cc-consulta-detail .cc-consulta-descricao {
+.consulta-detail .consulta-descricao {
   display: -webkit-box;
   width: 100%;
   font-size: 0.8em;

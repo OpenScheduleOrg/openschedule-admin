@@ -1,28 +1,28 @@
 <template>
   <div
     :class="{
-      'cc-form-group': true,
-      'cc-input-is-valid': valid && !advise,
-      'cc-input-is-invalid': advise,
+      'form-group': true,
+      'input-is-valid': valid && !advise,
+      'input-is-invalid': advise,
     }"
   >
-    <div class="cc-field-container">
+    <div class="field-container">
       <div
         :class="{
-          'cc-input-field': true,
-          'cc-input-not-empty': text,
-          'cc-input-readonly': readonly,
-          'cc-manual-focus': manual_focus,
+          'input-field': true,
+          'input-not-empty': text,
+          'input-readonly': readonly,
+          'manual-focus': manual_focus,
         }"
       >
-        <label class="cc-field-name" for="input-field-text" v-if="field_name">{{
+        <label class="field-name" for="input-field-text" v-if="field_name">{{
           field_name
         }}</label>
 
         <textarea
           :class="{
-            'cc-input-textarea': true,
-            'cc-not-editable': not_editable,
+            'input-textarea': true,
+            'not-editable': not_editable,
           }"
           v-model="text"
           autocomplete="off"
@@ -32,7 +32,7 @@
         ></textarea>
       </div>
     </div>
-    <div class="cc-advise">
+    <div class="advise">
       <font-awesome-icon v-if="advise" icon="exclamation-circle" />
       <span> {{ advise }}</span>
     </div>
@@ -69,7 +69,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.cc-input-textarea {
+.input-textarea {
   display: block;
   background-color: rgb(231, 231, 231);
   color: inherit;
@@ -81,17 +81,17 @@ export default defineComponent({
   text-align: justify;
 }
 
-.cc-input-not-empty #cc-input-field-textarea {
+.input-not-empty #input-field-textarea {
   color: rgb(36, 36, 36);
 }
 
-.cc-form-group .cc-input-field .cc-field-name {
+.form-group .input-field .field-name {
   left: 4px;
   top: 22px;
 }
 
-.cc-form-group .cc-input-field:focus-within .cc-field-name,
-.cc-form-group .cc-input-field.cc-input-not-empty .cc-field-name {
+.form-group .input-field:focus-within .field-name,
+.form-group .input-field.input-not-empty .field-name {
   left: 0;
   top: 0;
 }
