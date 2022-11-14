@@ -6,7 +6,7 @@ import FontAwesomeIcon from "@/presentation/assets/font-awesome";
 
 import "@/presentation/assets/css/style.css";
 
-import "./prototype";
+import "./extensions";
 
 createApp(App)
   .use(store, key)
