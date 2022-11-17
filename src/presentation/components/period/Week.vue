@@ -1,10 +1,5 @@
 <template>
   <div id="period-week" class="grid-container scrolled">
-    <div class="timezone">
-      <div class="content-ff">
-        <span>{{ utc_offset }}</span>
-      </div>
-    </div>
     <div class="grid-container week-row">
       <div class="week-day" v-for="wd in week_days" :key="wd.weekDay">
         <span> {{ wd.weekDay }}</span>
@@ -15,23 +10,8 @@
             name: 'day',
             params: { day: wd.day, month: wd.month + 1, year: wd.year },
           }"
-          >{{ wd.day }}</router-link
+          >{{ wd.day  }}</router-link
         >
-      </div>
-    </div>
-    <div
-      class="grid-container hours-column"
-      :class="{ 'empty-days': aw.empty_days }"
-    >
-      <div
-        class="hour num-interval"
-        :class="{ 'big-jump': h.bigjump }"
-        v-for="h in aw.column_hms"
-        :key="h.minutes + h.hours * 60"
-        :style="{ '--intervals': h.intervals } as any"
-      >
-        <span class="hhmm">{{ h.hhmm }}</span>
-        <div class="interval-fill"></div>
       </div>
     </div>
     <div
@@ -293,12 +273,12 @@ export default defineComponent({
 #period-week.grid-container {
   position: relative;
   grid-template:
-    "tz wr" 15%
-    "hc wha" 1fr / 1fr 19fr;
+    "wr" 15%
+    "wha" 1fr;
   font-size: 1rem;
   min-width: 900px;
   min-height: 400px;
-  grid-gap: 2.5vh 0.75vh;
+  grid-gap: .7em;
   background-color: var(--bg-period-week);
   overflow-x: hidden;
 }
@@ -317,7 +297,7 @@ export default defineComponent({
 }
 
 #period-week .grid-container {
-  grid-gap: 0.7vh;
+  grid-gap: .3em;
 }
 
 .timezone,
