@@ -4,3 +4,4 @@ export * from "./specialty-params";
 export * from "./professional-params";
 export * from "./acting-params";
 export * from "./schedule-params";
+export * from "./appointment-params";
