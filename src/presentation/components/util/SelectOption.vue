@@ -68,9 +68,9 @@
 </template>
 
 <script lang="ts">
+import { OptionSelect } from "@/presentation/models";
 import { defineComponent } from "vue";
 
-export type OptionSelect = { value: string | number; label: string };
 
 type ComponentData = {
   selected?: OptionSelect;
@@ -210,7 +210,7 @@ export default defineComponent({
   visibility: visible;
   opacity: 1;
   overflow-y: auto;
-  top: 2em;
+  top: 4.1em;
 }
 
 .input-readonly {

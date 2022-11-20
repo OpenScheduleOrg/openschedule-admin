@@ -84,10 +84,10 @@ import { ScheduleModel } from "@/domain/models";
 import { professionalService, scheduleService } from "@/domain/services";
 import { defineComponent } from "vue";
 import { Form, SelectOption } from "../util";
-import { OptionSelect } from "../util/SelectOption.vue";
 
 import { mapState, mapActions } from "vuex";
 import { WeekDay } from "@/common/constants";
+import { OptionSelect } from "@/presentation/models";
 
 type ComponentData = {
   professional_options: OptionSelect[];

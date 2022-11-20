@@ -94,8 +94,8 @@ import { defineComponent } from "vue";
 
 import { ScheduleBody } from "@/domain/params";
 import { professionalService, scheduleService } from "@/domain/services";
-import { OptionSelect } from "../util/SelectOption.vue";
 import { ScheduleModel } from "@/domain/models";
+import { OptionSelect } from "@/presentation/models";
 import { mapActions } from "vuex";
 import hash from "object-hash";
 

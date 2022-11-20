@@ -64,7 +64,7 @@
             <div class="form-dynamic-row form-group-col-2">
               <select-option
                 :name="'specialty'"
-                :label="'Selectiona a especialidade'"
+                :label="'Selecione a especialidade'"
                 :required="true"
                 :options="select_options.specialties"
                 :empty_message="'Cadastre uma especialidade'"
@@ -114,7 +114,7 @@ import {
   professionalService,
   specialtyService,
 } from "@/domain/services";
-import { OptionSelect } from "../util/SelectOption.vue";
+import { OptionSelect } from "@/presentation/models";
 
 type ComponentData = {
   professional_id?: number;
