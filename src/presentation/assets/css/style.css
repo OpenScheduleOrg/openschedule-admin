@@ -40,7 +40,7 @@
 
 html {
   font-family: "Oxygen", "Roboto", sans-serif;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 body,
@@ -198,7 +198,7 @@ button,
   font-weight: 600;
   border: var(--btn-default);
   border-radius: 1.5px;
-  transition: all .28s;
+  transition: all 0.28s;
 }
 
 button:hover,
@@ -219,7 +219,6 @@ button:disabled,
 /************* END BUTTONS *****************/
 /*******************************************/
 /*******************************************/
-
 
 .fade-enter-from {
   opacity: 0;

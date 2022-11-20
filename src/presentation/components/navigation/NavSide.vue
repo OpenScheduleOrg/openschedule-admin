@@ -1,4 +1,14 @@
 <template>
+  <div class="select-professional" v-if="current_user.admin">
+    <select-option
+      :name="'profesisonal'"
+      :label="'Profissional'"
+      v-model="professional_id"
+      :options="professional_options"
+      :empty_message="'Nenhum profissional cadastrado'"
+    />
+  </div>
+
   <div id="nav-calendar">
     <div class="calendar-picker">
       <div class="calendar-main">
@@ -32,7 +42,7 @@
                 'is-selected': d.isSelected,
                 'out-month': d.outMonth,
                 'is-today': d.isToday,
-                'is-invalid-day': !d.consultas.length && !d.hs_free.length,
+                'is-invalid-day': !d.valid_day,
               }"
               :to="{
                 name: period,
@@ -46,17 +56,20 @@
       </div>
     </div>
   </div>
-
   <nav id="nav-main">
     <ul>
       <li>
         <router-link class="nav-link" to="/clinics">Clínicas</router-link>
       </li>
       <li>
-        <router-link class="nav-link" to="/specialties">Especialidades</router-link>
+        <router-link class="nav-link" to="/specialties"
+          >Especialidades</router-link
+        >
       </li>
       <li>
-        <router-link class="nav-link" to="/professionals">Profissionais</router-link>
+        <router-link class="nav-link" to="/professionals"
+          >Profissionais</router-link
+        >
       </li>
       <li>
         <router-link class="nav-link" to="/schedules">Horários</router-link>
@@ -64,24 +77,29 @@
       <li>
         <router-link class="nav-link" to="/patients">Pacientes</router-link>
       </li>
-    </ul>
-    <ul>
       <li>
         <router-link class="nav-link" to="/users">Usuários</router-link>
       </li>
     </ul>
-
   </nav>
 </template>
 
 <script lang="ts">
+import { SelectOption } from "../util";
 import { defineComponent } from "vue";
 import { mapState, mapGetters, mapActions } from "vuex";
 
+type ComponentData = {
+  professional_id?: number;
+};
 export default defineComponent({
   name: "NavSide",
-  data() {
-    return {};
+  components: { SelectOption },
+  data(): ComponentData {
+    return { professional_id: undefined };
+  },
+  created() {
+    this.populateProfessionalOptions();
   },
   computed: {
     ...mapGetters({
@@ -89,9 +107,23 @@ export default defineComponent({
       calendar_month: "calendar/getMonthOffset",
     }),
     ...mapState("calendar", ["period", "current_date"]),
+    ...mapState("auth", ["current_user"]),
+    ...mapState("agenda", ["professional_options"]),
   },
   methods: {
-    ...mapActions({ setMonth: "calendar/setOffsetMonth" }),
+    ...mapActions({
+      setMonth: "calendar/setOffsetMonth",
+      populateProfessionalOptions: "agenda/populateProfessionalOptions",
+      setProfessional: "agenda/setProfessional",
+    }),
+  },
+  watch: {
+    professional_id(id: number) {
+      this.setProfessional(id);
+    },
+    "$store.state.agenda.profesional_id"(id: number) {
+      this.professional_id = id;
+    },
   },
 });
 </script>
@@ -110,18 +142,20 @@ ul {
 #nav-calendar {
   padding: 0 8px;
 }
-
-nav {
-  background-color: #00000007;
-  border-radius: 5px;
-}
-
 nav {
   flex: 7;
   margin-top: 7px;
-  background-color: #00000030;
   font-size: 1.05rem;
-  padding: 1.5rem 2.3rem 1rem 1.2rem;
+  padding: 0 8px;
+}
+nav > ul {
+  display: block;
+  background-color: #777777bc;
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  padding: 0.8em 2.8em 0.8em 2.2em;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 nav > ul:not(:first-child) {
@@ -152,5 +186,11 @@ a.nav-link.router-link-active {
 a.nav-link.router-link-exact-active {
   background-color: rgb(19, 63, 114);
   color: white;
+}
+
+.select-professional {
+  padding: 0 1rem;
+  font-size: 0.8em;
+  margin-bottom: 8px;
 }
 </style>

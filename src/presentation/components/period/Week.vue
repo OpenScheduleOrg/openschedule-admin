@@ -10,144 +10,70 @@
             name: 'day',
             params: { day: wd.day, month: wd.month + 1, year: wd.year },
           }"
-          >{{ wd.day  }}</router-link
+          >{{ wd.day }}</router-link
         >
       </div>
     </div>
     <div
       class="grid-container week-hours-area"
-      :class="{ 'empty-days': aw.empty_days }"
+      :class="{ 'empty-days': false }"
     >
-      <template
-        v-for="ch in aw.week_cells"
-        :key="ch.week_day + '/' + ch.hora_in_seconds"
-      >
-        <transition name="fade" mode="out-in">
-          <div
-            :style="{ '--intervals': ch.intervals } as any"
-            :class="[
-              'day-' + ch.week_day,
-              'num-interval',
-              'has-consulta',
-              ch.consulta.realizada ? 'consulta-realizada' : '',
-              !ch.consulta.realizada &&
-              now.valueOf() >
-                ch.consulta.marcada.valueOf() + ch.consulta.duracao * 1000
-                ? 'no-consulta-realizada'
-                : '',
-            ]"
-            v-if="ch.consulta"
-            @click="updateConsulta(ch.consulta)"
-            :key="ch.consulta.marcada.valueOf()"
-            @mouseenter="posFullDetail"
-          >
-            <div class="consulta-detail">
-              <span class="consulta-start">{{
-                ch.consulta.intervalo.start.hhmm
-              }}</span>
-
-              <strong class="full-name"
-                >{{ ch.consulta.cliente_nome }}
-                {{ ch.consulta.cliente_sobrenome }}
-              </strong>
-              <span class="consulta-end">{{
-                ch.consulta.intervalo.end.hhmm
-              }}</span>
-            </div>
-            <div class="consulta-full-detail">
-              <div class="consulta-row">
+      <template v-for="(aps, wkd) in week_agenda" :key="wkd">
+        <div :class="['week-day-column']">
+          <template v-for="scap in aps" :key="scap.key">
+            <div
+              v-if="scap.appointments !== undefined"
+              class="day-schedule"
+              :style="{ 'min-height': scap.height + 'em' }"
+            >
+              <div class="sc-top-info">
+                <span>{{ scap.start_time.toClockTime() }}</span>
+                <strong> {{ scap.specialty }} </strong>
+                <a class="icon-new-appointment">
+                  <font-awesome-icon :icon="['fa', 'plus']"></font-awesome-icon>
+                </a>
+              </div>
+              <div class="sc-appointments">
+                <div
+                  v-for="sap in scap.appointments"
+                  class="day-appointment"
+                  :style="{ height: sap.height + 'em' }"
+                  :key="sap.key"
+                >
+                  <div class="ap-top-info">
+                    <span>{{ sap.start_time.toClockTime() }}</span>
+                    <span :class="{ 'not-end-time': !sap.end_time }">{{
+                      sap.end_time ? sap.end_time.toClockTime() : "88:88"
+                    }}</span>
+                  </div>
+                  <div class="ap-patient">{{ sap.patient }}</div>
+                </div>
+              </div>
+              <span class="sc-bottom-info">
                 <span>
-                  {{ WeekDay[ch.consulta.marcada.getDay()] }}
-                  {{ ch.consulta.marcada.getDate() }} de
-                  {{ Month[ch.consulta.marcada.getMonth()][0] }} de
-                  {{ ch.consulta.marcada.getFullYear() }}
+                  {{ scap.appointments.length }}/{{ scap.max_visits }}
                 </span>
                 <span>
-                  {{ ch.consulta.intervalo.start.hhmm }} até
-                  {{ ch.consulta.intervalo.end.hhmm }}
+                  {{ scap.end_time.toClockTime() }}
                 </span>
-              </div>
-              <div class="consulta-row">
-                <label for="consulta.paciente-nome"
-                  ><font-awesome-icon
-                    :icon="['fa', 'user-alt']"
-                  ></font-awesome-icon
-                ></label>
-                <span id="consulta.paciente-nome"
-                  >{{ ch.consulta.cliente_nome }}
-                  {{ ch.consulta.cliente_sobrenome }}</span
-                >
-              </div>
-              <div class="consulta-row">
-                <label for="consulta.paciente-telefone"
-                  ><font-awesome-icon
-                    :icon="['fab', 'whatsapp-square']"
-                  ></font-awesome-icon
-                ></label>
-                <span id="consulta.paciente-telefone"
-                  >{{
-                    "(" +
-                    ch.consulta.cliente_telefone.slice(0, 2) +
-                    ")" +
-                    " 9 " +
-                    ch.consulta.cliente_telefone.slice(2, 6) +
-                    "-" +
-                    ch.consulta.cliente_telefone.slice(6)
-                  }}
-                </span>
-              </div>
-              <div class="consulta-row">
-                <template
-                  v-if="
-                    now.valueOf() <
-                    ch.consulta.marcada.valueOf() + ch.consulta.duracao * 1000
-                  "
-                >
-                  <label for="consulta.status"
-                    ><font-awesome-icon
-                      :icon="['fa', 'minus-circle']"
-                    ></font-awesome-icon
-                  ></label>
-                  <span id="consulta.status"> Aguardando </span></template
-                >
-                <template v-else-if="ch.consulta.realizada">
-                  <label for="consulta.status"
-                    ><font-awesome-icon
-                      :icon="['fa', 'check-circle']"
-                    ></font-awesome-icon
-                  ></label>
-                  <span id="consulta.status"> Realizada </span>
-                </template>
-                <template v-else>
-                  <label for="consulta.status"
-                    ><font-awesome-icon
-                      :icon="['fa', 'times-circle']"
-                    ></font-awesome-icon
-                  ></label>
-                  <span id="consulta.status"> Não realizada </span></template
-                >
-              </div>
-              <div class="consulta-row">
-                <fieldset class="consulta-descricao">
-                  <legend>Descrição</legend>
-                  {{ ch.consulta.descricao }}
-                </fieldset>
-              </div>
+              </span>
             </div>
-          </div>
-          <div
-            :style="{ '--intervals': ch.intervals } as any"
-            :class="[
-              'day-' + ch.week_day,
-              'num-interval',
-              ch.valid_horario ? 'valid-horario' : 'invalid-horario',
-            ]"
-            @click="
-              ch.valid_horario && newConsulta(ch.hora_in_seconds, ch.week_day)
-            "
-            v-else
-          ></div>
-        </transition>
+            <div
+              v-else
+              class="day-appointment"
+              :style="{ height: scap.height + 'em' }"
+            >
+              <div class="ap-top-info">
+                <span>{{ scap.start_time.toClockTime() }}</span>
+                <strong>{{ scap.specialty }}</strong>
+                <span :class="{ 'not-end-time': !scap.end_time }">{{
+                  scap.end_time ? scap.end_time.toClockTime() : "88:88"
+                }}</span>
+              </div>
+              <div class="ap-patient">{{ scap.patient }}</div>
+            </div>
+          </template>
+        </div>
       </template>
     </div>
   </div>
@@ -172,7 +98,7 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       week_days: "calendar/getWeekDays",
-      aw: "clinica/getWeek",
+      week_agenda: "agenda/getWeek",
     }),
     ...mapState("calendar", ["current_date", "period", "now"]),
   },
@@ -277,8 +203,8 @@ export default defineComponent({
     "wha" 1fr;
   font-size: 1rem;
   min-width: 900px;
-  min-height: 400px;
-  grid-gap: .7em;
+  min-height: 100%;
+  grid-gap: 0.7em;
   background-color: var(--bg-period-week);
   overflow-x: hidden;
 }
@@ -297,12 +223,13 @@ export default defineComponent({
 }
 
 #period-week .grid-container {
-  grid-gap: .3em;
+  grid-gap: 0.5em;
 }
 
 .timezone,
 .week-row {
-  position: -webkit-sticky; /* Safari */
+  position: -webkit-sticky;
+  /* Safari */
   position: sticky;
   top: 0;
   height: 100%;
@@ -395,6 +322,7 @@ export default defineComponent({
 .hours-column {
   grid-area: hc;
 }
+
 .hours-column .hour {
   --offset: -1.5vh;
   display: flex;
@@ -420,6 +348,7 @@ export default defineComponent({
   background: linear-gradient(var(--bg-valid-horario), var(--bg-period-week));
   border-radius: 3px;
 }
+
 .hours-column .hour.big-jump > .interval-fill {
   background: linear-gradient(
     var(--bg-valid-horario),
@@ -448,6 +377,7 @@ export default defineComponent({
   transition: all 0.7s;
   cursor: pointer;
 }
+
 .week-hours-area .valid-horario:hover {
   background-color: var(--bg-valid-horario-hv);
 }
@@ -468,6 +398,7 @@ export default defineComponent({
 .has-consulta.consulta-realizada {
   background-color: green;
 }
+
 .has-consulta.no-consulta-realizada {
   background-color: rgb(148, 0, 12);
 }
@@ -508,6 +439,7 @@ export default defineComponent({
   display: block;
   text-align: center;
 }
+
 .has-consulta .consulta-full-detail > .consulta-row {
   display: flex;
   align-items: center;
@@ -655,5 +587,98 @@ export default defineComponent({
 
 .week-hours-area .day-6 {
   grid-column: 7;
+}
+
+.week-hours-area .week-day-column {
+  display: grid;
+  background-color: rgb(238, 238, 238);
+  border-radius: 2px;
+  grid-template-columns: 1fr;
+  grid-gap: 0.5em;
+  justify-content: start;
+  align-content: start;
+}
+
+.day-schedule,
+.day-appointment {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(122, 190, 249);
+  border-radius: 0.6em 0em 0.6em 0px;
+  height: auto;
+  width: 100%;
+}
+
+.day-schedule .sc-top-info {
+  display: flex;
+  font-size: 0.8em;
+  padding: 0.3em 0.8em;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.day-schedule .sc-appointments {
+  display: grid;
+  flex: 1;
+  border-top: solid 1px rgb(44, 44, 44);
+  border-bottom: solid 1px rgb(44, 44, 44);
+  padding: 1em 2px;
+  grid-gap: 0.3em;
+  justify-content: start;
+  align-content: start;
+  grid-template-columns: 1fr;
+}
+
+.day-schedule .sc-bottom-info {
+  display: flex;
+  font-size: 0.8em;
+  padding: 0.3em 0.8em;
+  justify-content: space-between;
+}
+
+.icon-new-appointment {
+  display: flex;
+  cursor: pointer;
+  color: white;
+  background-color: rgb(0, 115, 27);
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+}
+
+.day-appointment {
+  cursor: pointer;
+  font-size: 0.7em;
+  color: white;
+  border-radius: 0.3em;
+  background-color: rgb(18, 106, 199);
+  transition: all 0.3s ease-in-out;
+}
+
+.day-appointment .ap-top-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3em 0.8em;
+}
+
+.day-appointment .ap-patient {
+  flex: 1;
+  display: flex;
+  border-top: solid 1px white;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.day-appointment:hover {
+  background-color: rgba(18, 105, 199, 0.85);
+}
+
+.not-end-time {
+  visibility: hidden;
 }
 </style>

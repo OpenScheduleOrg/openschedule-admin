@@ -50,7 +50,7 @@ export default defineComponent({
 #main.grid-container {
   grid-template:
     [header-left] "hd hd" 10.5vh [header-right]
-    [main-left] "nav  main" 2fr / 1fr 9fr [main-right];
+    [main-left] "nav  main" 2fr / 22vw 1fr [main-right];
   grid-template-rows: 10.5vmin minmax(0, 1fr);
   grid-gap: 0.15rem;
   height: 100vh;
@@ -67,8 +67,9 @@ header.grid-item {
 aside.grid-item {
   grid-area: nav;
   flex-direction: column;
-  padding: 0.7rem;
+  padding: 0.5rem 0.7rem 0.7rem 0.7rem;
   justify-content: space-between;
+  overflow: auto;
 }
 main.grid-item {
   position: relative;
