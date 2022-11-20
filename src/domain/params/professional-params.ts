@@ -9,4 +9,5 @@ export type ProfessionalBody = {
 
 export type ProfessionalFilter = {
   name?: string;
+  limit?: number;
 };

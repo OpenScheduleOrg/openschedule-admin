@@ -11,6 +11,6 @@ export type ScheduleModel = {
   clinic_name: string;
   speicalty_id: number;
   specialty_description: string;
-  professional_id: string;
+  professional_id: number;
   professional_name: string;
 };

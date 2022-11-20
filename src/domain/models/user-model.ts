@@ -3,5 +3,5 @@ export type UserModel = {
   name: string;
   username: string;
   email: string;
-  clinic_id: string;
+  clinic_id: number;
 };

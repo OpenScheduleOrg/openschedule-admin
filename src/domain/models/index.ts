@@ -6,4 +6,4 @@ export * from "./patient-model";
 export * from "./professional-model";
 export * from "./schedule-model";
 export * from "./specialty-model";
-export * from "./user-response-model";
+export * from "./user-model";
