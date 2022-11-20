@@ -5,14 +5,14 @@
   <div class="hd-center">
     <div class="nav-calendar">
       <router-link
-        class="hd_button"
+        class="hd-button"
         :class="{ 'is-today': isToday && isAgendaRoute }"
         :to="{ name: period }"
       >
         hoje
       </router-link>
       <router-link
-        class="prev-next"
+        class="nav-prev-next"
         :to="{
           name: period,
           params: {
@@ -25,7 +25,7 @@
         <font-awesome-icon icon="chevron-left" />
       </router-link>
       <router-link
-        class="prev-next"
+        class="nav-prev-next"
         :to="{
           name: period,
           params: {
@@ -41,7 +41,7 @@
     </div>
     <div class="period-calendar">
       <router-link
-        class="hd_button"
+        class="hd-button"
         v-for="(text, p) in periods"
         :class="{ 'selected-period': isActivedPeriod(p) && isAgendaRoute }"
         :key="p"
@@ -59,6 +59,13 @@
     </div>
   </div>
   <div class="hd-right">
+    <div class="operations">
+      <a class="hd-button new-appointment">
+        <font-awesome-icon icon="plus"></font-awesome-icon>
+        Nova consulta
+      </a>
+    </div>
+
     <div class="dropdown">
       <button id="btn-dropdown">
         <img
@@ -74,9 +81,7 @@
             alt="w3schools"
           />
           <div>
-            <span :title="current_user?.name"
-              >{{ current_user?.name }}</span
-            >
+            <span :title="current_user?.name">{{ current_user?.name }}</span>
             <span class="text-continous" :title="current_user?.email">{{
               current_user?.email
             }}</span>
@@ -137,14 +142,19 @@ export default defineComponent({
 header.grid-item > div,
 .nav-calendar,
 .dropdown {
-  height: 100%;
   display: flex;
+  height: 100%;
   align-items: center;
-  justify-content: space-between;
 }
+
+.nav-calendar {
+  width: 50%;
+}
+
 .hd-left {
   width: 20%;
 }
+
 .hd-center {
   width: 60%;
   padding: 0 8px;
@@ -161,40 +171,49 @@ header.grid-item > div,
   font-weight: bolder;
 }
 
-a.hd_button {
-  padding: 0.5rem 0.8rem;
+a.hd-button {
+  padding: 0.7em 0.85em;
   font-weight: bold;
   margin: 0 6px;
-  border: solid 1.3px rgb(216, 216, 216);
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 0.9rem;
+  border: solid 1px rgb(255, 255, 255);
+  transition: all .3s;
 }
 .nav-calendar > .button {
   margin-right: 18px;
 }
-.prev-next > * {
-  height: 1.3rem;
-  width: 1.3rem;
-}
-.prev-next {
-  padding: 0.4rem 0.4rem;
+
+.nav-prev-next {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+  width: 2rem;
   font-weight: bold;
   font-size: 1.2rem;
   border-radius: 50%;
-  transition: background-color 0.3s;
+  transition: color 0.3s;
 }
-a.hd_button:hover,
-.prev-next:hover {
-  background-color: rgba(241, 241, 241, 0.158);
+
+.nav-prev-next > * {
+  height: 1.3rem;
+  width: 1.3rem;
 }
-.prev-next:active {
-  background-color: rgba(241, 241, 241, 0.432);
+
+a.hd-button:hover,
+.nav-prev-next:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.nav-prev-next:active {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .today-date {
   font-size: 1.5rem;
   margin: 0 0.2rem;
 }
+
 .hd-center a {
   text-transform: uppercase;
 }
@@ -301,4 +320,21 @@ img {
 .dropdown-link:hover {
   background-color: rgb(228, 228, 228);
 }
+
+.operations {
+  display: flex;
+  align-items: center;
+}
+
+.hd-button.new-appointment {
+  cursor: pointer;
+  background-color: #028536;
+  border-color: #028536;
+}
+
+.hd-button.new-appointment:hover{
+  background-color: #018d39;
+  border-color: #00903a;
+}
+
 </style>

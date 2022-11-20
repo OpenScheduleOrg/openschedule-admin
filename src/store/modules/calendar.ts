@@ -119,7 +119,6 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
   },
   getters: {
     getDateString(state) {
-      let other_date: Date;
       const month = state.current_date.getMonth();
       const day = state.current_date.getDate();
       const year = state.current_date.getFullYear();
@@ -128,11 +127,7 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
         return day + " de " + Month[month][0] + " de " + year;
       }
 
-      if (state.period == Period.Agenda) {
-        other_date = new Date(year, month + 6, day);
-      } else {
-        other_date = monthBetween(state.current_date);
-      }
+      const other_date = monthBetween(state.current_date);
 
       if (
         other_date.getMonth() !== month ||

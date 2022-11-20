@@ -16,13 +16,6 @@ const children: RouteRecordRaw[] = [
     component: () => import("@/presentation/components/Agenda.vue"),
     children: [
       {
-        path: "/agenda" + agendaParams,
-        name: "agenda",
-        component: () =>
-          import("@/presentation/components/period/Consultas.vue"),
-        meta: { title: "Agenda - CONSULTAS" },
-      },
-      {
         path: "/agenda/week" + agendaParams,
         name: "week",
         component: () => import("@/presentation/components/period/Week.vue"),

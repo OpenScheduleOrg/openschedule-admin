@@ -1,7 +1,6 @@
 export const DEFAULT_TITLE = "ConsuChat";
 
 export enum Period {
-  Agenda = "agenda",
   Day = "day",
   Week = "week",
 }
@@ -10,7 +9,6 @@ export const Periods: { [lang: string]: { [p in Period]: string } } = {
   "pt-BR": {
     [Period.Day]: "Dia",
     [Period.Week]: "Semana",
-    [Period.Agenda]: "Consultas",
   },
 };
 export const MIN_INTERVAL = 15 * 60;
