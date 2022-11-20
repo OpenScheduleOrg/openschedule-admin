@@ -1,4 +1,5 @@
 export * from "./store";
+export * from "./agenda";
 
 export type DayTime = {
   his: number;
