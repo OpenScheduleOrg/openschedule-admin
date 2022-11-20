@@ -4,5 +4,5 @@ export type PatientModel = {
   cpf: string;
   phone: string;
   address?: string;
-  birhtdate?: Date;
+  birthdate?: Date;
 };
