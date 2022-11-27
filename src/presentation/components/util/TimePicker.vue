@@ -35,11 +35,9 @@
           readonly="true"
           tabindex="-1"
         />
-
         <div
           :class="{
             'drop-icon-wrapper': true,
-            'drop-open': show,
           }"
         >
           <font-awesome-icon class="drop-icon" :icon="['fa', 'clock']" />
@@ -108,12 +106,13 @@ export default defineComponent({
   data(): ComponentData {
     const clock = (this.$props.custom_clock as boolean[][]) || default_clock;
     clock[-1] = default_clock[-1];
+
     return {
       show: false,
       validation_message: undefined,
       clock,
-      hours: -1,
-      minutes: -1,
+      hours: this.modelValue !== undefined ? (this.modelValue / 60) >> 0 : -1,
+      minutes: this.modelValue !== undefined ? this.modelValue % 60 : -1,
     };
   },
   props: {
@@ -130,11 +129,16 @@ export default defineComponent({
     toggle() {
       this.show = !this.show && !this.disabled;
       if (this.show == false) this.validate();
-      if (this.modelValue == undefined) this.$emit("update:modelValue", -1);
+      if (this.show == false && this.minutes < 0) {
+        this.hours = -1;
+        this.minutes = -1;
+        this.$emit("update:modelValue", -1);
+      }
     },
     setHours(hours: number) {
       this.hours = hours;
       this.minutes = -1;
+      this.validate();
     },
     setMinutes(minutes: number) {
       this.minutes = minutes;
@@ -145,23 +149,13 @@ export default defineComponent({
     validate() {
       if (this.required && this.hours < 0 && this.minutes < 0)
         this.validation_message = "Campo obrigatória";
-      else if (
-        (this.required && (this.hours < 0 || this.minutes < 0)) ||
-        (this.hours >= 0 && this.minutes < 0)
-      )
-        this.validation_message = "Horário inválido";
       else this.validation_message = undefined;
-      this.$emit(
-        "updateValidation",
-        this.name,
-        this.hours >= 0 && this.minutes >= 0
-      );
+      this.$emit("updateValidation", this.name, !this.validation_message);
     },
   },
   watch: {
     modelValue(t) {
-      console.log(t);
-      if (t === undefined || t < 0) {
+      if (t == null  || t == undefined || t < 0) {
         this.hours = -1;
         this.minutes = -1;
       } else {
@@ -196,12 +190,7 @@ export default defineComponent({
   display: block;
   background-color: inherit;
   padding: 12px 0 6px 0;
-  color: inherit;
   cursor: inherit;
-}
-
-.input-not-empty .show-time {
-  color: rgb(65, 65, 65);
 }
 
 .drop-icon-wrapper {

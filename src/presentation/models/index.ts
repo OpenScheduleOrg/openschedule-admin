@@ -1,1 +1,1 @@
-export type OptionSelect = { value: string | number; label: string };
+export type OptionSelect = { value: number; label: string };
