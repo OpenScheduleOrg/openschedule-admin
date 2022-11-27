@@ -120,4 +120,10 @@ export default defineComponent({
 .not-editable {
   pointer-events: none;
 }
+
+.form-group .input-field:focus-within .field-name {
+  font-size: 1.1em;
+  left: 0;
+  top: 0;
+}
 </style>

@@ -135,15 +135,12 @@ export default defineComponent({
   letter-spacing: normal;
 }
 
-.form-group .input-field:focus-within .field-name,
 .form-group .input-field.input-not-empty .field-name {
   font-size: 1.1em;
   left: 0;
   top: 0;
 }
-.form-group:not(.input-is-invalid)
-  .input-field:focus-within
-  .field-name,
+
 .form-group:not(.input-is-invalid)
   .input-field.input-not-empty
   .field-name {
