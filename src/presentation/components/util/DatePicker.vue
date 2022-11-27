@@ -1,35 +1,57 @@
 <template>
-  <div class="form-group">
-    <div class="date-picker">
-      <div class="field-container" @click="show_calendar = !show_calendar">
-        <font-awesome-icon icon="calendar-alt" class="field-icon" />
-        <text-field
-          :modelValue="date_text"
-          ref="inpud-"
-          :field_name="field_name"
-          :maxlength="10"
-          :not_editable="true"
-          :manual_focus="show_calendar"
-        ></text-field>
+  <div
+    :class="{
+      'form-group': true,
+      'input-is-invalid': !!validation_message,
+    }"
+  >
+    <div class="field-container">
+      <div
+        :class="{
+          'input-field': true,
+          'input-not-empty': visible || date_text,
+          'input-disabled': disabled,
+        }"
+        @click="visible ? hide() : show()"
+      >
+        <label class="field-name" for="input-field-text" v-if="label">{{
+          label
+        }}</label>
+        <input
+          type="text"
+          ref="input_text"
+          name="input-field-text"
+          :class="{
+            'show-time': true,
+          }"
+          :value="date_text"
+          autocomplete="off"
+          readonly="true"
+          tabindex="-1"
+        />
+        <div
+          :class="{
+            'drop-icon-wrapper': true,
+          }"
+        >
+          <font-awesome-icon class="drop-icon" :icon="['fa', 'calendar-alt']" />
+        </div>
       </div>
       <div
         :class="{
           'calendar-picker': true,
-          'show-calendar-picker': show_calendar,
+          'show-calendar-picker': visible,
         }"
       >
         <div class="calendar-header">
           <div class="calendar-detail">
-            <span class="calendar-year">
-              {{ current_date.getFullYear() }}</span
-            >
+            <span class="calendar-year"> {{ current_date.getFullYear() }}</span>
             <span class="calendar-wd-month">
               {{ current_wd_text }}, {{ current_month_text }}</span
             >
             <span class="calendar-day"> {{ current_date.getDate() }}</span>
           </div>
         </div>
-
         <div class="calendar-main" v-if="show_years">
           <div class="calendar-nav calendar-show-years">
             <span class="calendar-month-year">
@@ -81,10 +103,7 @@
               {{ offset_date.getFullYear() }}
             </span>
             <div class="nav-month">
-              <span
-                class="noselect prev-next"
-                @click="setOffsetDateYear(-1)"
-              >
+              <span class="noselect prev-next" @click="setOffsetDateYear(-1)">
                 <font-awesome-icon icon="chevron-left" />
               </span>
               <span class="noselect prev-next" @click="setOffsetDateYear(1)">
@@ -113,10 +132,7 @@
               {{ offset_month_year }}
             </span>
             <div class="nav-month">
-              <span
-                class="noselect prev-next"
-                @click="setOffsetDateMonth(-1)"
-              >
+              <span class="noselect prev-next" @click="setOffsetDateMonth(-1)">
                 <font-awesome-icon icon="chevron-left" />
               </span>
               <span
@@ -124,10 +140,7 @@
                 @click="setNewCurrentDate(new Date())"
                 >Hoje</span
               >
-              <span
-                class="noselect prev-next"
-                @click="setOffsetDateMonth(1)"
-              >
+              <span class="noselect prev-next" @click="setOffsetDateMonth(1)">
                 <font-awesome-icon icon="chevron-right" />
               </span>
             </div>
@@ -161,13 +174,18 @@
         </div>
       </div>
     </div>
+    <div class="advise">
+      <font-awesome-icon v-if="validation_message" icon="exclamation-circle" />
+      <span> {{ validation_message }}</span>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import TextField from "./TextField.vue";
 import { Month, WeekDayShort } from "@/common/constants";
+
+import { addDays } from "date-fns";
 
 export default defineComponent({
   name: "DatePicker",
@@ -197,45 +215,61 @@ export default defineComponent({
       four_two,
       offset_date,
       offset_month_year,
-      show_calendar: false,
+      visible: false,
       show_months: false,
       show_years: false,
       months,
       ten_years: [] as number[],
       decade_start,
       decade_end,
+      validation_message: undefined as string | undefined,
     };
-  },
-  components: {
-    TextField,
   },
   props: {
     modelValue: Date,
-    field_name: String,
-    valid: Boolean,
-    readonly: Boolean,
-    advise: String,
+    name: String,
+    label: String,
+    validation: Object,
+    required: Boolean,
+    disabled: Boolean,
   },
   watch: {
     modelValue(n) {
       if (n) this.setNewCurrentDate(n);
     },
   },
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "updateValidation"],
   computed: {
     date_text() {
-      if (!this.modelValue) return "Campo vazio";
+      if (!this.modelValue) return "";
       return this.current_date.toLocaleDateString();
     },
   },
   methods: {
+    show() {
+      this.visible = true;
+    },
+    hide() {
+      this.visible = false;
+      this.validate();
+    },
+    validate() {
+      if (this.required && !this.date_text)
+        this.validation_message = "Seleção obrigatória";
+      else this.validation_message = undefined;
+      this.$emit(
+        "updateValidation",
+        this.name,
+        !!this.date_text || !this.required
+      );
+    },
     getSixWeeks(offset_date: any, current_date: any) {
       const days = [];
       const today = new Date();
 
-      let d = offset_date.addDays(-offset_date.getDay() - 1);
+      let d = addDays(offset_date, -offset_date.getDay() - 1);
       for (let i = 0; i < 42; i++) {
-        d = d.addDays(1);
+        d = addDays(d, 1);
         days[i] = {
           date: new Date(d.getFullYear(), d.getMonth(), d.getDate()),
           outMonth: d.getMonth() != offset_date.getMonth(),
@@ -263,8 +297,7 @@ export default defineComponent({
         " de " +
         this.offset_date.getFullYear();
 
-      this.show_calendar = false;
-
+      this.hide();
       this.$emit("update:modelValue", new_date);
     },
     setOffsetDateMonth(offset: number) {
@@ -336,25 +369,36 @@ export default defineComponent({
 
 <style scoped>
 .field-container {
+  cursor: initial;
+}
+
+.input-field {
   cursor: pointer;
 }
 
-.date-picker {
-  position: relative;
+.show-time {
+  display: block;
+  background-color: inherit;
+  padding: 12px 0 6px 0;
+  cursor: inherit;
+}
+
+.drop-icon-wrapper {
+  position: absolute;
+  top: 10px;
+  transform: translateY(60%);
+  right: 4px;
+  font-size: 1.1em;
+  width: auto;
 }
 
 .field-icon {
   margin-bottom: 18px;
 }
 
-.date-picker:focus-within,
-.date-picker:hover {
-  color: var(--line-color-hover);
-}
-
 .calendar-picker {
   position: absolute;
-  top: 0;
+  top: -8em;
   left: 0;
   transition: all 0.2s;
   visibility: hidden;
@@ -365,9 +409,7 @@ export default defineComponent({
 .calendar-picker.show-calendar-picker {
   visibility: visible;
   opacity: 1;
-  left: 30px;
-  transform: translateY(0);
-  transform: translateY(-88%);
+  top: 99%;
 }
 
 .calendar-main {
@@ -418,5 +460,18 @@ export default defineComponent({
 .twelve-months span:hover,
 .ten-years span:hover {
   background-color: rgba(0, 0, 0, 0.212);
+}
+
+.drop-icon-wrapper {
+  position: absolute;
+  top: 10px;
+  transform: translateY(60%);
+  right: 4px;
+  font-size: 1.1em;
+  width: auto;
+}
+
+.input-disabled .drop-icon-wrapper {
+  color: rgba(85, 85, 85, 0.363);
 }
 </style>

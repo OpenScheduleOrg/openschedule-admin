@@ -2,8 +2,7 @@
   <div
     :class="{
       'form-group': true,
-      'input-is-valid': valid && !advise,
-      'input-is-invalid': advise,
+      'input-is-invalid': validation_message,
     }"
   >
     <div class="field-container">
@@ -15,10 +14,9 @@
           'manual-focus': manual_focus,
         }"
       >
-        <label class="field-name" for="input-field-text" v-if="field_name">{{
-          field_name
+        <label class="field-name" for="input-field-text" v-if="label">{{
+          label
         }}</label>
-
         <textarea
           :class="{
             'input-textarea': true,
@@ -33,8 +31,8 @@
       </div>
     </div>
     <div class="advise">
-      <font-awesome-icon v-if="advise" icon="exclamation-circle" />
-      <span> {{ advise }}</span>
+      <font-awesome-icon v-if="validation_message" icon="exclamation-circle" />
+      <span> {{ validation_message }}</span>
     </div>
   </div>
 </template>
@@ -46,14 +44,13 @@ export default defineComponent({
   name: "TextArea",
   data() {
     const text = this.modelValue;
-    return { text };
+    return { text, validation_message: undefined };
   },
   props: {
     modelValue: String,
-    field_name: String,
+    label: String,
     valid: Boolean,
     readonly: Boolean,
-    advise: String,
     maxlength: Number,
     not_editable: Boolean,
     manual_focus: Boolean,
@@ -64,6 +61,9 @@ export default defineComponent({
     text(n) {
       this.$emit("update:modelValue", n);
     },
+    modelValue(text: string) {
+      this.text = text;
+    },
   },
 });
 </script>
@@ -72,7 +72,6 @@ export default defineComponent({
 .input-textarea {
   display: block;
   background-color: rgb(231, 231, 231);
-  color: inherit;
   margin-top: 12px;
   padding: 4px;
   font-family: Oxygen, Roboto, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
