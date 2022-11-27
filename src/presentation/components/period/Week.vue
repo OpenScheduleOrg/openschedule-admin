@@ -84,7 +84,6 @@ import { getUTCOffset } from "@/utils";
 import { defineComponent } from "vue";
 import { mapState, mapGetters } from "vuex";
 import { Month, WeekDay } from "@/common/constants";
-import { Consulta } from "@/store/models";
 
 export default defineComponent({
   name: "Week",
@@ -103,34 +102,6 @@ export default defineComponent({
     ...mapState("calendar", ["current_date", "period", "now"]),
   },
   methods: {
-    async newConsulta(his: number, wd: number) {
-      const new_current_date = this.$store.getters[
-        "clinica/getConsultaDatetime"
-      ](his, wd);
-
-      await this.$router.push({
-        name: this.period,
-        params: {
-          day: new_current_date.getDate(),
-          month: new_current_date.getMonth() + 1,
-          year: new_current_date.getFullYear(),
-        },
-      });
-
-      this.$emit("new-consulta", his);
-    },
-    async updateConsulta(s_consulta: Consulta) {
-      await this.$router.push({
-        name: this.period,
-        params: {
-          day: s_consulta.marcada.getDate(),
-          month: s_consulta.marcada.getMonth() + 1,
-          year: s_consulta.marcada.getFullYear(),
-        },
-      });
-
-      this.$emit("update-consulta", s_consulta);
-    },
     posFullDetail() {
       const mgt = document.querySelector("main.grid-item") as Element;
       const consultas_full_detail = document.querySelectorAll(

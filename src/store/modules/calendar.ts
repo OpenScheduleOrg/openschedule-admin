@@ -9,9 +9,8 @@ import {
 } from "./mutation-types";
 import { Month, Period, WeekDayShort } from "@/common/constants";
 import { monthBetween, setPeriod, getPeriod } from "@/utils";
-import { Consulta, DayDetail, SixWeeksDay } from "@/store/models";
 
-import { startOfWeek, addDays, formatISO } from "date-fns";
+import { startOfWeek, addDays } from "date-fns";
 
 const today = new Date();
 
@@ -194,69 +193,6 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
       }
 
       return days;
-    },
-    getDatePickerSixWeeks(state, getters, rootState, rootGetters) {
-      const current_date = state.current_date;
-      const today = new Date();
-      const days: SixWeeksDay[] = [];
-      const date_picker: {
-        current_month?: string;
-        current_week_day?: string;
-        current_year?: number;
-        current_day?: number;
-        offset_month?: string;
-        offset_year?: number;
-        six_weeks?: SixWeeksDay[];
-      } = {
-        current_month: Month[current_date.getMonth()][1],
-        current_week_day: WeekDayShort[current_date.getDay()][1],
-        current_day: current_date.getDate(),
-        current_year: current_date.getFullYear(),
-      };
-
-      const start_month = new Date(
-        current_date.getFullYear(),
-        current_date.getMonth() + state.offset_month_picker,
-        1
-      );
-
-      date_picker.offset_month = Month[start_month.getMonth()][0];
-      date_picker.offset_year = start_month.getFullYear();
-
-      let day_details: {
-        consultas: Consulta[];
-        hs_free: DayDetail[];
-      };
-
-      let d: Date = addDays(start_month, -start_month.getDay() - 1);
-      for (let i = 0; i < 42; i++) {
-        d = addDays(d, 1);
-        day_details = rootGetters["clinica/getDayDetails"](
-          formatISO(d, { representation: "date" }),
-          d.getDay()
-        );
-        days[i] = {
-          day: d.getDate(),
-          month: d.getMonth(),
-          year: d.getFullYear(),
-          outMonth: d.getMonth() != start_month.getMonth(),
-          isToday:
-            today.getDate() == d.getDate() &&
-            today.getMonth() == d.getMonth() &&
-            today.getFullYear() == d.getFullYear(),
-          isSelected:
-            state.current_date.getDate() == d.getDate() &&
-            state.current_date.getMonth() == d.getMonth() &&
-            state.current_date.getFullYear() == d.getFullYear(),
-          valid_day:
-            day_details.consultas.length > 0 || day_details.hs_free.length > 0,
-          consultas: day_details.consultas,
-          hs_free: day_details.hs_free,
-        };
-      }
-
-      date_picker.six_weeks = days;
-      return date_picker;
     },
 
     getMonthOffset(state) {

@@ -3,11 +3,9 @@ import { createStore, Store, useStore as baseUseStore } from "vuex";
 import {
   StateAuth,
   StateCalendar,
-  StateClinica,
   StateClinics,
   CalendarModule,
   AuthModule,
-  ClinicaModule,
   ClinicsModule,
   StateProfessionals,
   ProfessionalsModule,
@@ -20,7 +18,6 @@ import {
 export type State = {
   auth: StateAuth;
   calendar: StateCalendar;
-  clinica: StateClinica;
   clinics: StateClinics;
   professional: StateProfessionals;
   schedule: StateSchedules;
@@ -33,7 +30,6 @@ export default createStore<State>({
   modules: {
     auth: AuthModule,
     calendar: CalendarModule,
-    clinica: ClinicaModule,
     clinics: ClinicsModule,
     professionals: ProfessionalsModule,
     schedules: SchedulesModule,

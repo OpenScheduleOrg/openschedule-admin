@@ -10,9 +10,6 @@ const children: RouteRecordRaw[] = [
   {
     path: "/agenda",
     name: SyName.rootAgenda,
-    beforeEnter: () => {
-      store.dispatch("clinica/setClinica");
-    },
     component: () => import("@/presentation/components/Agenda.vue"),
     children: [
       {

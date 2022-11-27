@@ -9,9 +9,9 @@ export const agendaGuard: NavigationGuard = function (to, from, next) {
   if (to.name && Object.values<RouteRecordName>(Period).includes(to.name)) {
     if (!intervaleUpdateState)
       intervaleUpdateState = setInterval(() => {
-        store.dispatch("clinica/setConsultas");
+        store.dispatch("agenda/updateAgenda");
         store.dispatch("calendar/setNow");
-      }, 6000);
+      }, 20000);
     const today = new Date();
     if (to.params.day && to.params.year && to.params.month) {
       const year = Number(to.params.year);
