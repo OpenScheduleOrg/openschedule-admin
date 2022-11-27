@@ -9,9 +9,10 @@ import {
 } from "./mutation-types";
 import { Month, Period, WeekDayShort } from "@/common/constants";
 import { monthBetween, setPeriod, getPeriod } from "@/utils";
+import { Consulta, DayDetail, SixWeeksDay } from "@/store/models";
 
-import { DayDetail, SixWeeksDay } from "@/store/models";
-import { Consulta } from "@/store/models";
+import { startOfWeek, addDays, formatISO } from "date-fns";
+
 const today = new Date();
 
 export interface StateCalendar {
@@ -137,13 +138,13 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
     },
     getDatePrev(state) {
       const offset = state.period == Period.Week ? -7 : -1;
-      const date = state.current_date.addDays(offset);
+      const date = addDays(state.current_date, offset);
 
       return date;
     },
     getDateNext(state) {
       const offset = state.period == Period.Week ? 7 : 1;
-      const date = state.current_date.addDays(offset);
+      const date = addDays(state.current_date, offset);
       return date;
     },
     isActivedPeriod: (state) => (p: Period) => {
@@ -172,9 +173,9 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
         rootState.agenda.schedules.map((s) => s.week_day)
       );
 
-      let d: Date = start_month.addDays(-start_month.getDay() - 1);
+      let d: Date = addDays(start_month, -start_month.getDay() - 1);
       for (let i = 0; i < 42; i++) {
-        d = d.addDays(1);
+        d = addDays(d, 1);
         days[i] = {
           day: d.getDate(),
           month: d.getMonth(),
@@ -227,11 +228,11 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
         hs_free: DayDetail[];
       };
 
-      let d: Date = start_month.addDays(-start_month.getDay() - 1);
+      let d: Date = addDays(start_month, -start_month.getDay() - 1);
       for (let i = 0; i < 42; i++) {
-        d = d.addDays(1);
+        d = addDays(d, 1);
         day_details = rootGetters["clinica/getDayDetails"](
-          d.toISODate,
+          formatISO(d, { representation: "date" }),
           d.getDay()
         );
         days[i] = {
@@ -247,7 +248,7 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
             state.current_date.getDate() == d.getDate() &&
             state.current_date.getMonth() == d.getMonth() &&
             state.current_date.getFullYear() == d.getFullYear(),
-          isValidDay:
+          valid_day:
             day_details.consultas.length > 0 || day_details.hs_free.length > 0,
           consultas: day_details.consultas,
           hs_free: day_details.hs_free,
@@ -278,17 +279,17 @@ export const CalendarModule: Module<StateCalendar, stateRoot> = {
       }> = [];
       const today = new Date();
       const professional_week = new Set(
-        rootState.agenda.schedules.map((s) => s.week_day)
+        rootState.agenda.schedules.map((s) => (s.week_day + 1) % 7)
       );
 
       const current_date = state.current_date;
-      const weekDay = current_date.getDay();
+      const start_week = startOfWeek(current_date);
       let week_date;
       if (professional_week.size <= 0)
         for (let i = 0; i < 7; i++) professional_week.add(i);
 
       for (const wd of professional_week) {
-        week_date = current_date.addDays(wd - weekDay);
+        week_date = addDays(start_week, wd);
         week.push({
           day: week_date.getDate(),
           month: week_date.getMonth(),

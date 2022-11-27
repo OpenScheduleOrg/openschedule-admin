@@ -122,6 +122,8 @@ import { Cliente, Consulta } from "@/store/models";
 
 import { secondsToHorario } from "@/utils";
 
+import {addDays, formatISO } from "date-fns"
+
 export default defineComponent({
   name: "ConsultaForm",
   props: ["his", "s_consulta"],
@@ -138,7 +140,7 @@ export default defineComponent({
     }[];
   } {
     const current_date = this.$store.state.calendar.current_date;
-    const initial_iso_date = current_date.toISODate();
+    const initial_iso_date = formatISO(current_date, {representation: "date"});
     const initial_his = this.his ? this.his : this.s_consulta.his;
 
     const clinica_id = this.$store.state.clinica.id as number;
@@ -205,7 +207,6 @@ export default defineComponent({
   },
   methods: {
     async setCliente(cliente_id: number) {
-      console.log(cliente_id)
       // Mock cliente
       const res = {
         data: {
@@ -253,7 +254,7 @@ export default defineComponent({
       initial_his: number,
       consulta: { his: number; duracao: number; id?: number }
     ) {
-      const current_iso_date = ncd.toISODate();
+      const current_iso_date = formatISO(ncd, {representation: "date"});
       let { hs_free } = this.$store.getters["clinica/getDayDetails"](
         current_iso_date,
         ncd.getDay()

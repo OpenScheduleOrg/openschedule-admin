@@ -8,6 +8,8 @@ import {
   SET_HORARIOS,
 } from "./mutation-types";
 
+import { addDays, formatISO } from "date-fns";
+
 interface WeekCell {
   consulta?: Consulta;
   week_day: number;
@@ -40,11 +42,13 @@ export const ClinicaModule: Module<StateClinica, stateRoot> = {
       const consultas = state.consultas;
       const current_date = rootState.calendar.current_date;
       const weekDay = current_date.getDay();
-      const start_week = current_date.addDays(-weekDay);
+      const start_week = addDays(current_date, -weekDay);
 
       let iso_date: string;
       for (let wd = 0; wd < 7; wd++) {
-        iso_date = start_week.addDays(wd).toISODate();
+        iso_date = formatISO(addDays(start_week, wd), {
+          representation: "date",
+        });
         if (consultas[iso_date]) week_consultas[wd] = [...consultas[iso_date]];
       }
 
@@ -259,7 +263,8 @@ export const ClinicaModule: Module<StateClinica, stateRoot> = {
     },
     getConsultaDatetime:
       (state, getters, rootState) => (hs: number, wd: number) => {
-        const consulta_datetime = rootState.calendar.current_date.addDays(
+        const consulta_datetime = addDays(
+          rootState.calendar.current_date,
           wd - rootState.calendar.current_date.getDay()
         );
 

@@ -64,7 +64,7 @@
                   'is-selected': d.isSelected,
                   'out-month': d.outMonth,
                   'is-today': d.isToday,
-                  'is-invalid-day': !d.hs_free.length,
+                  'is-invalid-day': !d.valid_day,
                 }"
                 @click="
                   setNewCurrentDate({

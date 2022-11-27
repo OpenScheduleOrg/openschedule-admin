@@ -63,7 +63,7 @@ export const AgendaModule: Module<StateAgenda, stateRoot> = {
         day_schedules[sc.week_day].push({
           key: sc.id.toString() + "sc",
           schedule_id: sc.id,
-          date: start_week.addDays((sc.week_day + 1) % 6),
+          date: addDays(start_week, (sc.week_day + 1) % 6),
           start_time: sc.start_time,
           end_time: sc.end_time,
           height: calcHeightSchedule(sc.start_time, sc.end_time),

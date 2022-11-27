@@ -1,11 +1,12 @@
 import { Period } from "@/common/constants";
 import { Consulta, DayTime, Horario } from "@/store/models";
+import { addDays } from "date-fns";
 
 export function monthBetween(date: Date): Date {
   const month = date.getMonth();
 
-  const week_start = date.addDays(-date.getDay());
-  const week_end = date.addDays(7 - date.getDay());
+  const week_start = addDays(date, -date.getDay());
+  const week_end = addDays(date, 7 - date.getDay());
   if (week_start.getMonth() !== week_end.getMonth()) {
     if (week_start.getMonth() !== month) {
       return week_start;

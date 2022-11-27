@@ -13,7 +13,7 @@ export interface SixWeeksDay {
   isToday?: boolean;
   isSelected?: boolean;
   outMonth?: boolean;
-  isValidDay?: boolean;
+  valid_day: boolean;
   consultas: Consulta[];
   hs_free: DayDetail[];
 }
