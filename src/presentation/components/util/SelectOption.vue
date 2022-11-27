@@ -3,6 +3,7 @@
     :class="{
       'form-group': true,
       'input-is-invalid': !!validation_message,
+      'input-readonly': readonly,
     }"
   >
     <div class="field-container" @click="show_options ? hide() : show()">
@@ -10,7 +11,6 @@
         :class="{
           'input-field': true,
           'input-not-empty': show_options || selected,
-          'input-readonly': readonly,
           'manual-focus': manual_focus,
         }"
       >
@@ -71,7 +71,6 @@
 import { OptionSelect } from "@/presentation/models";
 import { defineComponent } from "vue";
 
-
 type ComponentData = {
   selected?: OptionSelect;
   validation_message?: string;
@@ -79,11 +78,14 @@ type ComponentData = {
 };
 
 export default defineComponent({
-  name: "Select",
+  name: "SelectOption",
   data(): ComponentData {
+    const options = this.$props.options as OptionSelect[];
+    const selected = options?.find((op) => op.value == this.$props.modelValue);
+
     return {
       show_options: false,
-      selected: undefined,
+      selected,
       validation_message: undefined,
     };
   },
@@ -93,7 +95,6 @@ export default defineComponent({
     label: String,
     empty_message: String,
     readonly: Boolean,
-    not_editable: Boolean,
     manual_focus: Boolean,
     options: Array,
     required: Boolean,
@@ -124,7 +125,7 @@ export default defineComponent({
     },
   },
   watch: {
-    modelValue(v) {
+    modelValue(v: number) {
       const options = this.options as OptionSelect[];
       this.selected = options.find((op) => op.value == v);
       this.validate();
@@ -213,7 +214,9 @@ export default defineComponent({
   top: 4.1em;
 }
 
-.input-readonly {
- cursor: initial;
+.input-readonly,
+.input-readonly * {
+  cursor: default !important;
+  pointer-events: none;
 }
 </style>
