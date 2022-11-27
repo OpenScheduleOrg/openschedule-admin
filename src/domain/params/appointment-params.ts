@@ -1,8 +1,9 @@
 export type AppointmentBody = {
   acting_id?: number;
+  patient_id?: number;
   complaint?: string;
   prescription?: string;
-  scheduled_day?: string;
+  scheduled_day?: Date;
   start_time?: number;
   end_time?: number;
 };
