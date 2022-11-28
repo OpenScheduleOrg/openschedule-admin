@@ -11,18 +11,36 @@
         </a>
         <div class="app-pac-nav">
           <button
-            @click="current_tab = tabs.appointment"
+            @click="setActiveTab(RECORD_TAB.appointment)"
             :class="{
-              active: current_tab == tabs.appointment,
+              active: active_tab == RECORD_TAB.appointment,
             }"
           >
             Consulta
           </button>
+          <button
+            @click="setActiveTab(RECORD_TAB.patient)"
+            :class="{
+              active: active_tab == RECORD_TAB.patient,
+            }"
+          >
+            Paciente
+          </button>
+          <button
+            @click="setActiveTab(RECORD_TAB.history)"
+            :class="{
+              active: active_tab == RECORD_TAB.history,
+            }"
+            :disabled="!patient_id"
+          >
+            Histórico
+          </button>
         </div>
         <div class="wrap-appointment-patient">
           <appointment-form
-            v-if="current_tab === tabs.appointment"
+            v-if="active_tab === RECORD_TAB.appointment"
           ></appointment-form>
+          <patient-form v-if="active_tab === RECORD_TAB.patient"></patient-form>
         </div>
       </div>
     </div>
@@ -31,28 +49,22 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import AppointmentForm from "./appointment/AppointmentForm.vue";
+import PatientForm from "./patient/PatientForm.vue";
 
-type ComponentData = {
-  tabs: { appointment: symbol; patient: symbol; history: symbol };
-  current_tab: symbol;
-};
-
-const tabs = {
-  appointment: Symbol("appointment-tab"),
-  patient: Symbol("patient-tab"),
-  history: Symbol("history-tab"),
-};
+import { RECORD_TAB } from "@/common/constants";
 
 export default defineComponent({
   name: "Record",
-  components: { AppointmentForm },
-  data(): ComponentData {
+  components: { AppointmentForm, PatientForm },
+  data() {
     return {
-      tabs,
-      current_tab: tabs.appointment,
+      RECORD_TAB,
     };
+  },
+  computed: {
+    ...mapState("record", ["patient_id", "active_tab"]),
   },
   methods: {
     closeModal(e: Event) {
@@ -60,6 +72,7 @@ export default defineComponent({
     },
     ...mapActions({
       resetCloseNewAppointment: "record/resetAndClose",
+      setActiveTab: "record/setActiveTab",
     }),
   },
 });

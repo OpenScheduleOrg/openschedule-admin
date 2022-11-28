@@ -85,13 +85,12 @@ import { ScheduleModel } from "@/domain/models";
 import { mapActions, mapState, mapGetters } from "vuex";
 import { appointmentService } from "@/domain/services";
 import hash from "object-hash";
-import { parseISO } from "date-fns"
+import { parseISO } from "date-fns";
 
 type ComponentData = {
   isLoading: boolean;
   field_valid: { [field: string]: boolean };
   body: AppointmentBody;
-  body_hash?: string;
   clocks: { end: boolean[][] };
   professional_schedules: ScheduleModel[];
   disable_watch: { [name: string]: boolean };
@@ -109,7 +108,8 @@ export default defineComponent({
   },
   data(): ComponentData {
     const appointment_id = this.$store.state.record.appointment_id;
-    const body = { ...this.$store.state.record.appointment };
+    const patient_id = this.$store.state.record.patient_id;
+    const body = { ...this.$store.state.record.appointment, patient_id };
 
     let end_clock: boolean[][] = [];
     if (body.start_time) this.updateClockEnd(body.start_time, end_clock);
@@ -125,7 +125,7 @@ export default defineComponent({
         acting_id: !!appointment_id || !!body.acting_id,
         start_time: !!appointment_id || !!body.start_time,
         scheduled_day: !!appointment_id || !!body.scheduled_day,
-        patient_id: !!appointment_id,
+        patient_id: !!appointment_id || !!patient_id,
       },
       body,
       clocks: { end: end_clock },
@@ -134,19 +134,19 @@ export default defineComponent({
     };
   },
   async created() {
-    if (this.appointment_id)
+    if (this.appointment_id && !this.hash_appointment)
       appointmentService.getById(this.appointment_id).then((appointment) => {
         this.body.acting_id = appointment.acting_id;
         this.body.patient_id = appointment.patient_id;
-        this.body.scheduled_day = parseISO(appointment.scheduled_day) as Date;
-          
+        this.body.scheduled_day = parseISO(appointment.scheduled_day);
+
         this.body.complaint = appointment.complaint || "";
         this.body.prescription = appointment.prescription || "";
         this.body.start_time = appointment.start_time;
         this.updateClockEnd(appointment.start_time, this.clocks.end);
         this.body.end_time = appointment.end_time;
 
-        this.body_hash = hash(this.body);
+        this.setHashAppointment(hash(this.body));
       });
   },
   computed: {
@@ -158,10 +158,9 @@ export default defineComponent({
     ...mapState("record", [
       "appointment",
       "appointment_id",
+      "hash_appointment",
     ]),
-    ...mapGetters("record", [
-      "actuations_options",
-    ]),
+    ...mapGetters("record", ["actuations_options"]),
   },
   methods: {
     updateClockEnd(start_seconds: number, clock: boolean[][]): void {
@@ -179,6 +178,9 @@ export default defineComponent({
       updateAgenda: "agenda/updateAgenda",
       loadSchedules: "schedules/load",
       resetCloseNewAppointment: "record/resetAndClose",
+      setRecordPatientId: "record/setRecordPatientId",
+      setRecordAppointment: "record/setRecordAppointment",
+      setHashAppointment: "record/setHashAppointment",
     }),
     updateValidation(field: string, valid: boolean) {
       this.field_valid[field] = valid;
@@ -191,7 +193,7 @@ export default defineComponent({
           ? payload.end_time
           : undefined;
 
-      if (this.appointment_id && this.body_hash != hash(this.body))
+      if (this.appointment_id && this.hash_appointment != hash(this.body))
         return appointmentService
           .update(this.appointment_id, payload as AppointmentBody)
           .then(() => {
@@ -199,10 +201,12 @@ export default defineComponent({
             this.close();
           });
       else if (!this.appointment_id)
-        return appointmentService.create(this.body as AppointmentBody).then(() => {
-          this.isLoading = false;
-          this.close();
-        });
+        return appointmentService
+          .create(this.body as AppointmentBody)
+          .then(() => {
+            this.isLoading = false;
+            this.close();
+          });
       this.close();
     },
     close() {
@@ -210,7 +214,9 @@ export default defineComponent({
       this.resetCloseNewAppointment();
     },
   },
-
+  beforeUnmount() {
+    this.setRecordAppointment(this.body);
+  },
   watch: {
     "body.start_time"(time_seconds: number) {
       if (this.disable_watch.start_time && this.appointment_id) {
@@ -225,6 +231,9 @@ export default defineComponent({
       }
       this.clocks.end = [];
       this.body.end_time = undefined;
+    },
+    "body.patient_id"(patient_id: number | undefined) {
+      this.setRecordPatientId(patient_id);
     },
   },
 });

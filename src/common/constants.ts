@@ -39,3 +39,9 @@ export const Month = [
   ["Novembro", "Nov"],
   ["Dezembro", "Dez"],
 ];
+
+export enum RECORD_TAB {
+  appointment = 1,
+  patient,
+  history,
+}
