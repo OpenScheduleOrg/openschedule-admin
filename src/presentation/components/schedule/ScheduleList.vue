@@ -5,7 +5,7 @@
       <div class="list-header">
         <Form>
           <select-option
-            :name="'profesional_id'"
+            :name="'professional_id'"
             :label="'Selecione o profissional'"
             :options="professional_options"
             :empty_message="'Cadastre um professional'"

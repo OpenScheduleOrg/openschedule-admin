@@ -18,7 +18,7 @@ import { DaySchedule, WeekDaySchedules } from "../models";
 import { startOfWeek, formatISO, addDays } from "date-fns";
 
 export type StateAgenda = {
-  profesional_id?: number;
+  professional_id?: number;
   professional_options: OptionSelect[];
   schedules: ScheduleModel[];
   appointments: AppointmentModel[];
@@ -115,7 +115,7 @@ export const AgendaModule: Module<StateAgenda, stateRoot> = {
       state.professional_options = options;
     },
     [SET_PROFESSIONAL_AGENDA](state, professional_id: number) {
-      state.profesional_id = professional_id;
+      state.professional_id = professional_id;
     },
     [SET_SCHEDULES_AGENDA](state, schedules: ScheduleModel[]) {
       state.schedules = schedules;
@@ -126,8 +126,8 @@ export const AgendaModule: Module<StateAgenda, stateRoot> = {
   },
   actions: {
     populateProfessionalOptions({ commit }: { commit: Commit }) {
-      return professionalService.load({ limit: 50 }).then((profesionals) => {
-        const professional_options: OptionSelect[] = profesionals.map((p) => ({
+      return professionalService.load({ limit: 50 }).then((professionals) => {
+        const professional_options: OptionSelect[] = professionals.map((p) => ({
           value: p.id,
           label: p.name,
         }));
@@ -162,15 +162,15 @@ export const AgendaModule: Module<StateAgenda, stateRoot> = {
       { dispatch }: { dispatch: Dispatch },
       professional_id: number
     ) {
-      if (!this.state.agenda.profesional_id) return;
+      if (!this.state.agenda.professional_id) return;
 
       dispatch(
         "loadSchedules",
-        professional_id || this.state.agenda.profesional_id
+        professional_id || this.state.agenda.professional_id
       );
       dispatch(
         "loadAppointments",
-        professional_id || this.state.agenda.profesional_id
+        professional_id || this.state.agenda.professional_id
       );
     },
   },

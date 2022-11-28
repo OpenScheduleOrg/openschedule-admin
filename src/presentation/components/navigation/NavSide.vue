@@ -121,7 +121,7 @@ export default defineComponent({
     professional_id(id: number) {
       this.setProfessional(id);
     },
-    "$store.state.agenda.profesional_id"(id: number) {
+    "$store.state.agenda.professional_id"(id: number) {
       this.professional_id = id;
     },
   },
