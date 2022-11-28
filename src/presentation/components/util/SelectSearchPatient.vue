@@ -71,7 +71,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { PatientModel } from "@/domain/models";
-import { patientService } from "@/domain/services";
+import { mapState } from "vuex"
 
 type ComponentData = {
   selected_label?: string;
@@ -79,7 +79,6 @@ type ComponentData = {
   text_search: string;
   validation_message?: string;
   show_options: boolean;
-  patients: PatientModel[];
 };
 
 export default defineComponent({
@@ -90,21 +89,19 @@ export default defineComponent({
       patient: undefined,
       validation_message: undefined,
       text_search: "",
-      patients: [],
     };
   },
   created() {
-    patientService.load().then((patients) => {
-      this.patients = patients;
-      this.patient = this.patients.find((p) => p.id == this.modelValue);
-      if (this.patient) this.text_search = this.patient.name;
-    });
+    this.$store.dispatch("cache/updateCachePatients")
+    this.patient = this.patients.find((p: PatientModel) => p.id == this.modelValue);
+    if (this.patient) this.text_search = this.patient.name;
   },
   computed: {
+    ...mapState("cache", ["patients"]),
     options(): PatientModel[] {
-      return this.patients.filter((p) =>
+      return this.patients.filter((p: PatientModel) =>
         p.name.match(new RegExp(this.text_search, "i"))
-      ) as any[];
+      );
     },
   },
   props: {
@@ -153,9 +150,13 @@ export default defineComponent({
   },
   watch: {
     modelValue(id: number) {
-      this.patient = this.patients.find((p) => p.id == id);
+      this.patient = this.patients.find((p: PatientModel) => p.id == id);
       if (this.patient) this.text_search = this.patient.name;
     },
+    patients(patients: PatientModel[]){
+      this.patient = patients.find((p) => p.id == this.modelValue);
+      if (this.patient) this.text_search = this.patient.name;
+    }
   },
 });
 </script>
