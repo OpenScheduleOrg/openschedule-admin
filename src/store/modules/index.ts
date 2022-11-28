@@ -4,5 +4,6 @@ export * from "./calendar";
 export * from "./clinics";
 export * from "./professionals";
 export * from "./schedules";
+export * from "./record";
 
 export * from "./mutation-types";

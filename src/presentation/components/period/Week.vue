@@ -29,7 +29,15 @@
               <div class="sc-top-info">
                 <span>{{ scap.start_time.toClockTime() }}</span>
                 <strong> {{ scap.specialty }} </strong>
-                <a class="icon-new-appointment">
+                <a
+                  class="icon-new-appointment"
+                  @click="
+                    initRecord({
+                      scheduled_day: scap.date,
+                      start_time: scap.start_time,
+                    })
+                  "
+                >
                   <font-awesome-icon :icon="['fa', 'plus']"></font-awesome-icon>
                 </a>
               </div>
@@ -39,6 +47,7 @@
                   class="day-appointment"
                   :style="{ height: sap.height + 'em' }"
                   :key="sap.key"
+                  @click="initUpdateRecord(sap.appointment_id)"
                 >
                   <div class="ap-top-info">
                     <span>{{ sap.start_time.toClockTime() }}</span>
@@ -62,6 +71,7 @@
               v-else
               class="day-appointment"
               :style="{ height: scap.height + 'em' }"
+              @click="initUpdateRecord(scap.appointment_id)"
             >
               <div class="ap-top-info">
                 <span>{{ scap.start_time.toClockTime() }}</span>
@@ -82,7 +92,7 @@
 <script lang="ts">
 import { getUTCOffset } from "@/utils";
 import { defineComponent } from "vue";
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import { Month, WeekDay } from "@/common/constants";
 
 export default defineComponent({
@@ -153,6 +163,10 @@ export default defineComponent({
         }
       }
     },
+    ...mapActions({
+      initRecord: "record/initRecord",
+      initUpdateRecord: "record/initUpdateRecord",
+    }),
   },
 });
 </script>

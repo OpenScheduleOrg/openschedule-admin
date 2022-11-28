@@ -60,7 +60,10 @@
   </div>
   <div class="hd-right">
     <div class="operations">
-      <a class="hd-button new-appointment">
+      <a
+        class="hd-button new-appointment"
+        @click="showNewAppointmentModal()"
+      >
         <font-awesome-icon icon="plus"></font-awesome-icon>
         Nova consulta
       </a>
@@ -109,7 +112,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 import { Periods } from "@/common/constants";
 
 export default defineComponent({
@@ -132,6 +135,14 @@ export default defineComponent({
     isAgendaRoute() {
       return this.$route.path.startsWith("/agenda");
     },
+  },
+  methods: {
+    showNewAppointmentModal() {
+      this.initRecord({});
+    },
+    ...mapActions({
+      initRecord: "record/initRecord",
+    }),
   },
 });
 </script>
@@ -178,7 +189,7 @@ a.hd-button {
   border-radius: 4px;
   font-size: 0.9rem;
   border: solid 1px rgb(255, 255, 255);
-  transition: all .3s;
+  transition: all 0.3s;
 }
 .nav-calendar > .button {
   margin-right: 18px;
@@ -332,9 +343,8 @@ img {
   border-color: #028536;
 }
 
-.hd-button.new-appointment:hover{
+.hd-button.new-appointment:hover {
   background-color: #018d39;
   border-color: #00903a;
 }
-
 </style>

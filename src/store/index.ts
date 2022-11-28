@@ -13,6 +13,8 @@ import {
   SchedulesModule,
   StateAgenda,
   AgendaModule,
+  StateRecord,
+  RecordModule,
 } from "./modules";
 
 export type State = {
@@ -22,6 +24,7 @@ export type State = {
   professional: StateProfessionals;
   schedule: StateSchedules;
   agenda: StateAgenda;
+  record: StateRecord;
 };
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -34,6 +37,7 @@ export default createStore<State>({
     professionals: ProfessionalsModule,
     schedules: SchedulesModule,
     agenda: AgendaModule,
+    record: RecordModule,
   },
 });
 

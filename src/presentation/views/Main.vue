@@ -9,12 +9,15 @@
     <main class="grid-item">
       <router-view />
     </main>
+    <record v-if="showNewAppointmentModal" />
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import { mapState } from "vuex";
 import NavTop from "@/presentation/components/navigation/NavTop.vue";
 import NavSide from "@/presentation/components/navigation/NavSide.vue";
+import Record from "@/presentation/components/Record.vue";
 
 function setScrolled() {
   const els_scrolled = document.getElementsByClassName("scrolled");
@@ -40,6 +43,13 @@ export default defineComponent({
   components: {
     NavTop,
     NavSide,
+    Record,
+  },
+  computed: mapState("record", {
+    showNewAppointmentModal: "showModal",
+  }),
+  created(){
+    this.$store.dispatch("record/updateActuationsOptions")
   },
   updated: setScrolled,
   mounted: setScrolled,
