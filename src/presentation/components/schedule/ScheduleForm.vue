@@ -61,9 +61,7 @@
                 :name="'end_time'"
                 :label="'Fim atendimento'"
                 :custom_clock="clocks.end"
-                :disabled="
-                  body.start_time === undefined || clocks.end.length == 0
-                "
+                :disabled="!field_valid.start_time"
                 :required="true"
                 @updateValidation="updateValidation"
               />
@@ -272,7 +270,6 @@ export default defineComponent({
   },
   watch: {
     "body.week_day"(weekday: number) {
-      console.log(this.disable_watch);
       if (this.disable_watch.week_day && this.schedule_id) {
         this.disable_watch.week_day = false;
         return;
@@ -292,7 +289,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .modal-mask {
   position: fixed;
   z-index: 9998;
