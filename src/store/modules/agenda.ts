@@ -132,8 +132,14 @@ export const AgendaModule: Module<StateAgenda, stateRoot> = {
           value: p.id,
           label: p.name,
         }));
+
         commit(SET_PROFESSIONAL_OPTIONS, professional_options);
-        commit(SET_PROFESSIONAL_AGENDA, professional_options?.[0].value);
+        commit(
+          SET_PROFESSIONAL_AGENDA,
+          !this.state.auth.current_user?.admin && this.state.auth.current_user
+            ? this.state.auth.current_user.id
+            : professional_options?.[0].value
+        );
       });
     },
     setProfessional(

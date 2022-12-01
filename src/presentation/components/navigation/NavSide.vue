@@ -58,28 +58,37 @@
   </div>
   <nav id="nav-main">
     <ul>
-      <li>
-        <router-link class="nav-link" to="/clinics">Clínicas</router-link>
-      </li>
-      <li>
-        <router-link class="nav-link" to="/specialties"
-          >Especialidades</router-link
-        >
-      </li>
-      <li>
-        <router-link class="nav-link" to="/professionals"
-          >Profissionais</router-link
-        >
-      </li>
-      <li>
-        <router-link class="nav-link" to="/schedules">Horários</router-link>
-      </li>
-      <li>
-        <router-link class="nav-link" to="/patients">Pacientes</router-link>
-      </li>
-      <li>
-        <router-link class="nav-link" to="/users">Usuários</router-link>
-      </li>
+      <template v-if="current_user.admin">
+        <li>
+          <router-link class="nav-link" to="/clinics">Clínicas</router-link>
+        </li>
+        <li>
+          <router-link class="nav-link" to="/specialties"
+            >Especialidades</router-link
+          >
+        </li>
+        <li>
+          <router-link class="nav-link" to="/professionals"
+            >Profissionais</router-link
+          >
+        </li>
+        <li>
+          <router-link class="nav-link" to="/schedules">Horários</router-link>
+        </li>
+        <li>
+          <router-link class="nav-link" to="/patients">Pacientes</router-link>
+        </li>
+        <li>
+          <router-link class="nav-link" to="/users">Usuários</router-link>
+        </li>
+      </template>
+      <template v-else>
+        <li>
+          <router-link class="nav-link" to="/schedules"
+            >Meus Horários</router-link
+          >
+        </li>
+      </template>
     </ul>
   </nav>
 </template>

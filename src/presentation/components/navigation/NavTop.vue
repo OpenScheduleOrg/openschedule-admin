@@ -353,6 +353,7 @@ img {
 }
 
 .hd-button.new-appointment {
+  white-space: nowrap;
   cursor: pointer;
   background-color: #028536;
   border-color: #028536;

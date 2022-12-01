@@ -10,6 +10,7 @@
             :options="professional_options"
             :empty_message="'Cadastre um professional'"
             v-model="professional_id"
+            v-if="current_user.admin"
           />
         </Form>
         <router-link
@@ -36,7 +37,7 @@
           >
             <div class="item-data">
               <strong
-                >{{ WeekDay[schedule.week_day] }} das
+                >{{ WeekDay[(schedule.week_day + 1) % 6] }} das
                 {{ schedule.start_time.toClockTime() }} até
                 {{ schedule.end_time.toClockTime() }}</strong
               >
@@ -106,6 +107,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState("schedules", ["schedules", "isLoading"]),
+    ...mapState("auth", ["current_user"]),
   },
   components: {
     Form,
@@ -121,7 +123,9 @@ export default defineComponent({
           value: p.id,
           label: p.name,
         }));
-        this.professional_id = this.professional_options?.[0].value as number;
+        this.professional_id = !this.current_user.admin
+          ? this.current_user.id
+          : (this.professional_options?.[0].value as number);
       });
     },
     deleteSchedule(id: number) {
