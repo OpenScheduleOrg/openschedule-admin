@@ -41,12 +41,13 @@
     </div>
     <div class="period-calendar">
       <router-link
+        v-if="false"
         class="hd-button"
-        v-for="(text, p) in periods"
-        :class="{ 'selected-period': isActivedPeriod(p) && isAgendaRoute }"
-        :key="p"
+        :class="{
+          'selected-period': isActivedPeriod(Period.Day) && isAgendaRoute,
+        }"
         :to="{
-          name: p,
+          name: Period.Day,
           params: {
             day: current_date.getDate(),
             month: current_date.getMonth() + 1,
@@ -54,16 +55,29 @@
           },
         }"
       >
-        {{ text }}
+        {{ periods[Period.Day] }}
+      </router-link>
+      <router-link
+        class="hd-button"
+        :class="{
+          'selected-period': isActivedPeriod(Period.Week) && isAgendaRoute,
+        }"
+        :to="{
+          name: Period.Week,
+          params: {
+            day: current_date.getDate(),
+            month: current_date.getMonth() + 1,
+            year: current_date.getFullYear(),
+          },
+        }"
+      >
+        {{ periods[Period.Week] }}
       </router-link>
     </div>
   </div>
   <div class="hd-right">
     <div class="operations">
-      <a
-        class="hd-button new-appointment"
-        @click="showNewAppointmentModal()"
-      >
+      <a class="hd-button new-appointment" @click="showNewAppointmentModal()">
         <font-awesome-icon icon="plus"></font-awesome-icon>
         Nova consulta
       </a>
@@ -113,7 +127,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapGetters, mapState, mapActions } from "vuex";
-import { Periods } from "@/common/constants";
+import { Periods, Period } from "@/common/constants";
 
 export default defineComponent({
   name: "NavTop",
@@ -121,6 +135,7 @@ export default defineComponent({
     return {
       current_user: this.$store.state.auth.current_user,
       periods: Periods[navigator.language],
+      Period,
     };
   },
   computed: {
