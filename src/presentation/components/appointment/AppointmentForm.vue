@@ -135,19 +135,21 @@ export default defineComponent({
   },
   async created() {
     if (this.appointment_id && !this.hash_appointment)
-      appointmentService.getById(this.appointment_id).then((appointment) => {
-        this.body.acting_id = appointment.acting_id;
-        this.body.patient_id = appointment.patient_id;
-        this.body.scheduled_day = parseISO(appointment.scheduled_day);
+      await appointmentService
+        .getById(this.appointment_id)
+        .then((appointment) => {
+          this.body.acting_id = appointment.acting_id;
+          this.body.patient_id = appointment.patient_id;
+          this.body.scheduled_day = parseISO(appointment.scheduled_day);
 
-        this.body.complaint = appointment.complaint || "";
-        this.body.prescription = appointment.prescription || "";
-        this.body.start_time = appointment.start_time;
-        this.updateClockEnd(appointment.start_time, this.clocks.end);
-        this.body.end_time = appointment.end_time;
+          this.body.complaint = appointment.complaint || "";
+          this.body.prescription = appointment.prescription || "";
+          this.body.start_time = appointment.start_time;
+          this.updateClockEnd(appointment.start_time, this.clocks.end);
+          this.body.end_time = appointment.end_time;
 
-        this.setHashAppointment(hash(this.body));
-      });
+          this.setHashAppointment(hash(this.body));
+        });
   },
   computed: {
     isFormValid() {
@@ -189,9 +191,12 @@ export default defineComponent({
       this.isLoading = true;
       const payload = { ...this.body };
       payload.end_time =
-        payload.end_time !== undefined && payload.end_time >= 0
+        payload.end_time !== undefined &&
+        payload.end_time !== null &&
+        payload.end_time >= 0
           ? payload.end_time
           : undefined;
+
 
       if (this.appointment_id && this.hash_appointment != hash(this.body))
         return appointmentService
@@ -202,7 +207,7 @@ export default defineComponent({
           });
       else if (!this.appointment_id)
         return appointmentService
-          .create(this.body as AppointmentBody)
+          .create(payload as AppointmentBody)
           .then(() => {
             this.isLoading = false;
             this.close();

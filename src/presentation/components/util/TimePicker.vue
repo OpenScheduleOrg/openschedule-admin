@@ -111,8 +111,18 @@ export default defineComponent({
       show: false,
       validation_message: undefined,
       clock,
-      hours: this.modelValue !== undefined ? (this.modelValue / 60) >> 0 : -1,
-      minutes: this.modelValue !== undefined ? this.modelValue % 60 : -1,
+      hours:
+        this.modelValue !== undefined &&
+        this.modelValue !== null &&
+        this.modelValue >= 0
+          ? (this.modelValue / 60) >> 0
+          : -1,
+      minutes:
+        this.modelValue !== undefined &&
+        this.modelValue !== null &&
+        this.modelValue >= 0
+          ? this.modelValue % 60
+          : -1,
     };
   },
   props: {
@@ -155,7 +165,7 @@ export default defineComponent({
   },
   watch: {
     modelValue(t) {
-      if (t == null  || t == undefined || t < 0) {
+      if (t === null || t === undefined || t < 0) {
         this.hours = -1;
         this.minutes = -1;
       } else {

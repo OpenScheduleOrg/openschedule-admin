@@ -12,6 +12,7 @@ import {
   SET_HASH_APPOINTMENT,
   SET_HASH_PATIENT,
   SET_CURRENT_TAB_RECORD,
+  SET_RECORD_APPOINTMENT_ID,
 } from "./mutation-types";
 
 import { actingService } from "@/domain/services";
@@ -71,6 +72,9 @@ export const RecordModule: Module<StateRecord, stateRoot> = {
     [SET_CURRENT_TAB_RECORD](state, tab: RECORD_TAB) {
       state.active_tab = tab;
     },
+    [SET_RECORD_APPOINTMENT_ID](state, appointment_id: number) {
+      state.appointment_id = appointment_id;
+    },
     [SET_RECORD_PATIENT_ID](state, patient_id: number | undefined) {
       state.hash_patient = undefined;
       state.patient = undefined;
@@ -117,6 +121,12 @@ export const RecordModule: Module<StateRecord, stateRoot> = {
       patient_id: number | undefined
     ) {
       commit(SET_RECORD_PATIENT_ID, patient_id);
+    },
+    setRecordAppointmentId(
+      { commit }: { commit: Commit },
+      appointment_id: number
+    ) {
+      commit(SET_RECORD_APPOINTMENT_ID, appointment_id);
     },
     initUpdateRecord({ commit }: { commit: Commit }, appointment_id: number) {
       commit(INIT_UPDATE_RECORD, appointment_id);

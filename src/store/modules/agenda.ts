@@ -107,6 +107,7 @@ export const AgendaModule: Module<StateAgenda, stateRoot> = {
 
       for (const ds in day_schedules)
         day_schedules[ds] = day_schedules[ds].sort(sortDaySchedules);
+
       return day_schedules;
     },
   },

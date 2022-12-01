@@ -41,6 +41,7 @@
             v-if="active_tab === RECORD_TAB.appointment"
           ></appointment-form>
           <patient-form v-if="active_tab === RECORD_TAB.patient"></patient-form>
+          <patient-history v-if="active_tab === RECORD_TAB.history"></patient-history>
         </div>
       </div>
     </div>
@@ -52,12 +53,13 @@ import { defineComponent } from "vue";
 import { mapState, mapActions } from "vuex";
 import AppointmentForm from "./appointment/AppointmentForm.vue";
 import PatientForm from "./patient/PatientForm.vue";
+import PatientHistory from "./patient/PatientHistory.vue";
 
 import { RECORD_TAB } from "@/common/constants";
 
 export default defineComponent({
   name: "Record",
-  components: { AppointmentForm, PatientForm },
+  components: { AppointmentForm, PatientForm, PatientHistory },
   data() {
     return {
       RECORD_TAB,
@@ -99,6 +101,8 @@ export default defineComponent({
   padding: 0.4em;
   margin: 0 auto;
   height: 86vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .close-modal {
@@ -146,5 +150,9 @@ export default defineComponent({
   pointer-events: none;
   background-color: #0057a7;
   color: rgb(233, 233, 233);
+}
+
+.wrap-appointment-patient{
+  flex: 1;
 }
 </style>

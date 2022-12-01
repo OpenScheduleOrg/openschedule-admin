@@ -11,6 +11,7 @@ export type AppointmentBody = {
 export type AppointmentFilter = {
   start_date?: Date;
   end_date?: Date;
+  patient_id?: number;
   acting_id?: number;
   professional_id?: number;
   clinic_id?: number;

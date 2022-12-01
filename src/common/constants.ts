@@ -14,16 +14,16 @@ export const Periods: { [lang: string]: { [p in Period]: string } } = {
 export const MIN_INTERVAL = 15 * 60;
 
 export const WeekDay = [
+  "Domingo",
   "Segunda-feira",
   "Terça-feira",
   "Quarta-feira",
   "Quinta-feira",
   "Sexta-feira",
   "Sábado",
-  "Domingo",
 ];
 
-export const WeekDayShort = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
+export const WeekDayShort = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
 
 export const Month = [
   ["Janeiro", "Jan"],
