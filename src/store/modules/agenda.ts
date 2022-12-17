@@ -160,7 +160,7 @@ export const AgendaModule: Module<StateAgenda, stateRoot> = {
     },
     loadAppointments({ commit }: { commit: Commit }, professional_id: number) {
       return appointmentService
-        .load({ professional_id })
+        .load({ professional_id, limit: 5000 })
         .then((appointments) => {
           commit(SET_APPOINTMENTS_AGENDA, appointments);
         });

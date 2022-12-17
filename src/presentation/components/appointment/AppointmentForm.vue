@@ -47,7 +47,7 @@
         />
       </div>
       <div class="form-dynamic-row form-group-col-1">
-        <text-area v-model="body.complaint" :label="'Queixa'"> </text-area>
+        <text-area v-model="body.complaint" :label="'Queixa/Anamnese'"> </text-area>
       </div>
       <div class="form-dynamic-row form-group-col-1">
         <text-area v-model="body.prescription" :label="'Receita'"> </text-area>

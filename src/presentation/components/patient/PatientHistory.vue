@@ -52,7 +52,7 @@ export default defineComponent({
   },
   async created() {
     appointmentService
-      .load({ patient_id: this.patient_id })
+      .load({ patient_id: this.patient_id, limit: 5000 })
       .then((appointments) => {
         this.appointments = appointments.reverse();
       });

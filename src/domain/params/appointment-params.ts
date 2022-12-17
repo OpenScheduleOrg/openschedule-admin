@@ -9,6 +9,7 @@ export type AppointmentBody = {
 };
 
 export type AppointmentFilter = {
+  limit?: number;
   start_date?: Date;
   end_date?: Date;
   patient_id?: number;
