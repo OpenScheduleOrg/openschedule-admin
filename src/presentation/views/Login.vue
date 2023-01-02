@@ -1,7 +1,7 @@
 <template>
   <div class="containe">
     <div class="login-form">
-      <h1>ConsuChat</h1>
+      <h1>Open Schedule</h1>
       <hr />
       <span class="error">{{ messages.error.both }}</span>
       <div class="form-group">

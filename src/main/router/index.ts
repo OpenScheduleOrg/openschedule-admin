@@ -102,7 +102,7 @@ const routes: RouteRecordRaw[] = [
     path: "/login",
     name: SyName.login,
     component: () => import("@/presentation/views/Login.vue"),
-    meta: { title: "ConsuChat - LOGIN" },
+    meta: { title: "Open Schedule - Login" },
   },
   {
     path: "/logout",

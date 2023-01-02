@@ -60,7 +60,7 @@
     <ul>
       <template v-if="current_user.admin">
         <li>
-          <router-link class="nav-link" to="/clinics">Clínicas</router-link>
+          <router-link class="nav-link" to="/clinics">Estabelecimentos</router-link>
         </li>
         <li>
           <router-link class="nav-link" to="/specialties"

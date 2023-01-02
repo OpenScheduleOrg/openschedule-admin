@@ -1,6 +1,6 @@
 <template>
   <div class="some-padding">
-    <h1 class="form-title">{{ !appointment_id ? "Nova " : "" }}Consulta</h1>
+    <h1 class="form-title">{{ !appointment_id ? "Novo " : "" }}Agendamento</h1>
     <Form class="form-wrap">
       <div class="form-dynamic-row form-group-col-2">
         <select-option

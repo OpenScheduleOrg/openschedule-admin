@@ -1,4 +1,4 @@
-# consuchat-admin
+# Open Schedule Admin
 
 ## Project setup
 ```

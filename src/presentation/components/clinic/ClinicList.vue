@@ -1,10 +1,10 @@
 <template>
   <div class="container scrolled">
     <div class="list-wrapper">
-      <h1>Clínicas</h1>
+      <h1>Estabelecimentos</h1>
       <div class="list-header">
         <router-link class="btn btn-new" :to="{ name: 'clinic_new' }">
-          Nova clínica
+          Novo Estabelecimento 
         </router-link>
       </div>
       <ul

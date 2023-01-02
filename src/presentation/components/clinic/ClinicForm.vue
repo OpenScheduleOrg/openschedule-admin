@@ -6,7 +6,7 @@
           <font-awesome-icon :icon="['fa', 'times']"></font-awesome-icon>
         </router-link>
 
-        <h1 class="modal-title">{{ !clinic_id ? "Nova " : "" }}Clínica</h1>
+        <h1 class="modal-title">{{ !clinic_id ? "Nova " : "" }}Estabelecimento</h1>
         <div class="form-wrap">
           <Form>
             <text-field
@@ -129,6 +129,8 @@ export default defineComponent({
             phone: clinic.phone.maskPhone(),
             cnpj: clinic.cnpj.maskCnpj(),
             address: clinic.address,
+            latitude: clinic.latitude,
+            longitude: clinic.longitude
           };
           this.body_hash = hash(this.body);
         })

@@ -11,7 +11,7 @@ export const agendaGuard: NavigationGuard = function (to, from, next) {
       intervaleUpdateState = setInterval(() => {
         store.dispatch("agenda/updateAgenda");
         store.dispatch("calendar/setNow");
-      }, 20000);
+      }, 5000);
     const today = new Date();
     if (to.params.day && to.params.year && to.params.month) {
       const year = Number(to.params.year);

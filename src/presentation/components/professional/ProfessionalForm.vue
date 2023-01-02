@@ -73,7 +73,7 @@
               />
               <select-option
                 :name="'clinic'"
-                :label="'Seleciona a clinica'"
+                :label="'Seleciona estabelecimento'"
                 :required="true"
                 :options="select_options.clinics"
                 :empty_message="'Cadastre uma clínica'"

@@ -1,4 +1,4 @@
-export const DEFAULT_TITLE = "ConsuChat";
+export const DEFAULT_TITLE = "Open Schedule";
 
 export enum Period {
   Day = "day",

@@ -1,6 +1,6 @@
 <template>
   <div class="hd-left">
-    <router-link class="brand" to="/" title="ConsuChat">ConsuChat</router-link>
+    <router-link class="brand" to="/" title="Open Schedule">Open Schedule</router-link>
   </div>
   <div class="hd-center">
     <div class="nav-calendar">
@@ -79,7 +79,7 @@
     <div class="operations">
       <a class="hd-button new-appointment" @click="showNewAppointmentModal()">
         <font-awesome-icon icon="plus"></font-awesome-icon>
-        Nova consulta
+        Novo Agendamento
       </a>
     </div>
 
@@ -193,7 +193,7 @@ header.grid-item > div,
   display: inline-block;
   margin-left: 1rem;
   padding: 10px 30px;
-  font-size: 2.1rem;
+  font-size: 1.85rem;
   font-weight: bolder;
 }
 
