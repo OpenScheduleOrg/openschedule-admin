@@ -5,4 +5,5 @@ export type PatientModel = {
   phone: string;
   address?: string;
   birthdate?: Date;
+  registration?: string;
 };

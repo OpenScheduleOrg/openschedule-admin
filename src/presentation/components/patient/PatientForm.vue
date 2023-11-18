@@ -37,6 +37,16 @@
       </div>
       <div class="form-dynamic-row form-group-col-1">
         <text-field
+          v-model="body.registration"
+          :name="'matricula'"
+          :label="'Matrícula'"
+          :format="'matricula'"
+          :validators="{ required: {}, registration: {} }"
+          @updateValidation="updateValidation"
+        />
+      </div>
+      <div class="form-dynamic-row form-group-col-1">
+        <text-field
           v-model="body.address"
           :name="'address'"
           :label="'Endereço'"
@@ -101,10 +111,11 @@ export default defineComponent({
     if (this.patient_id && !this.hash_patient)
       patientService.getById(this.patient_id).then((patient) => {
         this.body.name = patient.name;
-        this.body.cpf = patient.cpf.maskCpf();
         this.body.phone = patient.phone.maskPhone();
         this.body.birthdate = patient.birthdate;
         this.body.address = patient.address;
+        this.body.registration = patient.registration;
+        this.body.cpf = patient.cpf.maskCpf();
 
         this.setHashPatient(hash(this.body));
       });

@@ -4,6 +4,7 @@ export type PatientBody = {
   cpf?: string;
   birthdate?: Date;
   address?: string;
+  registration?: string;
 };
 
 export type PatientFilter = {
