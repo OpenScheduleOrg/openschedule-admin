@@ -25,6 +25,7 @@
     "object-hash": "^3.0.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.12",
+    "vue3-google-login": "^2.0.25",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
