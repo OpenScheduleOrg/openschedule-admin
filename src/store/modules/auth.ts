@@ -47,6 +47,16 @@ export const AuthModule: Module<StateAuth, stateRoot> = {
 
       commit(SET_AUTH_STATE, auth_info);
     },
+    async login_google(
+      { commit }: { commit: Commit; dispatch: Dispatch },
+      credentials: Credentials
+    ) {
+      const auth_info = await authService.login_google(credentials);
+      if (auth_info.tokens.session_token)
+        LocalStorageManager.saveSessionToken(auth_info.tokens.session_token);
+
+      commit(SET_AUTH_STATE, auth_info);
+    },
     async restoreSession({ commit }: { commit: Commit; dispatch: Dispatch }) {
       const session_token = LocalStorageManager.getSessionToken();
       if (session_token) {

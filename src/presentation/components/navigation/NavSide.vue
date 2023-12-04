@@ -1,5 +1,5 @@
 <template>
-  <div class="select-professional" v-if="current_user.admin">
+  <div class="select-professional" v-if="current_user?.admin">
     <select-option
       :name="'profesisonal'"
       :label="'Profissional'"
@@ -58,7 +58,7 @@
   </div>
   <nav id="nav-main">
     <ul>
-      <template v-if="current_user.admin">
+      <template v-if="current_user?.admin">
         <li>
           <router-link class="nav-link" to="/clinics">Estabelecimentos</router-link>
         </li>
