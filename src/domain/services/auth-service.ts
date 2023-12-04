@@ -21,6 +21,12 @@ export class AuthService {
     return this.toAuthInfo(token_response);
   };
 
+  login_google = async (body: Credentials): Promise<AuthInfo> => {
+    const token_response = await this.httpClient.post<TokenResponse>(`signin/google`, { body });
+
+    return this.toAuthInfo(token_response);
+  };
+
   refreshToken = async (access_token: string): Promise<AuthInfo> => {
     const token_response = await this.httpClient.get<TokenResponse>(
       "/refresh-token",
