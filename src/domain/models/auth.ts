@@ -3,6 +3,7 @@ export type CurrentUser = {
   name: string;
   username: string;
   email: string;
+  picture: string;
   admin: boolean;
 };
 

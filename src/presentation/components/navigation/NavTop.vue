@@ -86,16 +86,14 @@
     <div class="dropdown">
       <button id="btn-dropdown">
         <img
-          src="https://www.w3schools.com/howto/img_avatar.png"
-          alt="w3schools"
+          :src="current_user?.picture || 'https://www.w3schools.com/howto/img_avatar.png'"
         />
         <span>{{ current_user?.name }}</span>
       </button>
       <ul div class="drop-content" ref="drop-content">
         <li class="user-detail">
           <img
-            src="https://www.w3schools.com/howto/img_avatar.png"
-            alt="w3schools"
+            :src="current_user?.picture || 'https://www.w3schools.com/howto/img_avatar.png'"
           />
           <div>
             <span :title="current_user?.name">{{ current_user?.name }}</span>
@@ -271,7 +269,7 @@ a.is-today {
 }
 img {
   border-radius: 50%;
-  height: 8vh;
+  height: 50px;
   margin: 0 4px;
 }
 .drop-content {

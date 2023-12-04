@@ -63,6 +63,7 @@ export class AuthService {
         username: token_payload.username,
         email: token_payload.email,
         admin: token_payload.admin,
+        picture: token_payload.picture,
       },
       tokens: { ...token_response, exp_access_token: token_payload.exp },
     };

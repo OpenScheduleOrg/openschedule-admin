@@ -8,6 +8,7 @@ export type TokenPayload = {
   name: string;
   username: string;
   email: string;
+  picture: string;
   admin: boolean;
   exp: number;
 };
