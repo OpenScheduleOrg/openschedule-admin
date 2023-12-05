@@ -7,4 +7,6 @@ export * from "./schedules";
 export * from "./record";
 export * from "./cache";
 
+export * from "./user";
+
 export * from "./mutation-types";

@@ -2,6 +2,7 @@ export type UserBody = {
   id?: number;
   name?: string;
   username?: string;
+  password?: string;
   email?: string;
   picture?: string;
   active?: boolean;

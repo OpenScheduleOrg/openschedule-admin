@@ -70,7 +70,6 @@ export const AuthModule: Module<StateAuth, stateRoot> = {
       }
 
       const access_token = LocalStorageManager.getAccessToken();
-      console.log(access_token)
       if (access_token) {
         const auth_info = await authService.refreshToken(access_token);
         if (auth_info.tokens.access_token)

@@ -71,6 +71,26 @@ const children: RouteRecordRaw[] = [
     ],
   },
   {
+    path: "/users",
+    name: "users",
+    component: () =>
+      import("@/presentation/components/user/UserRoute.vue"),
+    children: [
+      {
+        path: "/users/new",
+        name: "user_new",
+        component: () =>
+          import("@/presentation/components/user/UserForm.vue"),
+      },
+      {
+        path: "/users/:user_id/edit",
+        name: "user_edit",
+        component: () =>
+          import("@/presentation/components/user/UserForm.vue"),
+      },
+    ],
+  },
+  {
     path: "/schedules",
     name: "schedules",
     component: () =>
