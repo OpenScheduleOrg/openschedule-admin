@@ -57,7 +57,6 @@
                 :name="'password'"
                 :label="'Senha'"
                 v-model="body.password"
-                :required="!professional_id"
                 @updateValidation="updateValidation"
               />
             </div>
