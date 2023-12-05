@@ -56,7 +56,14 @@ export default defineComponent({
       this.validation_message = undefined;
       const vals = { required: {}, password: {} } as {[validator: string]: any};
 
-      if (!this.required) delete vals["required"];
+      if (!this.required) {
+        delete vals["required"]
+        if(this.text?.length == 0 || this.text == undefined){
+          this.text = undefined;
+          this.$emit("updateValidation", this.name, true);
+          return;
+        }
+      }
 
       for (let name in vals) {
         const message = validators[name](this.text, validators[name]);

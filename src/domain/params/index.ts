@@ -6,3 +6,4 @@ export * from "./acting-params";
 export * from "./schedule-params";
 export * from "./appointment-params";
 export * from "./patient-params";
+export * from "./user-params";

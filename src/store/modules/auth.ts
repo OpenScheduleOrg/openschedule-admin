@@ -25,6 +25,7 @@ export const AuthModule: Module<StateAuth, stateRoot> = {
       state.current_user = auth_info.current_user;
       state.access_token = auth_info.tokens.access_token;
       state.exp = auth_info.tokens.exp_access_token;
+      LocalStorageManager.saveAccessToken(state.access_token);
     },
     [REFRESH_TOKEN](state, auth_info: AuthInfo) {
       state.access_token = auth_info.tokens.access_token;
@@ -47,6 +48,16 @@ export const AuthModule: Module<StateAuth, stateRoot> = {
 
       commit(SET_AUTH_STATE, auth_info);
     },
+    async login_google(
+      { commit }: { commit: Commit; dispatch: Dispatch },
+      credentials: Credentials
+    ) {
+      const auth_info = await authService.login_google(credentials);
+      if (auth_info.tokens.session_token)
+        LocalStorageManager.saveSessionToken(auth_info.tokens.session_token);
+
+      commit(SET_AUTH_STATE, auth_info);
+    },
     async restoreSession({ commit }: { commit: Commit; dispatch: Dispatch }) {
       const session_token = LocalStorageManager.getSessionToken();
       if (session_token) {
@@ -58,10 +69,21 @@ export const AuthModule: Module<StateAuth, stateRoot> = {
         return Promise.resolve();
       }
 
+      const access_token = LocalStorageManager.getAccessToken();
+      if (access_token) {
+        const auth_info = await authService.refreshToken(access_token);
+        if (auth_info.tokens.access_token)
+          LocalStorageManager.saveAccessToken(auth_info.tokens.access_token);
+
+        commit(SET_AUTH_STATE, auth_info);
+        return Promise.resolve();
+      }
+
       console.warn("Session token not found");
       return Promise.reject();
     },
     logout({ commit }: { commit: Commit }) {
+      LocalStorageManager.removeAccessToken();
       LocalStorageManager.removeSessionToken();
       commit(RESET_AUTH_STATE);
     },

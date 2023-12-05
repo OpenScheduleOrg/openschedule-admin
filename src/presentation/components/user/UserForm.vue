@@ -2,12 +2,12 @@
   <transition name="modal">
     <div ref="modal_mask" @mousedown="closeModal($event)" class="modal-mask">
       <div class="modal-container">
-        <router-link id="close-modal" :to="{ name: 'professionals' }">
+        <router-link id="close-modal" :to="{ name: 'users' }">
           <font-awesome-icon :icon="['fa', 'times']"></font-awesome-icon>
         </router-link>
 
         <h1 class="modal-title">
-          {{ !professional_id ? "Cadastro " : "" }}Profissional
+          {{ !user_id ? "Cadastro " : "" }}Profissional
         </h1>
         <div class="form-wrap">
           <Form>
@@ -19,23 +19,8 @@
                 :validators="{ required: {} }"
                 @updateValidation="updateValidation"
               />
-              <!--
-              <text-field
-                v-model="body.reg_number"
-                :name="'reg_number'"
-                :label="'Número registro'"
-              />
-             -->
             </div>
             <div class="form-dynamic-row form-group-col-2">
-              <text-field
-                :name="'phone'"
-                :label="'Telefone'"
-                v-model="body.phone"
-                :format="'phone'"
-                :validators="{ required: {}, phone: {} }"
-                @updateValidation="updateValidation"
-              />
               <text-field
                 v-model="body.email"
                 :name="'email'"
@@ -43,11 +28,20 @@
                 :validators="{ required: {}, email: {} }"
                 @updateValidation="updateValidation"
               />
+              <select-option
+                :name="'clinic'"
+                :label="'Seleciona estabelecimento'"
+                :required="true"
+                :options="select_options.clinics"
+                :empty_message="'Cadastre uma clínica'"
+                v-model="body.clinic_id"
+                @updateValidation="updateValidation"
+              />
             </div>
             <div class="form-dynamic-row form-group-col-2">
               <text-field
                 :name="'username'"
-                :label="'Login'"
+                :label="'Nome de usuário'"
                 v-model="body.username"
                 :format="'username'"
                 :validators="{ required: {} }"
@@ -60,26 +54,7 @@
                 @updateValidation="updateValidation"
               />
             </div>
-            <div class="form-dynamic-row form-group-col-2">
-              <select-option
-                :name="'specialty'"
-                :label="'Selecione a especialidade'"
-                :required="true"
-                :options="select_options.specialties"
-                :empty_message="'Cadastre uma especialidade'"
-                v-model="acting_body.specialty_id"
-                @updateValidation="updateValidation"
-              />
-              <select-option
-                :name="'clinic'"
-                :label="'Seleciona estabelecimento'"
-                :required="true"
-                :options="select_options.clinics"
-                :empty_message="'Cadastre uma clínica'"
-                v-model="acting_body.clinic_id"
-                @updateValidation="updateValidation"
-              />
-            </div>
+
           </Form>
         </div>
         <div class="operations-wrap">
@@ -87,8 +62,8 @@
             @click="save()"
             :class="{
               btn: true,
-              'btn-update': !isLoading && isFormValid && !!professional_id,
-              'btn-new': !isLoading && isFormValid && !!!professional_id,
+              'btn-update': !isLoading && isFormValid && !!user_id,
+              'btn-new': !isLoading && isFormValid && !!!user_id,
             }"
             :disabled="!isFormValid || isLoading"
           >
@@ -106,68 +81,54 @@ import { defineComponent } from "vue";
 import { mapActions } from "vuex";
 import hash from "object-hash";
 
-import { ProfessionalBody, ActingBody } from "@/domain/params";
+import { UserBody } from "@/domain/params";
 import {
-  actingService,
   clinicService,
-  professionalService,
-  specialtyService,
+  userService
 } from "@/domain/services";
 import { OptionSelect } from "@/presentation/models";
 
 type ComponentData = {
-  professional_id?: number;
+  user_id?: number;
   acting_id?: number;
   isLoading: boolean;
   field_valid: { [field: string]: boolean };
-  body: ProfessionalBody;
-  acting_body: ActingBody;
+  body: UserBody;
   body_hash?: string;
   acting_body_hash?: string;
   select_options: {
     clinics: OptionSelect[];
-    specialties: OptionSelect[];
   };
 };
 
 export default defineComponent({
-  name: "ProfessionalForm",
+  name: "UserForm",
   components: { Form, TextField, PasswordField, SelectOption },
   data(): ComponentData {
-    const professional_id = Number(this.$route.params.professional_id);
+    const user_id = Number(this.$route.params.user_id);
     return {
-      professional_id,
+      user_id,
       isLoading: false,
       field_valid: {
-        name: !!professional_id,
-        phone: !!professional_id,
-        email: !!professional_id,
-        username: !!professional_id,
-        password: !!professional_id,
-        clinic: !!professional_id,
-        specialty: !!professional_id,
+        name: !!user_id,
+        email: !!user_id,
+        username: !!user_id,
+        clinic: !!user_id,
       },
       body: {
         name: "",
-        phone: "",
         username: "",
         email: "",
-        password: "",
-      },
-      acting_body: {
-        professional_id: 0,
-        clinic_id: 0,
-        specialty_id: 0,
+        clinic_id: 0
       },
       select_options: {
         clinics: [],
-        specialties: [],
       },
     };
   },
   async created() {
     await this.populateSelects();
-    if (this.professional_id) await this.loadProfessional(this.professional_id);
+    if (this.user_id) await this.loadUser(this.user_id);
   },
   computed: {
     isFormValid() {
@@ -177,97 +138,61 @@ export default defineComponent({
     },
   },
   methods: {
-    loadProfessional(professional_id: number) {
+    loadUser(user_id: number) {
       this.isLoading = true;
-      return professionalService
-        .getById(professional_id)
-        .then((professional) => {
+      return userService
+        .getById(user_id)
+        .then((user) => {
           this.isLoading = false;
           this.body = {
-            name: professional.name,
-            phone: professional.phone.maskPhone(),
-            email: professional.email,
-            username: professional.username,
+            name: user.name,
+            email: user.email,
+            username: user.username,
             password: "",
-            reg_number: professional.reg_number,
-          };
-          const acting = professional.actuations?.[0];
-          this.acting_id = acting?.id;
-          this.acting_body = {
-            specialty_id: acting?.specialty_id || 0,
-            clinic_id: acting?.clinic_id || 0,
-            professional_id: professional.id,
+            clinic_id: user.clinic_id
           };
 
           this.body_hash = hash(this.body);
-          this.acting_body_hash = hash(this.acting_body);
         })
         .catch(() => {
-          this.$router.push("/professionals");
+          this.$router.push("/users");
         });
-    },
-    async saveActing(professional_id?: number) {
-      const payload = { ...this.acting_body };
-
-      if (this.acting_id && this.acting_body_hash != hash(this.acting_body))
-        return actingService
-          .update(this.acting_id, payload)
-          .then(() => {
-            this.reloadProfessionals();
-            this.$router.push("/professionals");
-          })
-          .catch(() => {
-            this.isLoading = false;
-          });
-      else if (!this.acting_id && professional_id) {
-        payload.professional_id = professional_id;
-        return actingService
-          .create(payload)
-          .then(async () => {
-            this.reloadProfessionals();
-            this.$router.push("/professionals");
-          })
-          .catch(() => {
-            this.isLoading = false;
-          });
-      }
-      this.$router.push("/professionals");
     },
     save() {
       this.isLoading = true;
-      const payload = {
-        ...this.body,
-        phone: this.body.phone.removeMask(),
-      };
+      const payload = this.body; 
 
       if (!payload.password) delete payload.password;
 
-      if (this.professional_id && this.body_hash != hash(this.body)) {
-        return professionalService
-          .update(this.professional_id, payload)
+      if (this.user_id && this.body_hash != hash(this.body)) {
+        return userService
+          .update(this.user_id, payload)
           .then(() => {
-            this.saveActing();
+            this.reloadUsers();
+            this.$router.push("/users");
           })
           .catch(() => {
             this.isLoading = false;
           });
-      } else if (!this.professional_id)
-        return professionalService
+      } else if (!this.user_id)
+        return userService
           .create(payload)
-          .then((professional) => {
-            this.saveActing(professional.id);
+          .then(() => {
+            this.reloadUsers();
+            this.$router.push("/users");
           })
           .catch(() => {
             this.isLoading = false;
           });
-      this.saveActing();
+          this.reloadUsers();
+          this.$router.push("/users");
     },
     closeModal(e: Event) {
       if (
         e.target == this.$refs.modal_mask ||
         e.target == this.$refs.close_modal
       )
-        this.$router.push("/professionals");
+        this.$router.push("/users");
     },
     updateValidation(field: string, valid: boolean) {
       this.field_valid[field] = valid;
@@ -279,15 +204,8 @@ export default defineComponent({
           label: c.name,
         }));
       });
-
-      await specialtyService.load().then((specialties) => {
-        this.select_options.specialties = specialties.map((s) => ({
-          value: s.id,
-          label: s.description,
-        }));
-      });
     },
-    ...mapActions({ reloadProfessionals: "professionals/load" }),
+    ...mapActions({ reloadUsers: "users/load" }),
   },
 });
 </script>

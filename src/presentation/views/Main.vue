@@ -59,9 +59,9 @@ export default defineComponent({
 <style scoped>
 #main.grid-container {
   grid-template:
-    [header-left] "hd hd" 10.5vh [header-right]
-    [main-left] "nav  main" 2fr / 22vw 1fr [main-right];
-  grid-template-rows: 10.5vmin minmax(0, 1fr);
+    [header-left] "hd hd" 7.5vh [header-right]
+    [main-left] "nav  main" 2fr / 370px 1fr [main-right];
+  grid-template-rows: 8.6vmin minmax(0, 1fr);
   grid-gap: 0.15rem;
   height: 100vh;
   width: 100vw;
