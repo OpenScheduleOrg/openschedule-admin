@@ -102,6 +102,14 @@ const routes: RouteRecordRaw[] = [
     path: "/login",
     name: SyName.login,
     component: () => import("@/presentation/views/Login.vue"),
+    beforeEnter(to, from, next) {
+      if (!store.state.auth.current_user)
+        store
+          .dispatch("auth/restoreSession")
+          .then(() => next({ name: SyNames.home }))
+          .catch(next)
+      else next({ name: SyNames.home });
+    },
     meta: { title: "Open Schedule - Login" },
   },
   {
