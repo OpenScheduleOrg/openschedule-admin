@@ -127,7 +127,7 @@ const routes: RouteRecordRaw[] = [
         store
           .dispatch("auth/restoreSession")
           .then(() => next({ name: SyNames.home }))
-          .catch(next)
+          .catch(() => next())
       else next({ name: SyNames.home });
     },
     meta: { title: "Open Schedule - Login" },
