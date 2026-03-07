@@ -10,9 +10,12 @@ import "@/presentation/assets/css/style.css";
 
 import "./extensions";
 
-createApp(App)
+let appBuilder = createApp(App)
   .use(store, key)
-  .use(router)
-  .use(vue3GoogleLogin, {   clientId: process.env.VUE_APP_GOOGLE_OAUTH_CLIENTID })
-  .component("font-awesome-icon", FontAwesomeIcon)
+  .use(router);
+
+if (process.env.VUE_APP_GOOGLE_OAUTH_CLIENTID)
+  appBuilder = appBuilder.use(vue3GoogleLogin, { clientId: process.env.VUE_APP_GOOGLE_OAUTH_CLIENTID })
+
+appBuilder.component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");

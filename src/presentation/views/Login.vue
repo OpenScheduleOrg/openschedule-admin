@@ -58,7 +58,11 @@ export default defineComponent({
     const input = this.$refs.username as HTMLInputElement;
     const btnSubmit = this.$refs.btnSubmit as HTMLButtonElement;
 
-    googleOneTap().then(this.callback);
+    try {
+      googleOneTap().then(this.callback);
+    } catch(error) {
+      console.error(error);
+    }
 
     setTimeout(() => {
       if (input.matches(":-webkit-autofill")) {
